@@ -6,7 +6,7 @@ export class GameRoom {
     public adminsIds?: Array<string>;
     public playersIds?: Array<string>;
     public history?: Array<Phrase>;
-    public createdAt?: number;
+    public createdAt?: Date;
 
     constructor({ id, name, adminsIds, playersIds, history, createdAt }: {
         id?: string,
@@ -14,7 +14,7 @@ export class GameRoom {
         adminsIds: Array<string>,
         playersIds?: Array<string>,
         history?: Array<Phrase>,
-        createdAt?: number,
+        createdAt?: Date,
     }) {
         this.id = id;
         this.name = name;

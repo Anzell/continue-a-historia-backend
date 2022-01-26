@@ -1,10 +1,10 @@
 export class Phrase {
-    public sendAt?: number;
+    public sendAt?: Date;
     public senderId?: string;
     public phrase?: string;
 
     constructor({ sendAt, senderId, phrase }: {
-        sendAt?: number,
+        sendAt?: Date,
         senderId: string,
         phrase: string
     }) {

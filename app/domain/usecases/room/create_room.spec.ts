@@ -17,12 +17,12 @@ describe("teste de usecase", () => {
             new Phrase({
                 phrase: "Era uma vez",
                 senderId: "admin1",
-                sendAt: Date.now()
+                sendAt: new Date()
             })
         ],
         id: "validId",
         playersIds:[],
-        createdAt: Date.now()
+        createdAt: new Date()
     });
     
     it("deve retornar right void caso chamada ao repository der sucesso", async () => {

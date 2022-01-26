@@ -1,6 +1,7 @@
 import { left, right } from "either-ts";
 import { ServerException } from "../../core/failures/exceptions";
 import { ServerFailure } from "../../core/failures/failures";
+import { DateHelper } from "../../core/helper/date_helper";
 import { GameRoom } from "../../domain/entities/game_room";
 import { Phrase } from "../../domain/entities/phrase";
 import { RoomRepository } from "../../domain/repositories/room_repository";
@@ -8,7 +9,6 @@ import { RoomRemoteDs } from "../datasources/remote/room_remote_ds";
 import { RoomRepositoryImpl } from "./room_repository_impl";
 
 describe("teste de room repository impl", () => {
-    
 
     describe("create room", () => {
         const exampleRoom = new GameRoom({
@@ -18,12 +18,12 @@ describe("teste de room repository impl", () => {
                 new Phrase({
                     phrase: "Era uma vez",
                     senderId: "admin1",
-                    sendAt: Date.now()
+                    sendAt: DateHelper.numberToDate(Date.now())
                 })
             ],
             id: "validId",
             playersIds:[],
-            createdAt: Date.now()
+            createdAt: DateHelper.numberToDate(Date.now())
         });
 
         it("deve retornar right null caso chamada ao datasource der sucesso", async () => {
