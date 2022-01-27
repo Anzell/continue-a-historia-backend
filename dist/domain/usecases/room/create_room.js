@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateRoomUsecaseParams = exports.CreateRoomUsecase = void 0;
+exports.CreateRoomUsecaseParams = exports.CreateRoomUsecaseImpl = exports.CreateRoomUsecase = void 0;
 class CreateRoomUsecase {
+}
+exports.CreateRoomUsecase = CreateRoomUsecase;
+class CreateRoomUsecaseImpl {
     constructor(repository) {
         this.repository = repository;
     }
@@ -9,7 +12,7 @@ class CreateRoomUsecase {
         return await this.repository.createRoom(params.room);
     }
 }
-exports.CreateRoomUsecase = CreateRoomUsecase;
+exports.CreateRoomUsecaseImpl = CreateRoomUsecaseImpl;
 class CreateRoomUsecaseParams {
     constructor({ room }) {
         this.room = room;

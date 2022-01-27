@@ -1,6 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServerFailure = void 0;
+exports.ValidationFailure = exports.ServerFailure = void 0;
 class ServerFailure {
 }
 exports.ServerFailure = ServerFailure;
+class ValidationFailure {
+    constructor({ message }) {
+        this.message = message;
+    }
+}
+exports.ValidationFailure = ValidationFailure;

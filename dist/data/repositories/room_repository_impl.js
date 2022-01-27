@@ -10,10 +10,10 @@ class RoomRepositoryImpl {
     async createRoom(room) {
         try {
             await this.datasource.createRoom(room);
-            return either_ts_1.right(null);
+            return (0, either_ts_1.right)(null);
         }
         catch (e) {
-            return either_ts_1.left(new failures_1.ServerFailure());
+            return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
     }
 }

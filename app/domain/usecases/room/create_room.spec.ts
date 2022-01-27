@@ -3,7 +3,7 @@ import { ServerFailure } from "../../../core/failures/failures";
 import { GameRoom } from "../../entities/game_room";
 import { Phrase } from "../../entities/phrase";
 import { RoomRepository } from "../../repositories/room_repository";
-import { CreateRoomUsecase, CreateRoomUsecaseParams } from "./create_room";
+import {CreateRoomUsecase, CreateRoomUsecaseImpl, CreateRoomUsecaseParams} from "./create_room";
 
 
 jest.mock("../../repositories/room_repository");
@@ -29,7 +29,7 @@ describe("teste de usecase", () => {
         const mockRoomRepository: RoomRepository = {
             createRoom: jest.fn().mockReturnValue(right(null))
         } as RoomRepository;
-        let usecase: CreateRoomUsecase = new CreateRoomUsecase(mockRoomRepository);
+        let usecase: CreateRoomUsecase = new CreateRoomUsecaseImpl(mockRoomRepository);
       let result = await usecase.handle(new CreateRoomUsecaseParams({room: exampleRoom}));
       expect(result).toStrictEqual(right(null));
     });
@@ -38,7 +38,7 @@ describe("teste de usecase", () => {
         const mockRoomRepository: RoomRepository = {
             createRoom: jest.fn().mockReturnValue(left(new ServerFailure()))
         } as RoomRepository;
-        let usecase: CreateRoomUsecase = new CreateRoomUsecase(mockRoomRepository);
+        let usecase: CreateRoomUsecase = new CreateRoomUsecaseImpl(mockRoomRepository);
       let result = await usecase.handle(new CreateRoomUsecaseParams({room: exampleRoom}));
       expect(result).toStrictEqual(left(new ServerFailure()));
     });
