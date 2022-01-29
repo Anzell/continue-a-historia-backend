@@ -1,5 +1,6 @@
 import {Db, MongoClient} from "mongodb";
 import {v4 as Uuid} from "uuid";
+import * as bcrypt from "bcrypt";
 
 export class ExternalInjector {
     public static async mongoFactory(): Promise<Db> {
@@ -10,5 +11,9 @@ export class ExternalInjector {
 
     public static uuidFactory(): typeof Uuid{
         return Uuid;
+    }
+
+    public static bcryptFactory(): typeof bcrypt{
+        return bcrypt;
     }
 }
