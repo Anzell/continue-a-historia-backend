@@ -14,7 +14,7 @@ export class CryptographyHelperImpl implements CryptographyHelper {
     }
 
     async hashString (value: string): Promise<string> {
-        return await this.cryptography.hash(value, process.env['CRYPTOGRAPHY_SALT_ROUNDS']!);
+        return await this.cryptography.hash(value, Number.parseInt(process.env['CRYPTOGRAPHY_SALT_ROUNDS']!));
     }
 
 }

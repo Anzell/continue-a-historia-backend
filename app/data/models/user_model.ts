@@ -5,7 +5,8 @@ export class UserModel extends UserEntity{
         return {
             "username": this.username,
             "id": this.id,
-            "email": this.email
+            "email": this.email,
+            "permission": this.permission
         };
     }
 
@@ -13,7 +14,8 @@ export class UserModel extends UserEntity{
         return new UserModel({
             username: json['username'],
             id: json['id'],
-            email: json['email']
+            email: json['email'],
+            permission: json['permission']
         });
     }
 }

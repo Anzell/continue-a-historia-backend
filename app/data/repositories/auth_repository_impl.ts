@@ -1,8 +1,14 @@
 import {AuthRepository} from "../../domain/repositories/auth_repository";
-import {Failure, ServerFailure, UsernameAlreadyExistFailure} from "../../core/failures/failures";
+import {
+    Failure,
+    InvalidCredentialsFailure,
+    ServerFailure,
+    UsernameAlreadyExistFailure
+} from "../../core/failures/failures";
 import {AuthRemoteDs} from "../datasources/remote/auth_remote_ds";
-import {UsernameAlreadyExistException} from "../../core/failures/exceptions";
+import {InvalidCredentialsException, UsernameAlreadyExistException} from "../../core/failures/exceptions";
 import {left, right} from "either-ts";
+import {AuthToken} from "../../domain/entities/auth_token";
 
 export class AuthRepositoryImpl implements  AuthRepository {
     constructor (private readonly datasource: AuthRemoteDs) {}
@@ -15,6 +21,21 @@ export class AuthRepositoryImpl implements  AuthRepository {
             if(e instanceof UsernameAlreadyExistException){
                 return left(new UsernameAlreadyExistFailure());
             }
+            return left(new ServerFailure());
+        }
+    }
+
+
+    async signIn ({username, password}: { username: string; password: string }): Promise<Either<Failure, AuthToken>> {
+        try{
+            const result = await this.datasource.signIn({username, password});
+            return right(result);
+        }catch(e){
+            if(e instanceof InvalidCredentialsException){
+                return left(new InvalidCredentialsFailure());
+            }
+            console.log(e);
+
             return left(new ServerFailure());
         }
     }

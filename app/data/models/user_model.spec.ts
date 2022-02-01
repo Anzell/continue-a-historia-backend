@@ -1,6 +1,4 @@
 import {UserModel} from "./user_model";
-import {DateHelper} from "../../core/helper/date_helper";
-import {PhraseModel} from "./phrase_model";
 
 describe('user model', function () {
     let model: UserModel;
@@ -9,7 +7,8 @@ describe('user model', function () {
        model = new UserModel({
            username: "anzell",
            id: "validId",
-           email: "test@email.com"
+           email: "test@email.com",
+           permission: "user"
        });
     });
 
@@ -17,7 +16,8 @@ describe('user model', function () {
         const expected = {
             "username": "anzell",
             "id": "validId",
-            "email": "test@email.com"
+            "email": "test@email.com",
+            "permission": "user"
         };
         const result = model.toJson();
         expect(result).toStrictEqual(expected);
@@ -27,7 +27,8 @@ describe('user model', function () {
         const result = UserModel.fromJson({
             "username": "anzell",
             "id": "validId",
-            "email": "test@email.com"
+            "email": "test@email.com",
+            "permission": "user"
         });
         expect(result).toStrictEqual(model);
     });

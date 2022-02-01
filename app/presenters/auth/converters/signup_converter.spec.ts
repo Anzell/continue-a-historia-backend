@@ -20,6 +20,5 @@ describe('signup converter', function () {
         expect(result).toStrictEqual(left(new ValidationFailure({message: SignupConverterErrorMessages.missingPassword})));
         result = new SignupConverter().handle(new SignupConvertersParams({username: "anzell", password:"123456"}));
         expect(result).toStrictEqual(left(new ValidationFailure({message: SignupConverterErrorMessages.missingEmail})));
-
     });
 });

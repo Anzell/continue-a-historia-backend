@@ -1,4 +1,10 @@
-import {Failure, ServerFailure, ValidationFailure} from "../failures/failures";
+import {
+    Failure,
+    InvalidCredentialsFailure,
+    NotFoundFailure,
+    ServerFailure,
+    ValidationFailure
+} from "../failures/failures";
 import {ErrorMessages} from "../constants/messages/error_messages";
 
 export class FailureHelper{
@@ -8,6 +14,12 @@ export class FailureHelper{
         }
         if(failure instanceof  ValidationFailure){
             return (failure as ValidationFailure).message;
+        }
+        if(failure instanceof InvalidCredentialsFailure){
+            return ErrorMessages.invalidCredentials;
+        }
+        if(failure instanceof NotFoundFailure){
+            return ErrorMessages.notFound;
         }
         return ErrorMessages.unknownFailure;
     }

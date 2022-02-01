@@ -13,7 +13,8 @@ export class SignUpUsecaseImpl implements SignUpUsecase {
     async handle (params: SignUpUsecaseParams): Promise<Either<Failure, null>> {
         return await this.repository.signUp({
             username: params.username,
-            password: params.password
+            password: params.password,
+            email: params.email,
         });
     }
 

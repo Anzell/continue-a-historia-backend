@@ -3,10 +3,16 @@ import {v4 as Uuid} from "uuid";
 import * as bcrypt from "bcrypt";
 
 export class ExternalInjector {
-    public static async mongoFactory(): Promise<Db> {
-        const mongoClient: MongoClient = new MongoClient(`mongodb+srv://${process.env['MONGO_USER']}:${process.env['MONGO_PASS']}@cluster0.1pnw2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`);
-        await mongoClient.connect();
-        return mongoClient.db(`${process.env['MONGO_DB']}`);
+    static mongoClient: MongoClient;
+
+    public static async mongoInjector(): Promise<void> {
+        this.mongoClient = new MongoClient(`mongodb+srv://${process.env['MONGO_USER']}:${process.env['MONGO_PASS']}@cluster0.1pnw2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`);
+        await this.mongoClient.connect();
+    }
+
+
+    public static async dbFactory(): Promise<Db> {
+        return this.mongoClient.db(`${process.env['MONGO_DB']}`);
     }
 
     public static uuidFactory(): typeof Uuid{

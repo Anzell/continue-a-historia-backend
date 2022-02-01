@@ -15,7 +15,6 @@ describe('sign up controller', function () {
     }
 
     it('deve completar o registro de usuario normalmente e retornar status 200', async function () {
-
         const spyUsecase = jest.fn().mockReturnValue(right(null));
         const spyConverter = jest.fn().mockReturnValue(right(requestExample));
         const mockUsecase: SignUpUsecase = {handle: spyUsecase};
