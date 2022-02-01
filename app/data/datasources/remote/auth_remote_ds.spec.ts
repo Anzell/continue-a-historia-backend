@@ -16,7 +16,7 @@ describe('auth remote ds', function () {
     });
 
     describe('sign up', function () {
-        const username: string = "anzell";
+        const username: string = "newUser";
         const password: string = "123456";
         const email: string = "test@email.com";
 
@@ -40,6 +40,7 @@ describe('auth remote ds', function () {
             expect(spyHashPassword).toBeCalled();
             const newUserDocument = await db.collection(DbCollections.users).findOne({id: "validId"});
             expect(newUserDocument!['email']).toStrictEqual("test@email.com");
+            expect(newUserDocument!['username']).toStrictEqual("newUser");
         });
     });
 

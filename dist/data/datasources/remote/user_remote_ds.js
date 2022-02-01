@@ -11,7 +11,7 @@ class UserRemoteDsImpl {
     }
     async getUserById({ id }) {
         const document = await this.db.collection(db_collections_1.DbCollections.users).findOne({ id });
-        if (document === undefined) {
+        if (document == undefined) {
             throw new exceptions_1.NotFoundException();
         }
         return user_mapper_1.UserMapper.modelToEntity(user_model_1.UserModel.fromJson(document));

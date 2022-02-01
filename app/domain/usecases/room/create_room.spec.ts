@@ -27,7 +27,8 @@ describe("teste de usecase", () => {
     
     it("deve retornar right void caso chamada ao repository der sucesso", async () => {
         const mockRoomRepository: RoomRepository = {
-            createRoom: jest.fn().mockReturnValue(right(null))
+            createRoom: jest.fn().mockReturnValue(right(null)),
+            insertPlayer: jest.fn()
         } as RoomRepository;
         let usecase: CreateRoomUsecase = new CreateRoomUsecaseImpl(mockRoomRepository);
       let result = await usecase.handle(new CreateRoomUsecaseParams({room: exampleRoom}));
@@ -36,7 +37,8 @@ describe("teste de usecase", () => {
 
     it("deve retornar left failure caso chamada ao repository der erro", async () => {
         const mockRoomRepository: RoomRepository = {
-            createRoom: jest.fn().mockReturnValue(left(new ServerFailure()))
+            createRoom: jest.fn().mockReturnValue(left(new ServerFailure())),
+            insertPlayer: jest.fn()
         } as RoomRepository;
         let usecase: CreateRoomUsecase = new CreateRoomUsecaseImpl(mockRoomRepository);
       let result = await usecase.handle(new CreateRoomUsecaseParams({room: exampleRoom}));

@@ -6,6 +6,7 @@ import {RoomRemoteDs, RoomRemoteDsImpl} from "./room_remote_ds";
 import {StringHelper} from "../../../core/helper/string_helper";
 import {GameRoomMapper} from "../../mappers/game_room_mapper";
 import {GameRoomModel} from "../../models/game_room";
+import {NotFoundException} from "../../../core/failures/exceptions";
 
 describe("room remote ds", () => {
     let db: Db;
@@ -40,6 +41,71 @@ describe("room remote ds", () => {
             const result = await db.collection(DbCollections.rooms).findOne({"id": "validId"});
             expect(result).not.toBe(null);
             expect(GameRoomMapper.modelToEntity(GameRoomModel.fromJson(result))).toBeInstanceOf(GameRoom);
+        });
+    });
+
+    describe('insert player', function () {
+
+        const mockStringHelper: StringHelper = {
+            generateUuid: jest.fn().mockReturnValue("validId")
+        } as StringHelper;
+
+        it('should insert a new player in game room when array exists in document', async function () {
+            const roomId = "validIdExistingArray";
+            const userId = "exampleValidUserId";
+            const exampleRoom = new GameRoomModel({
+                adminsIds: ["admin1"],
+                name: "roomName",
+                history: [
+                    new Phrase({
+                        phrase: "Era uma vez",
+                        senderId: "admin1",
+                        sendAt: new Date(2021,10,10)
+                    })
+                ],
+                id: "validIdExistingArray",
+                playersIds: ["aId"],
+                createdAt: new Date(2021,10,10)
+            });
+            await db.collection(DbCollections.rooms).insertOne(exampleRoom.toJson());
+            const datasource = new RoomRemoteDsImpl(db, mockStringHelper);
+            await datasource.insertPlayer({roomId, userId});
+            const documentResult = await db.collection(DbCollections.rooms).findOne({id: "validIdExistingArray"});
+            const roomModel = GameRoomModel.fromJson(documentResult);
+            expect(roomModel.playersIds?.length).toStrictEqual(2);
+        });
+
+        it('should insert a new player in game room when array dont exists in document', async function () {
+            const roomId = "validIdDontExistingArray";
+            const userId = "exampleValidUserId";
+            const exampleRoom = new GameRoomModel({
+                adminsIds: ["admin1"],
+                name: "roomName",
+                history: [
+                    new Phrase({
+                        phrase: "Era uma vez",
+                        senderId: "admin1",
+                        sendAt: new Date(2021,10,10)
+                    })
+                ],
+                id: "validIdDontExistingArray",
+                playersIds: undefined,
+                createdAt: new Date(2021,10,10)
+            });
+            await db.collection(DbCollections.rooms).insertOne(exampleRoom.toJson());
+            const datasource = new RoomRemoteDsImpl(db, mockStringHelper);
+            await datasource.insertPlayer({roomId, userId});
+            const documentResult = await db.collection(DbCollections.rooms).findOne({id: "validIdDontExistingArray"});
+            const roomModel = GameRoomModel.fromJson(documentResult);
+            expect(roomModel.playersIds?.length).toStrictEqual(1);
+        });
+
+        it('should throw NotFoundException when roomId provided dont exists', async function () {
+            const roomId = "invalidId";
+            const userId = "exampleValidUserId";
+            const datasource = new RoomRemoteDsImpl(db, mockStringHelper);
+            const result = datasource.insertPlayer({roomId, userId});
+            await expect(result).rejects.toStrictEqual(new NotFoundException());
         });
     });
 });
