@@ -16,5 +16,14 @@ class RoomRepositoryImpl {
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
     }
+    async insertPlayer({ userId, roomId }) {
+        try {
+            await this.datasource.insertPlayer({ userId, roomId });
+            return (0, either_ts_1.right)(null);
+        }
+        catch (e) {
+            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+        }
+    }
 }
 exports.RoomRepositoryImpl = RoomRepositoryImpl;

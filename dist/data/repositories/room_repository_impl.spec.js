@@ -25,7 +25,8 @@ describe("teste de room repository impl", () => {
         });
         it("deve retornar right null caso chamada ao datasource der sucesso", async () => {
             const mockRoomDatasource = {
-                createRoom: jest.fn().mockReturnValue(null)
+                createRoom: jest.fn().mockReturnValue(null),
+                insertPlayer: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.createRoom(exampleRoom);
@@ -33,10 +34,33 @@ describe("teste de room repository impl", () => {
         });
         it("deve retornar left failure caso chamada ao repository der erro", async () => {
             const mockRoomDatasource = {
-                createRoom: jest.fn().mockRejectedValue(new exceptions_1.ServerException())
+                createRoom: jest.fn().mockRejectedValue(new exceptions_1.ServerException()),
+                insertPlayer: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.createRoom(exampleRoom);
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+        });
+    });
+    describe('insert player', function () {
+        const exampleRoomId = "validRoomId";
+        const exampleUserId = "validUserId";
+        it('should return a right null if call to datasource is success', async function () {
+            const mockRoomDatasource = {
+                createRoom: jest.fn(),
+                insertPlayer: jest.fn().mockReturnValue(null)
+            };
+            let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
+            let result = await repository.insertPlayer({ userId: exampleUserId, roomId: exampleRoomId });
+            expect(result).toStrictEqual((0, either_ts_1.right)(null));
+        });
+        it('should return left server failure if call to datasource fails', async function () {
+            const mockRoomDatasource = {
+                createRoom: jest.fn(),
+                insertPlayer: jest.fn().mockRejectedValue(new exceptions_1.ServerException())
+            };
+            let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
+            let result = await repository.insertPlayer({ userId: exampleUserId, roomId: exampleRoomId });
             expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
         });
     });

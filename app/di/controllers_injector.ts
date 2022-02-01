@@ -10,6 +10,9 @@ import {SignInController} from "../presenters/auth/signin_controller";
 import {SignInUsecase, SignInUseCaseImpl} from "../domain/usecases/auth/sign_in";
 import {RepositoriesInjector} from "./repositories_injector";
 import {SignInConverter} from "../presenters/auth/converters/signin_converter";
+import {PlayerEnterInRoomController} from "../presenters/room/player_enter_in_room_controller";
+import {PlayerEnterInRoomUsecase} from "../domain/usecases/room/player_enter_in_room";
+import {PlayerEnterInRoomConverter} from "../presenters/room/converters/player_enter_in_room_converter";
 
 export class ControllersInjectorFactory {
     public static async createRoomControllerFactory(): Promise<CreateRoomController>{
@@ -34,5 +37,11 @@ export class ControllersInjectorFactory {
         const usecase: SignInUsecase = new SignInUseCaseImpl(await RepositoriesInjector.authRepositoryFactory());
         const converter: SignInConverter = new SignInConverter();
         return new SignInController(usecase, converter);
+    }
+
+    public static async playerEnterInRoomControllerFactory(): Promise<PlayerEnterInRoomController> {
+        const usecase: PlayerEnterInRoomUsecase = await UsecasesInjector.insertUserInRoomUsecase();
+        const converter: PlayerEnterInRoomConverter = await ConvertersInjector.playerEnterInRoomConverterFactory();
+        return new PlayerEnterInRoomController(usecase, converter);
     }
 }

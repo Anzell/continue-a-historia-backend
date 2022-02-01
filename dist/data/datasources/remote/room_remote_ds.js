@@ -4,10 +4,29 @@ exports.RoomRemoteDsImpl = void 0;
 const db_collections_1 = require("../../../core/constants/db/db_collections");
 const game_room_mapper_1 = require("../../mappers/game_room_mapper");
 const date_helper_1 = require("../../../core/helper/date_helper");
+const exceptions_1 = require("../../../core/failures/exceptions");
+const game_room_1 = require("../../models/game_room");
 class RoomRemoteDsImpl {
     constructor(db, stringHelper) {
         this.db = db;
         this.stringHelper = stringHelper;
+    }
+    async insertPlayer({ roomId, userId }) {
+        const roomDocument = await this.db.collection(db_collections_1.DbCollections.rooms).findOne({ id: roomId });
+        console.log(roomDocument);
+        if (roomDocument === null) {
+            throw new exceptions_1.NotFoundException();
+        }
+        const roomModel = game_room_1.GameRoomModel.fromJson(roomDocument);
+        if (roomModel.playersIds !== undefined && roomModel.playersIds?.length > 0) {
+            roomModel.playersIds.push(userId);
+        }
+        else {
+            roomModel.playersIds = [userId];
+        }
+        await this.db.collection(db_collections_1.DbCollections.rooms).updateOne({ "id": roomId }, { $set: {
+                ...roomModel.toJson()
+            } }, { upsert: true });
     }
     async createRoom(room) {
         const id = this.stringHelper.generateUuid();
