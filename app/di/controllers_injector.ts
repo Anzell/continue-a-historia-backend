@@ -14,6 +14,7 @@ import {PlayerEnterInRoomController} from "../presenters/room/player_enter_in_ro
 import {PlayerEnterInRoomUsecase} from "../domain/usecases/room/player_enter_in_room";
 import {PlayerEnterInRoomConverter} from "../presenters/room/converters/player_enter_in_room_converter";
 import {AuthGuardSocket} from "../main/middlewares/auth_guard_socket";
+import {GetUserPermissionsUsecase} from "../domain/usecases/user/get_user_permissions";
 
 export class ControllersInjectorFactory {
     public static async createRoomControllerFactory(): Promise<CreateRoomController>{
@@ -29,15 +30,15 @@ export class ControllersInjectorFactory {
     }
 
     public static async authGuardRouteFactory(...authorized: string[]): Promise<AuthGuardRoute> {
-        const getUserByIdUsecase: GetUserByIdUsecase = await UsecasesInjector.getUserByIdUsecase();
+        const getUserPermissionUsecase: GetUserPermissionsUsecase = await UsecasesInjector.getUserPermissionUsecase();
         const tokenHelper: TokenHelper = await CoreInjector.tokenHelperFactory();
-        return new AuthGuardRoute({authorized, tokenHelper, getUserUsecase: getUserByIdUsecase});
+        return new AuthGuardRoute({authorized, tokenHelper, getUserPermissionUsecase: getUserPermissionUsecase});
     }
 
     public static async authGuardSocketFactory(...authorized: string[]): Promise<AuthGuardSocket> {
-        const getUserByIdUsecase: GetUserByIdUsecase = await UsecasesInjector.getUserByIdUsecase();
+        const getUserPermissionUsecase: GetUserPermissionsUsecase = await UsecasesInjector.getUserPermissionUsecase();
         const tokenHelper: TokenHelper = await CoreInjector.tokenHelperFactory();
-        return new AuthGuardSocket({authorized, tokenHelper, getUserUsecase: getUserByIdUsecase});
+        return new AuthGuardSocket({authorized, tokenHelper, getUserPermissionUsecase: getUserPermissionUsecase});
     }
 
     public static async signInControllerFactory(): Promise<SignInController> {

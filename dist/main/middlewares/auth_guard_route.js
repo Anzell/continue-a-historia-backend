@@ -5,10 +5,10 @@ const custom_response_1 = require("../protocols/custom_response");
 const exceptions_1 = require("../../core/failures/exceptions");
 const failure_mapper_1 = require("../../core/helper/failure_mapper");
 class AuthGuardRoute {
-    constructor({ authorized, tokenHelper, getUserUsecase }) {
+    constructor({ authorized, tokenHelper, getUserPermissionUsecase }) {
         this.authorized = authorized;
         this.tokenHelper = tokenHelper;
-        this.getUserUsecase = getUserUsecase;
+        this.getUserPermissionUsecase = getUserPermissionUsecase;
     }
     async handle() {
         return async (req, res, next) => {
@@ -58,13 +58,13 @@ class AuthGuardRoute {
         try {
             if (tokenData) {
                 if (tokenData.permission === "user") {
-                    const response = await this.getUserUsecase.handle({ id: tokenData.id });
+                    const response = await this.getUserPermissionUsecase.handle({ id: tokenData.id });
                     return await new Promise((resolve, reject) => {
                         response.leftMap((failure) => {
                             reject(failure_mapper_1.FailureHelper.mapFailureToMessage(failure));
                         });
-                        response.map((user) => {
-                            if (this.authorized.some((e) => e === user.permission)) {
+                        response.map((permission) => {
+                            if (this.authorized.some((e) => e === permission)) {
                                 resolve(true);
                             }
                             else {

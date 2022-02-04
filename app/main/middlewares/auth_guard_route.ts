@@ -8,16 +8,17 @@ import {GetUserByIdUsecase} from "../../domain/usecases/user/get_user_by_id";
 import {FailureHelper} from "../../core/helper/failure_mapper";
 import {UserEntity} from "../../domain/entities/user_entity";
 import {Failure} from "../../core/failures/failures";
+import {GetUserPermissionsUsecase} from "../../domain/usecases/user/get_user_permissions";
 
 export class AuthGuardRoute implements Middleware {
     private readonly authorized: string[];
-    private readonly getUserUsecase: GetUserByIdUsecase;
+    private readonly getUserPermissionUsecase: GetUserPermissionsUsecase;
     private readonly tokenHelper: TokenHelper;
 
-    constructor ({authorized, tokenHelper, getUserUsecase}: {authorized: string[], tokenHelper: TokenHelper, getUserUsecase: GetUserByIdUsecase}) {
+    constructor ({authorized, tokenHelper, getUserPermissionUsecase}: {authorized: string[], tokenHelper: TokenHelper, getUserPermissionUsecase: GetUserPermissionsUsecase}) {
         this.authorized = authorized;
         this.tokenHelper = tokenHelper;
-        this.getUserUsecase = getUserUsecase;
+        this.getUserPermissionUsecase = getUserPermissionUsecase;
     }
 
     async handle(): Promise<RequestHandler> {
@@ -68,13 +69,13 @@ export class AuthGuardRoute implements Middleware {
         try {
             if (tokenData) {
                 if (tokenData.permission === "user") {
-                    const response = await this.getUserUsecase.handle({id: tokenData.id});
+                    const response = await this.getUserPermissionUsecase.handle({id: tokenData.id});
                     return await new Promise((resolve, reject) => {
                         response.leftMap((failure: Failure) => {
                             reject(FailureHelper.mapFailureToMessage(failure));
                         });
-                        response.map((user: UserEntity) => {
-                            if (this.authorized.some((e) => e === user.permission)) {
+                        response.map((permission: string) => {
+                            if (this.authorized.some((e) => e === permission)) {
                                 resolve(true);
                             } else {
                                 resolve(false);
