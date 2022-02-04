@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotFoundException = exports.AccessDeniedException = exports.InvalidCredentialsException = exports.UsernameAlreadyExistException = exports.ServerException = void 0;
+exports.PlayerDontExistsInRoomException = exports.NotFoundException = exports.AccessDeniedException = exports.InvalidCredentialsException = exports.UsernameAlreadyExistException = exports.ServerException = void 0;
 class ServerException extends Error {
 }
 exports.ServerException = ServerException;
@@ -16,3 +16,6 @@ exports.AccessDeniedException = AccessDeniedException;
 class NotFoundException extends Error {
 }
 exports.NotFoundException = NotFoundException;
+class PlayerDontExistsInRoomException extends Error {
+}
+exports.PlayerDontExistsInRoomException = PlayerDontExistsInRoomException;

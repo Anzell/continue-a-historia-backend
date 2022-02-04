@@ -3,7 +3,6 @@ import {ConvertersInjector} from "./converters_injector";
 import {CreateRoomController} from "../presenters/room/create_room_controller";
 import {SignUpController} from "../presenters/auth/signup_controller";
 import {AuthGuardRoute} from "../main/middlewares/auth_guard_route";
-import {GetUserByIdUsecase} from "../domain/usecases/user/get_user_by_id";
 import {TokenHelper} from "../core/helper/token_helper";
 import {CoreInjector} from "./core_injector";
 import {SignInController} from "../presenters/auth/signin_controller";

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ValidationFailure = exports.NotFoundFailure = exports.InvalidCredentialsFailure = exports.UsernameAlreadyExistFailure = exports.ServerFailure = void 0;
+exports.ValidationFailure = exports.PlayerDontExistsInRoomFailure = exports.NotFoundFailure = exports.InvalidCredentialsFailure = exports.UsernameAlreadyExistFailure = exports.ServerFailure = void 0;
 class ServerFailure {
 }
 exports.ServerFailure = ServerFailure;
@@ -13,6 +13,9 @@ exports.InvalidCredentialsFailure = InvalidCredentialsFailure;
 class NotFoundFailure {
 }
 exports.NotFoundFailure = NotFoundFailure;
+class PlayerDontExistsInRoomFailure {
+}
+exports.PlayerDontExistsInRoomFailure = PlayerDontExistsInRoomFailure;
 class ValidationFailure {
     constructor({ message }) {
         this.message = message;

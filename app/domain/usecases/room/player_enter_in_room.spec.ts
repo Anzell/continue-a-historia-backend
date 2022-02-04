@@ -1,6 +1,6 @@
 import {RoomRepository} from "../../repositories/room_repository";
 import {left, right} from "either-ts";
-import {PlayerEnterInRoomUsecase, PlayerEnterInRoomUsecaseImpl} from "./player_enter_in_room";
+import { PlayerEnterInRoomUsecaseImpl} from "./player_enter_in_room";
 import {ServerFailure} from "../../../core/failures/failures";
 
 describe('player enter in room usecase', function () {
@@ -10,7 +10,8 @@ describe('player enter in room usecase', function () {
     it('should return a right null if call to repository is success', async function () {
         const mockRepository: RoomRepository = {
           createRoom: jest.fn(),
-          insertPlayer: jest.fn().mockReturnValue(right(null))
+          insertPlayer: jest.fn().mockReturnValue(right(null)),
+            sendPhrase: jest.fn()
         };
         const usecase = new PlayerEnterInRoomUsecaseImpl(mockRepository);
         const result = await usecase.handle({roomId: exampleRoomId, userId: exampleUserId});
@@ -20,7 +21,8 @@ describe('player enter in room usecase', function () {
     it('should return left server failure if call to repository fails', async function () {
         const mockRepository: RoomRepository = {
             createRoom: jest.fn(),
-            insertPlayer: jest.fn().mockReturnValue(left(new ServerFailure()))
+            insertPlayer: jest.fn().mockReturnValue(left(new ServerFailure())),
+            sendPhrase: jest.fn()
         };
         const usecase = new PlayerEnterInRoomUsecaseImpl(mockRepository);
         const result = await usecase.handle({roomId: exampleRoomId, userId: exampleUserId});

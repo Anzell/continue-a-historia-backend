@@ -108,4 +108,35 @@ describe("room remote ds", () => {
             await expect(result).rejects.toStrictEqual(new NotFoundException());
         });
     });
+
+    describe('send phrase', function () {
+        const mockStringHelper: StringHelper = {
+            generateUuid: jest.fn().mockReturnValue("validId")
+        } as StringHelper;
+
+        it('should register a new phrase in history', async function () {
+            const roomId = "roomForTestPhrase";
+            const userId = "player1";
+            const phrase = "um cara que";
+            const exampleRoom = new GameRoomModel({
+                adminsIds: ["admin1"],
+                name: "roomName",
+                history: [
+                    new Phrase({
+                        phrase: "Era uma vez",
+                        senderId: "admin1",
+                        sendAt: new Date(2021, 10, 10)
+                    })
+                ],
+                id: "roomForTestPhrase",
+                playersIds: ["player1"],
+                createdAt: new Date(2021, 10, 10)
+            });
+            await db.collection(DbCollections.rooms).insertOne(exampleRoom.toJson());
+            const datasource = new RoomRemoteDsImpl(db, mockStringHelper);
+            await datasource.sendPhrase({userId, roomId, phrase});
+            const documentAfterUpdate = await db.collection(DbCollections.rooms).findOne({id: roomId});
+            expect(documentAfterUpdate!['history'].length).toStrictEqual(2);
+        });
+    });
 });

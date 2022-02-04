@@ -25,5 +25,14 @@ class RoomRepositoryImpl {
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
     }
+    async sendPhrase({ userId, roomId, phrase }) {
+        try {
+            await this.datasource.sendPhrase({ userId, roomId, phrase });
+            return (0, either_ts_1.right)(null);
+        }
+        catch (e) {
+            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+        }
+    }
 }
 exports.RoomRepositoryImpl = RoomRepositoryImpl;

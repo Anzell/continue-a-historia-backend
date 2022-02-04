@@ -26,4 +26,13 @@ export class RoomRepositoryImpl implements RoomRepository {
         }
     }
 
+    async sendPhrase ({userId, roomId, phrase}: { userId: string; roomId: string; phrase: string }): Promise<Either<Failure, null>> {
+        try {
+            await this.datasource.sendPhrase({userId, roomId, phrase});
+            return right(null);
+        }catch(e){
+            return left(new ServerFailure());
+        }
+    }
+
 }

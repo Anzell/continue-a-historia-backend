@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adaptSocketMessage = void 0;
-const controllers_injector_1 = require("../../di/controllers_injector");
-const adaptSocketMessage = async (ws, data) => {
-    const controller = await controllers_injector_1.ControllersInjectorFactory.playerEnterInRoomControllerFactory();
+const adaptSocketMessage = async (ws, data, controller) => {
     const response = await controller.handle(data);
     ws.send(response.message);
 };
