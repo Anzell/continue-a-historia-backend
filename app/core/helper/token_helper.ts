@@ -9,7 +9,7 @@ export interface TokenHelper {
 export class TokenHelperImpl implements TokenHelper{
     decodeToken (data: any): TokenData | undefined {
         let token: TokenData | undefined;
-        jwt.verify(data, process.env.JWT_API_SECRET!, (error: any, decoded: any) => {
+        jwt.verify(data, process.env[`JWT_SECRET`]!, (error: any, decoded: any) => {
             if(decoded){
                 token = new TokenData({
                     id: decoded['id'],

@@ -2,7 +2,7 @@ import {UsecasesInjector} from "./usecases_injector";
 import {ConvertersInjector} from "./converters_injector";
 import {CreateRoomController} from "../presenters/room/create_room_controller";
 import {SignUpController} from "../presenters/auth/signup_controller";
-import {AuthGuard} from "../main/middlewares/auth_guard";
+import {AuthGuardRoute} from "../main/middlewares/auth_guard_route";
 import {GetUserByIdUsecase} from "../domain/usecases/user/get_user_by_id";
 import {TokenHelper} from "../core/helper/token_helper";
 import {CoreInjector} from "./core_injector";
@@ -13,6 +13,7 @@ import {SignInConverter} from "../presenters/auth/converters/signin_converter";
 import {PlayerEnterInRoomController} from "../presenters/room/player_enter_in_room_controller";
 import {PlayerEnterInRoomUsecase} from "../domain/usecases/room/player_enter_in_room";
 import {PlayerEnterInRoomConverter} from "../presenters/room/converters/player_enter_in_room_converter";
+import {AuthGuardSocket} from "../main/middlewares/auth_guard_socket";
 
 export class ControllersInjectorFactory {
     public static async createRoomControllerFactory(): Promise<CreateRoomController>{
@@ -27,10 +28,16 @@ export class ControllersInjectorFactory {
         return new SignUpController(usecase, converter);
     }
 
-    public static async authGuardFactory(...authorized: string[]): Promise<AuthGuard> {
+    public static async authGuardRouteFactory(...authorized: string[]): Promise<AuthGuardRoute> {
         const getUserByIdUsecase: GetUserByIdUsecase = await UsecasesInjector.getUserByIdUsecase();
         const tokenHelper: TokenHelper = await CoreInjector.tokenHelperFactory();
-        return new AuthGuard({authorized, tokenHelper, getUserUsecase: getUserByIdUsecase});
+        return new AuthGuardRoute({authorized, tokenHelper, getUserUsecase: getUserByIdUsecase});
+    }
+
+    public static async authGuardSocketFactory(...authorized: string[]): Promise<AuthGuardSocket> {
+        const getUserByIdUsecase: GetUserByIdUsecase = await UsecasesInjector.getUserByIdUsecase();
+        const tokenHelper: TokenHelper = await CoreInjector.tokenHelperFactory();
+        return new AuthGuardSocket({authorized, tokenHelper, getUserUsecase: getUserByIdUsecase});
     }
 
     public static async signInControllerFactory(): Promise<SignInController> {

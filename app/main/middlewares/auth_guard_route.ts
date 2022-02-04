@@ -9,7 +9,7 @@ import {FailureHelper} from "../../core/helper/failure_mapper";
 import {UserEntity} from "../../domain/entities/user_entity";
 import {Failure} from "../../core/failures/failures";
 
-export class AuthGuard implements Middleware {
+export class AuthGuardRoute implements Middleware {
     private readonly authorized: string[];
     private readonly getUserUsecase: GetUserByIdUsecase;
     private readonly tokenHelper: TokenHelper;

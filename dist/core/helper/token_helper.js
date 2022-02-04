@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 class TokenHelperImpl {
     decodeToken(data) {
         let token;
-        jwt.verify(data, process.env.JWT_API_SECRET, (error, decoded) => {
+        jwt.verify(data, process.env[`JWT_SECRET`], (error, decoded) => {
             if (decoded) {
                 token = new token_data_1.TokenData({
                     id: decoded['id'],

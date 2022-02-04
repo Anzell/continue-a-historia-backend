@@ -20,5 +20,17 @@ class UserRepositoryImpl {
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
     }
+    async getUserPermissions({ id }) {
+        try {
+            const result = await this.datasource.getUserPermissions({ id });
+            return (0, either_ts_1.right)(result);
+        }
+        catch (e) {
+            if (e instanceof exceptions_1.NotFoundException) {
+                return (0, either_ts_1.left)(new failures_1.NotFoundFailure());
+            }
+            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+        }
+    }
 }
 exports.UserRepositoryImpl = UserRepositoryImpl;

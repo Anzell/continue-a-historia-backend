@@ -9,6 +9,13 @@ class UserRemoteDsImpl {
     constructor(db) {
         this.db = db;
     }
+    async getUserPermissions({ id }) {
+        const document = await this.db.collection(db_collections_1.DbCollections.users).findOne({ id });
+        if (document == undefined) {
+            throw new exceptions_1.NotFoundException();
+        }
+        return document['permission'];
+    }
     async getUserById({ id }) {
         const document = await this.db.collection(db_collections_1.DbCollections.users).findOne({ id });
         if (document == undefined) {

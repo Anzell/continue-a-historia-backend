@@ -7,9 +7,18 @@ import {UserModel} from "../../models/user_model";
 
 export interface UserRemoteDs {
     getUserById: ({id}: {id: string}) => Promise<UserEntity>;
+    getUserPermissions: ({id}: {id: string}) => Promise<string>;
 }
 
 export class UserRemoteDsImpl implements UserRemoteDs {
+
+    async getUserPermissions ({id}: { id: string }): Promise<string> {
+        const document = await this.db.collection(DbCollections.users).findOne({id});
+        if (document == undefined) {
+            throw new NotFoundException();
+        }
+        return document['permission'];
+    }
 
     constructor (private readonly db: Db) {}
 

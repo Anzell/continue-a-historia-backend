@@ -13,7 +13,8 @@ describe('get user by id usecase', function () {
 
     it('should return a valid user if call to repository is success', async function () {
         const mockRepository: UserRepository = {
-          getUserById: jest.fn().mockReturnValue(right(userExample))
+          getUserById: jest.fn().mockReturnValue(right(userExample)),
+            getUserPermissions: jest.fn()
         };
         const usecase = new GetUserByIdUsecase(mockRepository);
         const result = await usecase.handle(new GetUserByIdUsecaseParams({id: "exampleId"}));
@@ -22,7 +23,8 @@ describe('get user by id usecase', function () {
 
     it('should return left ServerFailure if a error ocurred in repository', async function () {
         const mockRepository: UserRepository = {
-            getUserById: jest.fn().mockReturnValue(left(new ServerFailure()))
+            getUserById: jest.fn().mockReturnValue(left(new ServerFailure())),
+            getUserPermissions: jest.fn()
         };
         const usecase = new GetUserByIdUsecase(mockRepository);
         const result = await usecase.handle(new GetUserByIdUsecaseParams({id: "exampleId"}));

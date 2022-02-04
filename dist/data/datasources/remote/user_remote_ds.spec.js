@@ -33,4 +33,23 @@ describe('user remote ds', function () {
             await expect(result).rejects.toStrictEqual(new exceptions_1.NotFoundException());
         });
     });
+    describe('get user permission', function () {
+        it('should return a valid permission', async function () {
+            const expected = "user";
+            await db.collection(db_collections_1.DbCollections.users).insertOne({
+                "username": "anzell",
+                "id": "validPermissionId",
+                "email": "test@email.com",
+                "permission": expected
+            });
+            const datasource = new user_remote_ds_1.UserRemoteDsImpl(db);
+            const result = await datasource.getUserPermissions({ id: "validPermissionId" });
+            expect(result).toStrictEqual(expected);
+        });
+        it('should throw a NotFoundException if provided id not exists in database', async function () {
+            const datasource = new user_remote_ds_1.UserRemoteDsImpl(db);
+            const result = datasource.getUserPermissions({ id: "invalidId" });
+            await expect(result).rejects.toStrictEqual(new exceptions_1.NotFoundException());
+        });
+    });
 });
