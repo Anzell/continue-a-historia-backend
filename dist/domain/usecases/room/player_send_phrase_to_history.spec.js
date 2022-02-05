@@ -11,7 +11,8 @@ describe('player send phrase to history usecase', function () {
         const mockRepository = {
             createRoom: jest.fn(),
             insertPlayer: jest.fn(),
-            sendPhrase: jest.fn().mockReturnValue((0, either_ts_1.right)(null))
+            sendPhrase: jest.fn().mockReturnValue((0, either_ts_1.right)(null)),
+            getRoomById: jest.fn()
         };
         const usecase = new player_send_phrase_to_history_1.PlayerSendPhraseToHistoryUsecaseImpl(mockRepository);
         const result = await usecase.handle({ roomId: exampleRoomId, userId: exampleUserId, phrase: examplePhrase });
@@ -21,7 +22,8 @@ describe('player send phrase to history usecase', function () {
         const mockRepository = {
             createRoom: jest.fn(),
             insertPlayer: jest.fn(),
-            sendPhrase: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
+            sendPhrase: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure())),
+            getRoomById: jest.fn()
         };
         const usecase = new player_send_phrase_to_history_1.PlayerSendPhraseToHistoryUsecaseImpl(mockRepository);
         const result = await usecase.handle({ roomId: exampleRoomId, userId: exampleUserId, phrase: examplePhrase });

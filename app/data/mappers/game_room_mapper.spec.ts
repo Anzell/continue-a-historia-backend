@@ -1,9 +1,8 @@
 import {Phrase} from "../../domain/entities/phrase";
-import {PhraseModel} from "../models/phrase_model";
-import {PhraseMapper} from "./phrase_mapper";
 import {GameRoom} from "../../domain/entities/game_room";
 import {GameRoomModel} from "../models/game_room";
 import {GameRoomMapper} from "./game_room_mapper";
+import {PhraseModel} from "../models/phrase_model";
 
 describe("game room mapper", () => {
     const entity = new GameRoom({
@@ -27,7 +26,7 @@ describe("game room mapper", () => {
         adminsIds: ["admin1"],
         id: "validRoomId",
         history: [
-            new Phrase({
+            new PhraseModel({
                 senderId: "validId",
                 sendAt: new Date(2021,10,10),
                 phrase: "Era uma vez"

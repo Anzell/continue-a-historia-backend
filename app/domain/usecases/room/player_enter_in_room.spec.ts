@@ -11,7 +11,8 @@ describe('player enter in room usecase', function () {
         const mockRepository: RoomRepository = {
           createRoom: jest.fn(),
           insertPlayer: jest.fn().mockReturnValue(right(null)),
-            sendPhrase: jest.fn()
+            sendPhrase: jest.fn(),
+            getRoomById: jest.fn()
         };
         const usecase = new PlayerEnterInRoomUsecaseImpl(mockRepository);
         const result = await usecase.handle({roomId: exampleRoomId, userId: exampleUserId});
@@ -22,7 +23,8 @@ describe('player enter in room usecase', function () {
         const mockRepository: RoomRepository = {
             createRoom: jest.fn(),
             insertPlayer: jest.fn().mockReturnValue(left(new ServerFailure())),
-            sendPhrase: jest.fn()
+            sendPhrase: jest.fn(),
+            getRoomById: jest.fn()
         };
         const usecase = new PlayerEnterInRoomUsecaseImpl(mockRepository);
         const result = await usecase.handle({roomId: exampleRoomId, userId: exampleUserId});

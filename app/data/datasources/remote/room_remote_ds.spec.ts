@@ -7,6 +7,7 @@ import {StringHelper} from "../../../core/helper/string_helper";
 import {GameRoomMapper} from "../../mappers/game_room_mapper";
 import {GameRoomModel} from "../../models/game_room";
 import {NotFoundException} from "../../../core/failures/exceptions";
+import {PhraseModel} from "../../models/phrase_model";
 
 describe("room remote ds", () => {
     let db: Db;
@@ -57,7 +58,7 @@ describe("room remote ds", () => {
                 adminsIds: ["admin1"],
                 name: "roomName",
                 history: [
-                    new Phrase({
+                    new PhraseModel({
                         phrase: "Era uma vez",
                         senderId: "admin1",
                         sendAt: new Date(2021,10,10)
@@ -82,7 +83,7 @@ describe("room remote ds", () => {
                 adminsIds: ["admin1"],
                 name: "roomName",
                 history: [
-                    new Phrase({
+                    new PhraseModel({
                         phrase: "Era uma vez",
                         senderId: "admin1",
                         sendAt: new Date(2021,10,10)
@@ -122,7 +123,7 @@ describe("room remote ds", () => {
                 adminsIds: ["admin1"],
                 name: "roomName",
                 history: [
-                    new Phrase({
+                    new PhraseModel({
                         phrase: "Era uma vez",
                         senderId: "admin1",
                         sendAt: new Date(2021, 10, 10)
@@ -137,6 +138,35 @@ describe("room remote ds", () => {
             await datasource.sendPhrase({userId, roomId, phrase});
             const documentAfterUpdate = await db.collection(DbCollections.rooms).findOne({id: roomId});
             expect(documentAfterUpdate!['history'].length).toStrictEqual(2);
+        });
+    });
+
+    describe('get room by id', function () {
+
+        const mockStringHelper: StringHelper = {
+            generateUuid: jest.fn().mockReturnValue("validId")
+        } as StringHelper;
+
+        it('should return a valid GameRoom', async function () {
+            const expected = new GameRoom({
+                id: "getRoomByIdTest",
+                adminsIds: ["admin1"],
+                history: [],
+                createdAt: new Date(2021,10,10),
+                name: "test",
+                playersIds: []
+            });
+
+            await db.collection(DbCollections.rooms).insertOne({...GameRoomMapper.entityToModel(expected).toJson()});
+            const datasource = new RoomRemoteDsImpl(db, mockStringHelper);
+            const result = await datasource.getRoomById({id: "getRoomByIdTest"});
+            expect(result).toStrictEqual(expected);
+        });
+
+        it('should throw a NotFoundException if document dont exists in database', async function () {
+            const datasource = new RoomRemoteDsImpl(db, mockStringHelper);
+            const result = datasource.getRoomById({id: "invalidGetRoomByIdTest"});
+            await expect(result).rejects.toStrictEqual(new NotFoundException());
         });
     });
 });

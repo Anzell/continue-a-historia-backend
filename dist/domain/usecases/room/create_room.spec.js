@@ -25,7 +25,8 @@ describe("teste de usecase", () => {
         const mockRoomRepository = {
             createRoom: jest.fn().mockReturnValue((0, either_ts_1.right)(null)),
             insertPlayer: jest.fn(),
-            sendPhrase: jest.fn()
+            sendPhrase: jest.fn(),
+            getRoomById: jest.fn()
         };
         let usecase = new create_room_1.CreateRoomUsecaseImpl(mockRoomRepository);
         let result = await usecase.handle(new create_room_1.CreateRoomUsecaseParams({ room: exampleRoom }));
@@ -35,7 +36,8 @@ describe("teste de usecase", () => {
         const mockRoomRepository = {
             createRoom: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure())),
             insertPlayer: jest.fn(),
-            sendPhrase: jest.fn()
+            sendPhrase: jest.fn(),
+            getRoomById: jest.fn()
         };
         let usecase = new create_room_1.CreateRoomUsecaseImpl(mockRoomRepository);
         let result = await usecase.handle(new create_room_1.CreateRoomUsecaseParams({ room: exampleRoom }));

@@ -7,6 +7,7 @@ import {DateHelper} from "../../../core/helper/date_helper";
 import {NotFoundException, PlayerDontExistsInRoomException} from "../../../core/failures/exceptions";
 import {GameRoomModel} from "../../models/game_room";
 import {Phrase} from "../../../domain/entities/phrase";
+import {PhraseModel} from "../../models/phrase_model";
 
 export interface RoomRemoteDs {
     createRoom: (room: GameRoom) => Promise<void>;
@@ -48,14 +49,14 @@ export class RoomRemoteDsImpl implements RoomRemoteDs {
 
     async sendPhrase ({userId, roomId, phrase}: { userId: string; roomId: string; phrase: string }): Promise<void> {
         const roomDocument = await this.db.collection(DbCollections.rooms).findOne({id: roomId});
-        if(roomDocument === undefined){
+        if(roomDocument === null){
             throw new NotFoundException();
         }
         const roomModel = GameRoomModel.fromJson(roomDocument);
         if(!roomModel.playersIds?.some((player) => userId === player) && !roomModel.adminsIds?.some((admin) => admin === userId)){
             throw new PlayerDontExistsInRoomException();
         }
-        const phraseModel = new Phrase({
+        const phraseModel = new PhraseModel({
             sendAt: new Date(),
             senderId: userId,
             phrase: phrase
@@ -65,8 +66,8 @@ export class RoomRemoteDsImpl implements RoomRemoteDs {
     }
 
     async getRoomById ({id}: { id: string }): Promise<GameRoom> {
-        const document = this.db.collection(DbCollections.rooms).findOne({id});
-        if(document === undefined){
+        const document = await this.db.collection(DbCollections.rooms).findOne({id});
+        if(document === null){
             throw new NotFoundException();
         }
         return GameRoomMapper.modelToEntity(GameRoomModel.fromJson(document));

@@ -22,7 +22,7 @@ exports.default = async (server) => {
                     break;
                 default:
                     ws.send(new custom_message_1.CustomMessage({
-                        type: "error",
+                        type: type_messages_1.TypeSocketMessages.error,
                         content: "invalid_message_type"
                     }));
                     break;

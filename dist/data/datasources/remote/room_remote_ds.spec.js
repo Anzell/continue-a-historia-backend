@@ -8,6 +8,7 @@ const room_remote_ds_1 = require("./room_remote_ds");
 const game_room_mapper_1 = require("../../mappers/game_room_mapper");
 const game_room_2 = require("../../models/game_room");
 const exceptions_1 = require("../../../core/failures/exceptions");
+const phrase_model_1 = require("../../models/phrase_model");
 describe("room remote ds", () => {
     let db;
     beforeEach(async () => {
@@ -51,7 +52,7 @@ describe("room remote ds", () => {
                 adminsIds: ["admin1"],
                 name: "roomName",
                 history: [
-                    new phrase_1.Phrase({
+                    new phrase_model_1.PhraseModel({
                         phrase: "Era uma vez",
                         senderId: "admin1",
                         sendAt: new Date(2021, 10, 10)
@@ -75,7 +76,7 @@ describe("room remote ds", () => {
                 adminsIds: ["admin1"],
                 name: "roomName",
                 history: [
-                    new phrase_1.Phrase({
+                    new phrase_model_1.PhraseModel({
                         phrase: "Era uma vez",
                         senderId: "admin1",
                         sendAt: new Date(2021, 10, 10)
@@ -112,7 +113,7 @@ describe("room remote ds", () => {
                 adminsIds: ["admin1"],
                 name: "roomName",
                 history: [
-                    new phrase_1.Phrase({
+                    new phrase_model_1.PhraseModel({
                         phrase: "Era uma vez",
                         senderId: "admin1",
                         sendAt: new Date(2021, 10, 10)
@@ -127,6 +128,30 @@ describe("room remote ds", () => {
             await datasource.sendPhrase({ userId, roomId, phrase });
             const documentAfterUpdate = await db.collection(db_collections_1.DbCollections.rooms).findOne({ id: roomId });
             expect(documentAfterUpdate['history'].length).toStrictEqual(2);
+        });
+    });
+    describe('get room by id', function () {
+        const mockStringHelper = {
+            generateUuid: jest.fn().mockReturnValue("validId")
+        };
+        it('should return a valid GameRoom', async function () {
+            const expected = new game_room_1.GameRoom({
+                id: "getRoomByIdTest",
+                adminsIds: ["admin1"],
+                history: [],
+                createdAt: new Date(2021, 10, 10),
+                name: "test",
+                playersIds: []
+            });
+            await db.collection(db_collections_1.DbCollections.rooms).insertOne({ ...game_room_mapper_1.GameRoomMapper.entityToModel(expected).toJson() });
+            const datasource = new room_remote_ds_1.RoomRemoteDsImpl(db, mockStringHelper);
+            const result = await datasource.getRoomById({ id: "getRoomByIdTest" });
+            expect(result).toStrictEqual(expected);
+        });
+        it('should throw a NotFoundException if document dont exists in database', async function () {
+            const datasource = new room_remote_ds_1.RoomRemoteDsImpl(db, mockStringHelper);
+            const result = datasource.getRoomById({ id: "invalidGetRoomByIdTest" });
+            await expect(result).rejects.toStrictEqual(new exceptions_1.NotFoundException());
         });
     });
 });

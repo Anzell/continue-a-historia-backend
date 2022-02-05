@@ -27,7 +27,8 @@ describe("teste de room repository impl", () => {
             const mockRoomDatasource = {
                 createRoom: jest.fn().mockReturnValue(null),
                 insertPlayer: jest.fn(),
-                sendPhrase: jest.fn()
+                sendPhrase: jest.fn(),
+                getRoomById: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.createRoom(exampleRoom);
@@ -37,7 +38,8 @@ describe("teste de room repository impl", () => {
             const mockRoomDatasource = {
                 createRoom: jest.fn().mockRejectedValue(new exceptions_1.ServerException()),
                 insertPlayer: jest.fn(),
-                sendPhrase: jest.fn()
+                sendPhrase: jest.fn(),
+                getRoomById: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.createRoom(exampleRoom);
@@ -51,7 +53,8 @@ describe("teste de room repository impl", () => {
             const mockRoomDatasource = {
                 createRoom: jest.fn(),
                 insertPlayer: jest.fn().mockReturnValue(null),
-                sendPhrase: jest.fn()
+                sendPhrase: jest.fn(),
+                getRoomById: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.insertPlayer({ userId: exampleUserId, roomId: exampleRoomId });
@@ -61,7 +64,8 @@ describe("teste de room repository impl", () => {
             const mockRoomDatasource = {
                 createRoom: jest.fn(),
                 insertPlayer: jest.fn().mockRejectedValue(new exceptions_1.ServerException()),
-                sendPhrase: jest.fn()
+                sendPhrase: jest.fn(),
+                getRoomById: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.insertPlayer({ userId: exampleUserId, roomId: exampleRoomId });
@@ -76,7 +80,8 @@ describe("teste de room repository impl", () => {
             const mockRoomDatasource = {
                 createRoom: jest.fn(),
                 insertPlayer: jest.fn(),
-                sendPhrase: jest.fn().mockReturnValue(null)
+                sendPhrase: jest.fn().mockReturnValue(null),
+                getRoomById: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.sendPhrase({ userId: exampleUserId, roomId: exampleRoomId, phrase: examplePhrase });
@@ -86,7 +91,8 @@ describe("teste de room repository impl", () => {
             const mockRoomDatasource = {
                 createRoom: jest.fn(),
                 insertPlayer: jest.fn(),
-                sendPhrase: jest.fn().mockRejectedValue(new exceptions_1.ServerException())
+                sendPhrase: jest.fn().mockRejectedValue(new exceptions_1.ServerException()),
+                getRoomById: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.sendPhrase({ userId: exampleUserId, roomId: exampleRoomId, phrase: examplePhrase });

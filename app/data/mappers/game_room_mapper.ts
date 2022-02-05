@@ -1,5 +1,8 @@
 import {GameRoom} from "../../domain/entities/game_room";
 import {GameRoomModel} from "../models/game_room";
+import {PhraseMapper} from "./phrase_mapper";
+import {Phrase} from "../../domain/entities/phrase";
+import {PhraseModel} from "../models/phrase_model";
 
 export class GameRoomMapper{
     static entityToModel(entity: GameRoom): GameRoomModel {
@@ -7,7 +10,7 @@ export class GameRoomMapper{
            adminsIds: entity.adminsIds!,
            id: entity.id,
            createdAt: entity.createdAt,
-           history: entity.history,
+           history: entity.history?.map((element: Phrase) => PhraseMapper.entityToModel(element)),
            name: entity.name!,
            playersIds: entity.playersIds,
         });
@@ -18,7 +21,7 @@ export class GameRoomMapper{
             adminsIds: model.adminsIds!,
             id: model.id,
             createdAt: model.createdAt,
-            history: model.history,
+            history: model.history?.map((element: PhraseModel) => PhraseMapper.modelToEntity(element)),
             name: model.name!,
             playersIds: model.playersIds,
         });
