@@ -12,6 +12,7 @@ export interface RoomRemoteDs {
     createRoom: (room: GameRoom) => Promise<void>;
     insertPlayer: ({roomId, userId}: {roomId: string, userId: string}) => Promise<void>;
     sendPhrase: ({userId, roomId, phrase}: {userId: string, roomId: string, phrase: string}) => Promise<void>;
+    getRoomById: ({id}: {id: string}) => Promise<GameRoom>;
 }
 
 export class RoomRemoteDsImpl implements RoomRemoteDs {
@@ -61,6 +62,14 @@ export class RoomRemoteDsImpl implements RoomRemoteDs {
         });
         roomModel.history?.push(phraseModel);
         await this.db.collection(DbCollections.rooms).updateOne({id: roomId}, {$set: {...roomModel.toJson()}});
+    }
+
+    async getRoomById ({id}: { id: string }): Promise<GameRoom> {
+        const document = this.db.collection(DbCollections.rooms).findOne({id});
+        if(document === undefined){
+            throw new NotFoundException();
+        }
+        return GameRoomMapper.modelToEntity(GameRoomModel.fromJson(document));
     }
 
 }

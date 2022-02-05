@@ -1,12 +1,26 @@
 import { left, right } from "either-ts";
-import { Failure, ServerFailure } from "../../core/failures/failures";
+import {Failure, NotFoundFailure, ServerFailure} from "../../core/failures/failures";
 import { GameRoom } from "../../domain/entities/game_room";
 import { RoomRepository } from "../../domain/repositories/room_repository";
 import { RoomRemoteDs } from "../datasources/remote/room_remote_ds";
+import {NotFoundException} from "../../core/failures/exceptions";
 
 export class RoomRepositoryImpl implements RoomRepository {
 
+
     constructor(public datasource: RoomRemoteDs){}
+
+    async getRoomById ({id}: { id: string }): Promise<Either<Failure, GameRoom>> {
+        try{
+            const result = await this.datasource.getRoomById({id});
+            return right(result);
+        }catch(e){
+            if(e instanceof NotFoundException){
+                return left(new NotFoundFailure());
+            }
+            return left(new ServerFailure());
+        }
+    }
 
     async createRoom(room: GameRoom): Promise<Either<Failure, null>> {
         try{

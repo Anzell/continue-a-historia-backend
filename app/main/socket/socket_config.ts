@@ -24,7 +24,7 @@ export default async (server: Server): Promise<void> => {
                     break;
                 default:
                     ws.send(new CustomMessage({
-                        type: "error",
+                        type: TypeSocketMessages.error,
                         content: "invalid_message_type"
                     }))
                     break;
