@@ -1,4 +1,4 @@
-import {Controller} from "../../main/protocols/controller";
+import {HttpController} from "../../main/protocols/controller";
 import {CustomResponse} from "../../main/protocols/custom_response";
 import {SignUpUsecase} from "../../domain/usecases/auth/sign_up";
 import {SignupConverter, SignupConvertersParams} from "./converters/signup_converters";
@@ -6,7 +6,7 @@ import {SuccessMessages} from "../../core/constants/messages/success_messages";
 import {Failure, ValidationFailure} from "../../core/failures/failures";
 import {FailureHelper} from "../../core/helper/failure_mapper";
 
-export class SignUpController implements Controller{
+export class SignUpController implements HttpController{
     constructor (private readonly signUpUsecase: SignUpUsecase, private readonly signUpConverter: SignupConverter) {
     }
 
