@@ -1,6 +1,9 @@
 import {GameRoomConverter} from "../presenters/room/converters/game_room_converter";
 import {SignupConverter} from "../presenters/auth/converters/signup_converters";
 import {PlayerEnterInRoomConverter} from "../presenters/room/converters/player_enter_in_room_converter";
+import {
+    PlayerSendPhraseToHistoryConverter
+} from "../presenters/room/converters/player_send_phrase_to_history_converter";
 
 export class ConvertersInjector {
     public static async gameRoomConverterFactory(): Promise<GameRoomConverter> {
@@ -13,5 +16,9 @@ export class ConvertersInjector {
 
     public static async playerEnterInRoomConverterFactory(): Promise<PlayerEnterInRoomConverter> {
         return new PlayerEnterInRoomConverter();
+    }
+
+    public static async playerSendPhraseToHistoryConverterFactory(): Promise<PlayerSendPhraseToHistoryConverter>{
+        return new PlayerSendPhraseToHistoryConverter();
     }
 }

@@ -7,6 +7,7 @@ const player_send_phrase_to_history_converter_1 = require("./converters/player_s
 const type_messages_1 = require("../../core/constants/socket/type_messages");
 const get_room_by_id_1 = require("../../domain/usecases/room/get_room_by_id");
 const failure_mapper_1 = require("../../core/helper/failure_mapper");
+const game_room_mapper_1 = require("../../data/mappers/game_room_mapper");
 class PlayerSendPhraseToHistoryController {
     constructor(playerSendPhraseUsecase, playerSendPhraseConverter, getRoomByIdUsecase) {
         this.playerSendPhraseUsecase = playerSendPhraseUsecase;
@@ -53,11 +54,12 @@ class PlayerSendPhraseToHistoryController {
                         });
                         resolve(true);
                     });
-                    sendPhraseResult.map((_) => {
+                    sendPhraseResult.map((updatedRoom) => {
                         serverResponse = new custom_message_1.CustomMessage({
                             type: type_messages_1.TypeSocketMessages.sendPhraseToHistory,
-                            content: {}
+                            content: game_room_mapper_1.GameRoomMapper.entityToModel(updatedRoom).toJson()
                         });
+                        resolve(true);
                     });
                 });
             });

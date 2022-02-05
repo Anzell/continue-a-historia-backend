@@ -105,7 +105,7 @@ describe("room remote ds", () => {
         const mockStringHelper = {
             generateUuid: jest.fn().mockReturnValue("validId")
         };
-        it('should register a new phrase in history', async function () {
+        it('should register a new phrase in history and return a updated Room', async function () {
             const roomId = "roomForTestPhrase";
             const userId = "player1";
             const phrase = "um cara que";
@@ -125,9 +125,10 @@ describe("room remote ds", () => {
             });
             await db.collection(db_collections_1.DbCollections.rooms).insertOne(exampleRoom.toJson());
             const datasource = new room_remote_ds_1.RoomRemoteDsImpl(db, mockStringHelper);
-            await datasource.sendPhrase({ userId, roomId, phrase });
+            const result = await datasource.sendPhrase({ userId, roomId, phrase });
             const documentAfterUpdate = await db.collection(db_collections_1.DbCollections.rooms).findOne({ id: roomId });
             expect(documentAfterUpdate['history'].length).toStrictEqual(2);
+            expect(result.history?.length).toStrictEqual(2);
         });
     });
     describe('get room by id', function () {

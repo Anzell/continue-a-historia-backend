@@ -52,7 +52,8 @@ class RoomRemoteDsImpl {
             phrase: phrase
         });
         roomModel.history?.push(phraseModel);
-        await this.db.collection(db_collections_1.DbCollections.rooms).updateOne({ id: roomId }, { $set: { ...roomModel.toJson() } });
+        await this.db.collection(db_collections_1.DbCollections.rooms).findOneAndUpdate({ id: roomId }, { $set: { ...roomModel.toJson() } });
+        return game_room_mapper_1.GameRoomMapper.modelToEntity(roomModel);
     }
     async getRoomById({ id }) {
         const document = await this.db.collection(db_collections_1.DbCollections.rooms).findOne({ id });

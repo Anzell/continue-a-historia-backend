@@ -76,16 +76,30 @@ describe("teste de room repository impl", () => {
         const exampleRoomId = "validRoomId";
         const exampleUserId = "validUserId";
         const examplePhrase = "era uma vez";
-        it('should return a right null if call to datasource is success', async function () {
+        const exampleRoom = new game_room_1.GameRoom({
+            adminsIds: ["admin1"],
+            name: "roomName",
+            history: [
+                new phrase_1.Phrase({
+                    phrase: examplePhrase,
+                    senderId: exampleUserId,
+                    sendAt: date_helper_1.DateHelper.numberToDate(Date.now())
+                })
+            ],
+            id: exampleRoomId,
+            playersIds: [exampleUserId],
+            createdAt: date_helper_1.DateHelper.numberToDate(Date.now())
+        });
+        it('should return a right GameRoom if call to datasource is success', async function () {
             const mockRoomDatasource = {
                 createRoom: jest.fn(),
                 insertPlayer: jest.fn(),
-                sendPhrase: jest.fn().mockReturnValue(null),
+                sendPhrase: jest.fn().mockReturnValue(exampleRoom),
                 getRoomById: jest.fn()
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.sendPhrase({ userId: exampleUserId, roomId: exampleRoomId, phrase: examplePhrase });
-            expect(result).toStrictEqual((0, either_ts_1.right)(null));
+            expect(result).toStrictEqual((0, either_ts_1.right)(exampleRoom));
         });
         it('should return left server failure if call to datasource fails', async function () {
             const mockRoomDatasource = {

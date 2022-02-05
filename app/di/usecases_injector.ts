@@ -5,6 +5,11 @@ import {SignInUsecase, SignInUseCaseImpl} from "../domain/usecases/auth/sign_in"
 import {GetUserByIdUsecase} from "../domain/usecases/user/get_user_by_id";
 import {PlayerEnterInRoomUsecase, PlayerEnterInRoomUsecaseImpl} from "../domain/usecases/room/player_enter_in_room";
 import {GetUserPermissionsUsecase} from "../domain/usecases/user/get_user_permissions";
+import {
+    PlayerSendPhraseToHistoryUsecase,
+    PlayerSendPhraseToHistoryUsecaseImpl
+} from "../domain/usecases/room/player_send_phrase_to_history";
+import {GetRoomByIdUsecase, GetRoomByIdUsecaseImpl} from "../domain/usecases/room/get_room_by_id";
 
 export class UsecasesInjector {
     public static async CreateRoomUsecaseFactory(): Promise<CreateRoomUsecase> {
@@ -22,20 +27,29 @@ export class UsecasesInjector {
         return new SignInUseCaseImpl(repository);
     }
 
-    public static async getUserByIdUsecase(): Promise<GetUserByIdUsecase> {
+    public static async getUserByIdUsecaseFactory(): Promise<GetUserByIdUsecase> {
         const repository = await RepositoriesInjector.userRepositoryFactory();
         return new GetUserByIdUsecase(repository);
     }
 
-    public static async getUserPermissionUsecase(): Promise<GetUserPermissionsUsecase> {
+    public static async getUserPermissionUsecaseFactory(): Promise<GetUserPermissionsUsecase> {
         const repository = await RepositoriesInjector.userRepositoryFactory();
         return new GetUserPermissionsUsecase(repository);
     }
 
-    public static async insertUserInRoomUsecase(): Promise<PlayerEnterInRoomUsecase> {
+    public static async insertUserInRoomUsecaseFactory(): Promise<PlayerEnterInRoomUsecase> {
         const repository = await RepositoriesInjector.roomRepositoryFactory();
         return new PlayerEnterInRoomUsecaseImpl(repository);
     }
 
+    public static async playerSendPhraseToHistoryUsecaseFactory(): Promise<PlayerSendPhraseToHistoryUsecase> {
+        const repository = await RepositoriesInjector.roomRepositoryFactory();
+        return new PlayerSendPhraseToHistoryUsecaseImpl(repository);
+    }
+
+    public static async getRoomByIdUsecaseFactory(): Promise<GetRoomByIdUsecase> {
+        const repository = await RepositoriesInjector.roomRepositoryFactory();
+        return new GetRoomByIdUsecaseImpl(repository);
+    }
 
 }

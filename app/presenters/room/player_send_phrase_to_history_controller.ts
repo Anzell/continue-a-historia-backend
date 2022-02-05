@@ -13,6 +13,7 @@ import {GetRoomByIdUsecase, GetRoomByIdUsecaseParams} from "../../domain/usecase
 import {Failure} from "../../core/failures/failures";
 import {FailureHelper} from "../../core/helper/failure_mapper";
 import {GameRoom} from "../../domain/entities/game_room";
+import {GameRoomMapper} from "../../data/mappers/game_room_mapper";
 
 export class PlayerSendPhraseToHistoryController implements SocketController {
     constructor (
@@ -61,11 +62,13 @@ export class PlayerSendPhraseToHistoryController implements SocketController {
                         });
                         resolve(true);
                     });
-                    sendPhraseResult.map((_) => {
+                    sendPhraseResult.map((updatedRoom: GameRoom) => {
                        serverResponse = new CustomMessage({
-                           type: TypeSocketMessages.sendPhraseToHistory,
-                           content: {}
-                       }) ;
+                               type: TypeSocketMessages.sendPhraseToHistory,
+                               content: GameRoomMapper.entityToModel(updatedRoom).toJson()
+                           }
+                       ) ;
+                       resolve(true);
                     });
                 });
             });

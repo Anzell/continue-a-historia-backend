@@ -5,9 +5,6 @@ import {ControllersInjectorFactory} from "../../di/controllers_injector";
 import {SocketController} from "../protocols/controller";
 import {TypeSocketMessages} from "../../core/constants/socket/type_messages";
 import {CustomMessage} from "../protocols/custom_message";
-import {PlayerEnterInRoomController} from "../../presenters/room/player_enter_in_room_controller";
-import {UsecasesInjector} from "../../di/usecases_injector";
-import {ConvertersInjector} from "../../di/converters_injector";
 
 export default async (server: Server): Promise<void> => {
     const ws = new WebSocket.Server({
@@ -20,7 +17,10 @@ export default async (server: Server): Promise<void> => {
             let controller: SocketController;
             switch (data['type']) {
                 case TypeSocketMessages.playerEnterInRoom:
-                    controller = new PlayerEnterInRoomController(await UsecasesInjector.insertUserInRoomUsecase(), await ConvertersInjector.playerEnterInRoomConverterFactory());
+                    controller = await ControllersInjectorFactory.playerEnterInRoomControllerFactory();
+                    break;
+                case TypeSocketMessages.sendPhraseToHistory:
+                    controller = await ControllersInjectorFactory.playerSendPhraseToHistoryControllerFactory();
                     break;
                 default:
                     ws.send(new CustomMessage({

@@ -14,6 +14,7 @@ import {PlayerEnterInRoomUsecase} from "../domain/usecases/room/player_enter_in_
 import {PlayerEnterInRoomConverter} from "../presenters/room/converters/player_enter_in_room_converter";
 import {AuthGuardSocket} from "../main/middlewares/auth_guard_socket";
 import {GetUserPermissionsUsecase} from "../domain/usecases/user/get_user_permissions";
+import {PlayerSendPhraseToHistoryController} from "../presenters/room/player_send_phrase_to_history_controller";
 
 export class ControllersInjectorFactory {
     public static async createRoomControllerFactory(): Promise<CreateRoomController>{
@@ -29,13 +30,13 @@ export class ControllersInjectorFactory {
     }
 
     public static async authGuardRouteFactory(...authorized: string[]): Promise<AuthGuardRoute> {
-        const getUserPermissionUsecase: GetUserPermissionsUsecase = await UsecasesInjector.getUserPermissionUsecase();
+        const getUserPermissionUsecase: GetUserPermissionsUsecase = await UsecasesInjector.getUserPermissionUsecaseFactory();
         const tokenHelper: TokenHelper = await CoreInjector.tokenHelperFactory();
         return new AuthGuardRoute({authorized, tokenHelper, getUserPermissionUsecase: getUserPermissionUsecase});
     }
 
     public static async authGuardSocketFactory(...authorized: string[]): Promise<AuthGuardSocket> {
-        const getUserPermissionUsecase: GetUserPermissionsUsecase = await UsecasesInjector.getUserPermissionUsecase();
+        const getUserPermissionUsecase: GetUserPermissionsUsecase = await UsecasesInjector.getUserPermissionUsecaseFactory();
         const tokenHelper: TokenHelper = await CoreInjector.tokenHelperFactory();
         return new AuthGuardSocket({authorized, tokenHelper, getUserPermissionUsecase: getUserPermissionUsecase});
     }
@@ -47,8 +48,15 @@ export class ControllersInjectorFactory {
     }
 
     public static async playerEnterInRoomControllerFactory(): Promise<PlayerEnterInRoomController> {
-        const usecase: PlayerEnterInRoomUsecase = await UsecasesInjector.insertUserInRoomUsecase();
+        const usecase: PlayerEnterInRoomUsecase = await UsecasesInjector.insertUserInRoomUsecaseFactory();
         const converter: PlayerEnterInRoomConverter = await ConvertersInjector.playerEnterInRoomConverterFactory();
         return new PlayerEnterInRoomController(usecase, converter);
+    }
+
+    public static async playerSendPhraseToHistoryControllerFactory(): Promise<PlayerSendPhraseToHistoryController> {
+        const getRoomIdUsecase = await UsecasesInjector.getRoomByIdUsecaseFactory();
+        const sendPhraseToHistoryUsecase = await UsecasesInjector.playerSendPhraseToHistoryUsecaseFactory();
+        const converter = await ConvertersInjector.playerSendPhraseToHistoryConverterFactory();
+        return new PlayerSendPhraseToHistoryController(sendPhraseToHistoryUsecase, converter, getRoomIdUsecase);
     }
 }
