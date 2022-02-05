@@ -40,10 +40,10 @@ export class RoomRepositoryImpl implements RoomRepository {
         }
     }
 
-    async sendPhrase ({userId, roomId, phrase}: { userId: string; roomId: string; phrase: string }): Promise<Either<Failure, null>> {
+    async sendPhrase ({userId, roomId, phrase}: { userId: string; roomId: string; phrase: string }): Promise<Either<Failure, GameRoom>> {
         try {
-            await this.datasource.sendPhrase({userId, roomId, phrase});
-            return right(null);
+            const result = await this.datasource.sendPhrase({userId, roomId, phrase});
+            return right(result);
         }catch(e){
             return left(new ServerFailure());
         }

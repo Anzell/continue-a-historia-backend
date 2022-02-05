@@ -6,13 +6,12 @@ import {GameRoomMapper} from "../../mappers/game_room_mapper";
 import {DateHelper} from "../../../core/helper/date_helper";
 import {NotFoundException, PlayerDontExistsInRoomException} from "../../../core/failures/exceptions";
 import {GameRoomModel} from "../../models/game_room";
-import {Phrase} from "../../../domain/entities/phrase";
 import {PhraseModel} from "../../models/phrase_model";
 
 export interface RoomRemoteDs {
     createRoom: (room: GameRoom) => Promise<void>;
     insertPlayer: ({roomId, userId}: {roomId: string, userId: string}) => Promise<void>;
-    sendPhrase: ({userId, roomId, phrase}: {userId: string, roomId: string, phrase: string}) => Promise<void>;
+    sendPhrase: ({userId, roomId, phrase}: {userId: string, roomId: string, phrase: string}) => Promise<GameRoom>;
     getRoomById: ({id}: {id: string}) => Promise<GameRoom>;
 }
 
@@ -47,7 +46,7 @@ export class RoomRemoteDsImpl implements RoomRemoteDs {
         });
     }
 
-    async sendPhrase ({userId, roomId, phrase}: { userId: string; roomId: string; phrase: string }): Promise<void> {
+    async sendPhrase ({userId, roomId, phrase}: { userId: string; roomId: string; phrase: string }): Promise<GameRoom> {
         const roomDocument = await this.db.collection(DbCollections.rooms).findOne({id: roomId});
         if(roomDocument === null){
             throw new NotFoundException();
@@ -62,7 +61,8 @@ export class RoomRemoteDsImpl implements RoomRemoteDs {
             phrase: phrase
         });
         roomModel.history?.push(phraseModel);
-        await this.db.collection(DbCollections.rooms).updateOne({id: roomId}, {$set: {...roomModel.toJson()}});
+        await this.db.collection(DbCollections.rooms).findOneAndUpdate({id: roomId}, {$set: {...roomModel.toJson()}});
+        return GameRoomMapper.modelToEntity(roomModel);
     }
 
     async getRoomById ({id}: { id: string }): Promise<GameRoom> {

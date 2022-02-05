@@ -84,17 +84,31 @@ describe("teste de room repository impl", () => {
         const exampleRoomId = "validRoomId";
         const exampleUserId = "validUserId";
         const examplePhrase = "era uma vez";
+        const exampleRoom = new GameRoom({
+            adminsIds:["admin1"],
+            name: "roomName",
+            history: [
+                new Phrase({
+                    phrase: examplePhrase,
+                    senderId: exampleUserId,
+                    sendAt: DateHelper.numberToDate(Date.now())
+                })
+            ],
+            id: exampleRoomId,
+            playersIds:[exampleUserId],
+            createdAt: DateHelper.numberToDate(Date.now())
+        });
 
-        it('should return a right null if call to datasource is success', async function () {
+        it('should return a right GameRoom if call to datasource is success', async function () {
             const mockRoomDatasource: RoomRemoteDs = {
                 createRoom: jest.fn(),
                 insertPlayer: jest.fn(),
-                sendPhrase: jest.fn().mockReturnValue(null),
+                sendPhrase: jest.fn().mockReturnValue(exampleRoom),
                 getRoomById: jest.fn()
             } as RoomRemoteDs;
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.sendPhrase({userId: exampleUserId, roomId: exampleRoomId, phrase: examplePhrase});
-            expect(result).toStrictEqual(right(null));
+            expect(result).toStrictEqual(right(exampleRoom));
         });
 
         it('should return left server failure if call to datasource fails', async function () {
@@ -142,8 +156,7 @@ describe("teste de room repository impl", () => {
             let result = await repository.getRoomById({id: "getRoomByIdTest"});
             expect(result).toStrictEqual(left(new NotFoundFailure()));
         });
-
-
+        
         it('should return left server failure if call to datasource fails', async function () {
             const mockRoomDatasource: RoomRemoteDs = {
                 createRoom: jest.fn(),
