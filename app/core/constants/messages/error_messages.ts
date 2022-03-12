@@ -3,4 +3,5 @@ export class ErrorMessages {
     static unknownFailure: string = "Erro Desconhecido";
     static invalidCredentials: string = "Credenciais invalidas";
     static notFound: string = "Não encontrado";
+    static usernameAlreadyexists: string = "Username já existe";
 }

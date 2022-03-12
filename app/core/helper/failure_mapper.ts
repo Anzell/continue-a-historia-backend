@@ -2,7 +2,7 @@ import {
     Failure,
     InvalidCredentialsFailure,
     NotFoundFailure,
-    ServerFailure,
+    ServerFailure, UsernameAlreadyExistFailure,
     ValidationFailure
 } from "../failures/failures";
 import {ErrorMessages} from "../constants/messages/error_messages";
@@ -20,6 +20,10 @@ export class FailureHelper{
         }
         if(failure instanceof NotFoundFailure){
             return ErrorMessages.notFound;
+        }
+        if(failure instanceof UsernameAlreadyExistFailure){
+            return ErrorMessages.usernameAlreadyexists;
+
         }
         return ErrorMessages.unknownFailure;
     }

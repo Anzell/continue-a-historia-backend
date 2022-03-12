@@ -17,6 +17,9 @@ class FailureHelper {
         if (failure instanceof failures_1.NotFoundFailure) {
             return error_messages_1.ErrorMessages.notFound;
         }
+        if (failure instanceof failures_1.UsernameAlreadyExistFailure) {
+            return error_messages_1.ErrorMessages.usernameAlreadyexists;
+        }
         return error_messages_1.ErrorMessages.unknownFailure;
     }
 }
