@@ -14,7 +14,6 @@ class RoomRemoteDsImpl {
     }
     async insertPlayer({ roomId, userId }) {
         const roomDocument = await this.db.collection(db_collections_1.DbCollections.rooms).findOne({ id: roomId });
-        console.log(roomDocument);
         if (roomDocument === null) {
             throw new exceptions_1.NotFoundException();
         }

@@ -6,15 +6,15 @@ const either_ts_1 = require("either-ts");
 class PlayerSendPhraseToHistoryConverter {
     handle(params) {
         if (params.phrase === undefined || params.phrase === "") {
-            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: PlayerSendPhraseToHistoryConverterErrorMessages.missingPhrase }));
+            return either_ts_1.left(new failures_1.ValidationFailure({ message: PlayerSendPhraseToHistoryConverterErrorMessages.missingPhrase }));
         }
         if (params.roomId === undefined || params.roomId === "") {
-            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: PlayerSendPhraseToHistoryConverterErrorMessages.missingRoom }));
+            return either_ts_1.left(new failures_1.ValidationFailure({ message: PlayerSendPhraseToHistoryConverterErrorMessages.missingRoom }));
         }
         if (params.userId === undefined || params.userId === "") {
-            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: PlayerSendPhraseToHistoryConverterErrorMessages.missingUser }));
+            return either_ts_1.left(new failures_1.ValidationFailure({ message: PlayerSendPhraseToHistoryConverterErrorMessages.missingUser }));
         }
-        return (0, either_ts_1.right)({
+        return either_ts_1.right({
             phrase: params.phrase,
             roomId: params.roomId,
             userId: params.userId

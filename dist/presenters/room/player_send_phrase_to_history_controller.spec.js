@@ -40,17 +40,17 @@ describe('player send phrase to history controller', function () {
             createdAt: new Date(2021, 10, 10)
         });
         const mockGetRoomUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(roomBeforeUpdate))
+            handle: jest.fn().mockReturnValue(either_ts_1.right(roomBeforeUpdate))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)({
+            handle: jest.fn().mockReturnValue(either_ts_1.right({
                 roomId: validRequestExample['roomId'],
                 userId: validRequestExample['userId'],
                 phrase: validRequestExample['phrase']
             }))
         };
         const mockSendPhraseUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(roomAfterUpdate))
+            handle: jest.fn().mockReturnValue(either_ts_1.right(roomAfterUpdate))
         };
         const controller = new player_send_phrase_to_history_controller_1.PlayerSendPhraseToHistoryController(mockSendPhraseUsecase, mockConverter, mockGetRoomUsecase);
         const result = await controller.handle(validRequestExample);
@@ -68,7 +68,7 @@ describe('player send phrase to history controller', function () {
             handle: jest.fn()
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: player_enter_in_room_converter_1.PlayerEnterInRoomConverterErrorMessages.missingRoomId })))
+            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ValidationFailure({ message: player_enter_in_room_converter_1.PlayerEnterInRoomConverterErrorMessages.missingRoomId })))
         };
         const mockSendPhraseUsecase = {
             handle: jest.fn()
@@ -87,10 +87,10 @@ describe('player send phrase to history controller', function () {
             "phrase": "era uma vez"
         };
         const mockGetRoomUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
+            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure()))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)({
+            handle: jest.fn().mockReturnValue(either_ts_1.right({
                 roomId: validRequestExample['roomId'],
                 userId: validRequestExample['userId'],
                 phrase: validRequestExample['phrase']
@@ -121,17 +121,17 @@ describe('player send phrase to history controller', function () {
             createdAt: new Date(2021, 10, 10)
         });
         const mockGetRoomUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(roomBeforeUpdate))
+            handle: jest.fn().mockReturnValue(either_ts_1.right(roomBeforeUpdate))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)({
+            handle: jest.fn().mockReturnValue(either_ts_1.right({
                 roomId: validRequestExample['roomId'],
                 userId: validRequestExample['userId'],
                 phrase: validRequestExample['phrase']
             }))
         };
         const mockSendPhraseUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
+            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure()))
         };
         const controller = new player_send_phrase_to_history_controller_1.PlayerSendPhraseToHistoryController(mockSendPhraseUsecase, mockConverter, mockGetRoomUsecase);
         const result = await controller.handle(validRequestExample);

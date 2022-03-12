@@ -18,21 +18,21 @@ describe('get room by id usecase', function () {
             createRoom: jest.fn(),
             insertPlayer: jest.fn(),
             sendPhrase: jest.fn(),
-            getRoomById: jest.fn().mockReturnValue((0, either_ts_1.right)(expected))
+            getRoomById: jest.fn().mockReturnValue(either_ts_1.right(expected))
         };
         const usecase = new get_room_by_id_1.GetRoomByIdUsecaseImpl(mockRepository);
         const result = await usecase.handle({ id: exampleRoomId });
-        expect(result).toStrictEqual((0, either_ts_1.right)(expected));
+        expect(result).toStrictEqual(either_ts_1.right(expected));
     });
     it('should return left server failure if call to repository fails', async function () {
         const mockRepository = {
             createRoom: jest.fn(),
             insertPlayer: jest.fn(),
             sendPhrase: jest.fn(),
-            getRoomById: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
+            getRoomById: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure()))
         };
         const usecase = new get_room_by_id_1.GetRoomByIdUsecaseImpl(mockRepository);
         const result = await usecase.handle({ id: exampleRoomId });
-        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+        expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
     });
 });

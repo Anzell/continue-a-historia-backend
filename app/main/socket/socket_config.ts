@@ -12,10 +12,13 @@ export default async (server: Server): Promise<void> => {
         verifyClient: await (await ControllersInjectorFactory.authGuardSocketFactory("user")).handle()
     });
 
+
     ws.on('connection', (ws: WebSocket) => {
-        ws.on('message', async (data: any) => {
+
+        ws.on('message', async (data: Buffer) => {
             let controller: SocketController;
-            switch (data['type']) {
+            const jsonData = JSON.parse(data.toString());
+            switch (jsonData['type']) {
                 case TypeSocketMessages.playerEnterInRoom:
                     controller = await ControllersInjectorFactory.playerEnterInRoomControllerFactory();
                     break;
@@ -26,10 +29,10 @@ export default async (server: Server): Promise<void> => {
                     ws.send(new CustomMessage({
                         type: TypeSocketMessages.error,
                         content: "invalid_message_type"
-                    }))
+                    }));
                     break;
             }
-            await adaptSocketMessage(ws, data, controller!);
+            await adaptSocketMessage(ws, jsonData.content, controller!);
         });
     });
 }

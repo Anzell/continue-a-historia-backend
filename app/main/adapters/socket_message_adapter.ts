@@ -3,5 +3,5 @@ import * as WebSocket from 'ws';
 
 export const adaptSocketMessage = async (ws: WebSocket, data: any, controller: SocketController) => {
     const response = await controller.handle(data);
-    ws.send(response.content);
+    ws.send(JSON.stringify(response.content));
 }

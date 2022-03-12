@@ -28,22 +28,22 @@ describe('player send phrase to history usecase', function () {
         const mockRepository = {
             createRoom: jest.fn(),
             insertPlayer: jest.fn(),
-            sendPhrase: jest.fn().mockReturnValue((0, either_ts_1.right)(exampleRoom)),
+            sendPhrase: jest.fn().mockReturnValue(either_ts_1.right(exampleRoom)),
             getRoomById: jest.fn()
         };
         const usecase = new player_send_phrase_to_history_1.PlayerSendPhraseToHistoryUsecaseImpl(mockRepository);
         const result = await usecase.handle({ roomId: exampleRoomId, userId: exampleUserId, phrase: examplePhrase });
-        expect(result).toStrictEqual((0, either_ts_1.right)(exampleRoom));
+        expect(result).toStrictEqual(either_ts_1.right(exampleRoom));
     });
     it('should return left server failure if call to repository fails', async function () {
         const mockRepository = {
             createRoom: jest.fn(),
             insertPlayer: jest.fn(),
-            sendPhrase: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure())),
+            sendPhrase: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure())),
             getRoomById: jest.fn()
         };
         const usecase = new player_send_phrase_to_history_1.PlayerSendPhraseToHistoryUsecaseImpl(mockRepository);
         const result = await usecase.handle({ roomId: exampleRoomId, userId: exampleUserId, phrase: examplePhrase });
-        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+        expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
     });
 });

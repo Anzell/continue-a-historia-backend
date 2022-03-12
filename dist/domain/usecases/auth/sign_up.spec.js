@@ -6,7 +6,7 @@ const sign_up_1 = require("./sign_up");
 describe("sign up usecase", () => {
     it("deve retornar right null caso chamada ao repository der sucesso", async () => {
         const mockAuthRepository = {
-            signUp: jest.fn().mockReturnValue((0, either_ts_1.right)(null)),
+            signUp: jest.fn().mockReturnValue(either_ts_1.right(null)),
             signIn: jest.fn()
         };
         let usecase = new sign_up_1.SignUpUsecaseImpl(mockAuthRepository);
@@ -15,11 +15,11 @@ describe("sign up usecase", () => {
             username: "anzell",
             email: "test@email.com"
         }));
-        expect(result).toStrictEqual((0, either_ts_1.right)(null));
+        expect(result).toStrictEqual(either_ts_1.right(null));
     });
     it("deve retornar left failure caso chamada ao repository der erro", async () => {
         const mockAuthRepository = {
-            signUp: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure())),
+            signUp: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure())),
             signIn: jest.fn()
         };
         let usecase = new sign_up_1.SignUpUsecaseImpl(mockAuthRepository);
@@ -28,6 +28,6 @@ describe("sign up usecase", () => {
             username: "anzell",
             email: "test@email.com"
         }));
-        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+        expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
     });
 });

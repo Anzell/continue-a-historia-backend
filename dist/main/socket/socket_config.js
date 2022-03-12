@@ -13,7 +13,8 @@ exports.default = async (server) => {
     ws.on('connection', (ws) => {
         ws.on('message', async (data) => {
             let controller;
-            switch (data['type']) {
+            const jsonData = JSON.parse(data.toString());
+            switch (jsonData['type']) {
                 case type_messages_1.TypeSocketMessages.playerEnterInRoom:
                     controller = await controllers_injector_1.ControllersInjectorFactory.playerEnterInRoomControllerFactory();
                     break;
@@ -27,7 +28,7 @@ exports.default = async (server) => {
                     }));
                     break;
             }
-            await (0, socket_message_adapter_1.adaptSocketMessage)(ws, data, controller);
+            await socket_message_adapter_1.adaptSocketMessage(ws, jsonData.content, controller);
         });
     });
 };

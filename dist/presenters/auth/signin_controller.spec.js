@@ -17,8 +17,8 @@ describe('sign up controller', function () {
         token: "validToken"
     });
     it('should return a status code 200 with auth token', async function () {
-        const spyUsecase = jest.fn().mockReturnValue((0, either_ts_1.right)(authTokenExample));
-        const spyConverter = jest.fn().mockReturnValue((0, either_ts_1.right)(requestExample));
+        const spyUsecase = jest.fn().mockReturnValue(either_ts_1.right(authTokenExample));
+        const spyConverter = jest.fn().mockReturnValue(either_ts_1.right(requestExample));
         const mockUsecase = { handle: spyUsecase };
         const mockConverter = { handle: spyConverter };
         const result = await new signin_controller_1.SignInController(mockUsecase, mockConverter).handle(requestExample);
@@ -35,10 +35,10 @@ describe('sign up controller', function () {
     });
     it('deve retornar status 400 caso converter falhe', async function () {
         const mockUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(null))
+            handle: jest.fn().mockReturnValue(either_ts_1.right(null))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: "erro" })))
+            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ValidationFailure({ message: "erro" })))
         };
         const controller = new signin_controller_1.SignInController(mockUsecase, mockConverter);
         const result = await controller.handle({});
@@ -50,10 +50,10 @@ describe('sign up controller', function () {
     });
     it('deve retornar status 400 caso usecase falhe', async function () {
         const mockUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
+            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure()))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)({
+            handle: jest.fn().mockReturnValue(either_ts_1.right({
                 username: requestExample.username,
                 password: requestExample.password,
             }))
@@ -68,10 +68,10 @@ describe('sign up controller', function () {
     });
     it('should return status code 400 and a invalid credencials message', async function () {
         const mockUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.InvalidCredentialsFailure()))
+            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.InvalidCredentialsFailure()))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)({
+            handle: jest.fn().mockReturnValue(either_ts_1.right({
                 username: requestExample.username,
                 password: requestExample.password,
             }))

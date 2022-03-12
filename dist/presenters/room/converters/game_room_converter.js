@@ -7,12 +7,12 @@ const either_ts_1 = require("either-ts");
 class GameRoomConverter {
     handle(params) {
         if (params.name == undefined || params.name == "") {
-            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: GameRoomConverterErrorMessages.missingName }));
+            return either_ts_1.left(new failures_1.ValidationFailure({ message: GameRoomConverterErrorMessages.missingName }));
         }
         if (params.adminsIds == undefined || params.adminsIds.length == 0) {
-            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: GameRoomConverterErrorMessages.missingAdmins }));
+            return either_ts_1.left(new failures_1.ValidationFailure({ message: GameRoomConverterErrorMessages.missingAdmins }));
         }
-        return (0, either_ts_1.right)(new game_room_1.GameRoom({
+        return either_ts_1.right(new game_room_1.GameRoom({
             id: params.id,
             name: params.name,
             adminsIds: params.adminsIds,

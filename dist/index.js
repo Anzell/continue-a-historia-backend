@@ -11,7 +11,7 @@ class App {
             const server = app.listen(process.env.PORT || 3000, () => {
                 console.log(`Servidor rodando`);
             });
-            await (0, socket_config_1.default)(server);
+            await socket_config_1.default(server);
         }
         catch (e) {
             console.log(e);
