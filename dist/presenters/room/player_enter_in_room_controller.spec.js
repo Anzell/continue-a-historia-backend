@@ -10,10 +10,10 @@ describe('player enter in room controller', function () {
     const request = { userId: "validId", roomId: "validId" };
     it('should return a valid custom response with status code 200', async function () {
         const mockUseCase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(null))
+            handle: jest.fn().mockReturnValue(either_ts_1.right(null))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)({
+            handle: jest.fn().mockReturnValue(either_ts_1.right({
                 userId: "validId",
                 roomId: "validId"
             }))
@@ -27,10 +27,10 @@ describe('player enter in room controller', function () {
     });
     it('deve retornar status erro caso converter falhe', async function () {
         const mockCreateRoomUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(null))
+            handle: jest.fn().mockReturnValue(either_ts_1.right(null))
         };
         const mockRoomConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: "erro" })))
+            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ValidationFailure({ message: "erro" })))
         };
         const controller = new player_enter_in_room_controller_1.PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter);
         const result = await controller.handle(request);
@@ -41,10 +41,10 @@ describe('player enter in room controller', function () {
     });
     it('deve retornar status erro caso usecase falhe', async function () {
         const mockCreateRoomUsecase = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
+            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure()))
         };
         const mockRoomConverter = {
-            handle: jest.fn().mockReturnValue((0, either_ts_1.right)({
+            handle: jest.fn().mockReturnValue(either_ts_1.right({
                 userId: "validId",
                 roomId: "validId"
             }))

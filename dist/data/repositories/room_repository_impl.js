@@ -11,40 +11,40 @@ class RoomRepositoryImpl {
     async getRoomById({ id }) {
         try {
             const result = await this.datasource.getRoomById({ id });
-            return (0, either_ts_1.right)(result);
+            return either_ts_1.right(result);
         }
         catch (e) {
             if (e instanceof exceptions_1.NotFoundException) {
-                return (0, either_ts_1.left)(new failures_1.NotFoundFailure());
+                return either_ts_1.left(new failures_1.NotFoundFailure());
             }
-            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+            return either_ts_1.left(new failures_1.ServerFailure());
         }
     }
     async createRoom(room) {
         try {
             await this.datasource.createRoom(room);
-            return (0, either_ts_1.right)(null);
+            return either_ts_1.right(null);
         }
         catch (e) {
-            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+            return either_ts_1.left(new failures_1.ServerFailure());
         }
     }
     async insertPlayer({ userId, roomId }) {
         try {
             await this.datasource.insertPlayer({ userId, roomId });
-            return (0, either_ts_1.right)(null);
+            return either_ts_1.right(null);
         }
         catch (e) {
-            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+            return either_ts_1.left(new failures_1.ServerFailure());
         }
     }
     async sendPhrase({ userId, roomId, phrase }) {
         try {
             const result = await this.datasource.sendPhrase({ userId, roomId, phrase });
-            return (0, either_ts_1.right)(result);
+            return either_ts_1.right(result);
         }
         catch (e) {
-            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+            return either_ts_1.left(new failures_1.ServerFailure());
         }
     }
 }

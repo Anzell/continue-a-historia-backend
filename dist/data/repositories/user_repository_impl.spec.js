@@ -19,7 +19,7 @@ describe('user repository impl', function () {
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserById({ id: "validId" });
-            expect(result).toStrictEqual((0, either_ts_1.right)(userExample));
+            expect(result).toStrictEqual(either_ts_1.right(userExample));
         });
         it('should return a NotFoundFailure when datasource fails', async function () {
             const mockDatasource = {
@@ -28,7 +28,7 @@ describe('user repository impl', function () {
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserById({ id: "validId" });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.NotFoundFailure()));
+            expect(result).toStrictEqual(either_ts_1.left(new failures_1.NotFoundFailure()));
         });
         it('should return a ServerFailure when datasource fails', async function () {
             const mockDatasource = {
@@ -37,7 +37,7 @@ describe('user repository impl', function () {
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserById({ id: "validId" });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+            expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
         });
     });
     describe('get user permissions', function () {
@@ -49,7 +49,7 @@ describe('user repository impl', function () {
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserPermissions({ id: "validId" });
-            expect(result).toStrictEqual((0, either_ts_1.right)(permissionExample));
+            expect(result).toStrictEqual(either_ts_1.right(permissionExample));
         });
         it('should return a NotFoundFailure when datasource fails', async function () {
             const mockDatasource = {
@@ -58,7 +58,7 @@ describe('user repository impl', function () {
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserPermissions({ id: "validId" });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.NotFoundFailure()));
+            expect(result).toStrictEqual(either_ts_1.left(new failures_1.NotFoundFailure()));
         });
         it('should return a ServerFailure when datasource fails', async function () {
             const mockDatasource = {
@@ -67,7 +67,7 @@ describe('user repository impl', function () {
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserPermissions({ id: "validId" });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+            expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
         });
     });
 });

@@ -17,7 +17,7 @@ describe('auth repository impl', function () {
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
             const result = await repository.signUp({ email, password, username });
-            expect(result).toStrictEqual((0, either_ts_1.right)(null));
+            expect(result).toStrictEqual(either_ts_1.right(null));
         });
         it('should return left alreadyusernameexists if username provided is already registered in server', async function () {
             const mockDatasource = {
@@ -26,16 +26,16 @@ describe('auth repository impl', function () {
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
             const result = await repository.signUp({ email, password, username });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.UsernameAlreadyExistFailure()));
+            expect(result).toStrictEqual(either_ts_1.left(new failures_1.UsernameAlreadyExistFailure()));
         });
         it('should register a new user', async function () {
             const mockDatasource = {
-                signUp: jest.fn().mockRejectedValue((0, either_ts_1.left)(new exceptions_1.ServerException())),
+                signUp: jest.fn().mockRejectedValue(either_ts_1.left(new exceptions_1.ServerException())),
                 signIn: jest.fn()
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
             const result = await repository.signUp({ email, password, username });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+            expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
         });
     });
     describe('sign in', function () {
@@ -52,7 +52,7 @@ describe('auth repository impl', function () {
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
             const result = await repository.signIn({ password, username });
-            expect(result).toStrictEqual((0, either_ts_1.right)(expected));
+            expect(result).toStrictEqual(either_ts_1.right(expected));
         });
         it('should return left server failure if call to datasource fail', async function () {
             const mockDatasource = {
@@ -61,7 +61,7 @@ describe('auth repository impl', function () {
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
             const result = await repository.signIn({ password, username });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+            expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
         });
         it('should return left invalid credentials if datasource returns invalid', async function () {
             const mockDatasource = {
@@ -70,7 +70,7 @@ describe('auth repository impl', function () {
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
             const result = await repository.signIn({ password, username });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.InvalidCredentialsFailure()));
+            expect(result).toStrictEqual(either_ts_1.left(new failures_1.InvalidCredentialsFailure()));
         });
     });
 });

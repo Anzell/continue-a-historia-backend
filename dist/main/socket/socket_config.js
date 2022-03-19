@@ -11,30 +11,34 @@ exports.default = async (server) => {
         verifyClient: await (await controllers_injector_1.ControllersInjectorFactory.authGuardSocketFactory("user")).handle()
     });
     wss.on('connection', (ws) => {
-        function sendUpdateRoomToUsers(room) {
+        var joinedRoom = "";
+        ws.on("updateRoom", (bufferedRoom) => {
+            const formattedRoom = JSON.parse(bufferedRoom.toString());
             wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
+                if (client.readyState === WebSocket.OPEN && formattedRoom.id === joinedRoom) {
+                    client.send(JSON.stringify(formattedRoom));
                 }
             });
-        }
+        });
         ws.on('message', async (data) => {
-            let controller;
             const jsonData = JSON.parse(data.toString());
             switch (jsonData['type']) {
                 case type_messages_1.TypeSocketMessages.playerEnterInRoom:
-                    controller = await controllers_injector_1.ControllersInjectorFactory.playerEnterInRoomControllerFactory();
+                    await socket_message_adapter_1.adaptSocketMessage(ws, wss, jsonData, await controllers_injector_1.ControllersInjectorFactory.playerEnterInRoomControllerFactory());
                     break;
                 case type_messages_1.TypeSocketMessages.sendPhraseToHistory:
-                    controller = await controllers_injector_1.ControllersInjectorFactory.playerSendPhraseToHistoryControllerFactory();
+                    await socket_message_adapter_1.adaptSocketMessage(ws, wss, jsonData, await controllers_injector_1.ControllersInjectorFactory.playerSendPhraseToHistoryControllerFactory());
+                    break;
+                case type_messages_1.TypeSocketMessages.joinRoom:
+                    joinedRoom = jsonData["room_id"];
                     break;
                 default:
-                    ws.send(new custom_message_1.CustomMessage({
+                    ws.send(JSON.stringify(new custom_message_1.CustomMessage({
                         type: type_messages_1.TypeSocketMessages.error,
                         content: "invalid_message_type"
-                    }));
+                    })));
                     break;
             }
-            await (0, socket_message_adapter_1.adaptSocketMessage)(ws, wss, jsonData.content, controller);
         });
     });
 };

@@ -12,20 +12,20 @@ describe('get user by id usecase', function () {
     });
     it('should return a valid user if call to repository is success', async function () {
         const mockRepository = {
-            getUserById: jest.fn().mockReturnValue((0, either_ts_1.right)(userExample)),
+            getUserById: jest.fn().mockReturnValue(either_ts_1.right(userExample)),
             getUserPermissions: jest.fn()
         };
         const usecase = new get_user_by_id_1.GetUserByIdUsecase(mockRepository);
         const result = await usecase.handle(new get_user_by_id_1.GetUserByIdUsecaseParams({ id: "exampleId" }));
-        expect(result).toStrictEqual((0, either_ts_1.right)(userExample));
+        expect(result).toStrictEqual(either_ts_1.right(userExample));
     });
     it('should return left ServerFailure if a error ocurred in repository', async function () {
         const mockRepository = {
-            getUserById: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure())),
+            getUserById: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure())),
             getUserPermissions: jest.fn()
         };
         const usecase = new get_user_by_id_1.GetUserByIdUsecase(mockRepository);
         const result = await usecase.handle(new get_user_by_id_1.GetUserByIdUsecaseParams({ id: "exampleId" }));
-        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
+        expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
     });
 });

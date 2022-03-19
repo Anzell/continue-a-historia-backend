@@ -6,15 +6,15 @@ const either_ts_1 = require("either-ts");
 class SignupConverter {
     handle(params) {
         if (params.username == undefined || params.username == "") {
-            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: SignupConverterErrorMessages.missingUsername }));
+            return either_ts_1.left(new failures_1.ValidationFailure({ message: SignupConverterErrorMessages.missingUsername }));
         }
         if (params.email == undefined || params.email == "") {
-            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: SignupConverterErrorMessages.missingEmail }));
+            return either_ts_1.left(new failures_1.ValidationFailure({ message: SignupConverterErrorMessages.missingEmail }));
         }
         if (params.password == undefined || params.password == "") {
-            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: SignupConverterErrorMessages.missingPassword }));
+            return either_ts_1.left(new failures_1.ValidationFailure({ message: SignupConverterErrorMessages.missingPassword }));
         }
-        return (0, either_ts_1.right)({
+        return either_ts_1.right({
             username: params.username.toString(),
             email: params.email.toString(),
             password: params.password.toString(),
