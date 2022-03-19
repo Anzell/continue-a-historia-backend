@@ -18,10 +18,10 @@ describe("create room controller", () => {
     });
     it("deve registrar uma sala corretamente e retornar um custom response status 200", async () => {
         const mockCreateRoomUsecase = {
-            handle: jest.fn().mockReturnValue(either_ts_1.right(null))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(null))
         };
         const mockRoomConverter = {
-            handle: jest.fn().mockReturnValue(either_ts_1.right(roomExample))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(roomExample))
         };
         const controller = new create_room_controller_1.CreateRoomController(mockCreateRoomUsecase, mockRoomConverter);
         const result = await controller.handle(requestExample);
@@ -33,10 +33,10 @@ describe("create room controller", () => {
     });
     it('deve retornar status 400 caso converter falhe', async function () {
         const mockCreateRoomUsecase = {
-            handle: jest.fn().mockReturnValue(either_ts_1.right(null))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(null))
         };
         const mockRoomConverter = {
-            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ValidationFailure({ message: "erro" })))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: "erro" })))
         };
         const controller = new create_room_controller_1.CreateRoomController(mockCreateRoomUsecase, mockRoomConverter);
         const result = await controller.handle(requestExample);
@@ -48,10 +48,10 @@ describe("create room controller", () => {
     });
     it('deve retornar status 400 caso usecase falhe', async function () {
         const mockCreateRoomUsecase = {
-            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure()))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
         };
         const mockRoomConverter = {
-            handle: jest.fn().mockReturnValue(either_ts_1.right(roomExample))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(roomExample))
         };
         const controller = new create_room_controller_1.CreateRoomController(mockCreateRoomUsecase, mockRoomConverter);
         const result = await controller.handle(requestExample);

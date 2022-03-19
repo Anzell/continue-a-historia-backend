@@ -5,15 +5,24 @@ import {ControllersInjectorFactory} from "../../di/controllers_injector";
 import {SocketController} from "../protocols/controller";
 import {TypeSocketMessages} from "../../core/constants/socket/type_messages";
 import {CustomMessage} from "../protocols/custom_message";
+import {GameRoom} from "../../domain/entities/game_room";
 
 export default async (server: Server): Promise<void> => {
-    const ws = new WebSocket.Server({
+    const wss = new WebSocket.Server({
         server: server,
         verifyClient: await (await ControllersInjectorFactory.authGuardSocketFactory("user")).handle()
     });
 
 
-    ws.on('connection', (ws: WebSocket) => {
+    wss.on('connection', (ws: WebSocket) => {
+
+        function sendUpdateRoomToUsers(room: GameRoom) {
+            wss.clients.forEach((client) => {
+                if(client.readyState === WebSocket.OPEN){
+
+                }
+            });
+        }
 
         ws.on('message', async (data: Buffer) => {
             let controller: SocketController;
@@ -32,7 +41,7 @@ export default async (server: Server): Promise<void> => {
                     }));
                     break;
             }
-            await adaptSocketMessage(ws, jsonData.content, controller!);
+            await adaptSocketMessage(ws, wss, jsonData.content, controller!);
         });
     });
 }

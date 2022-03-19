@@ -14,19 +14,19 @@ describe('sign in use case', function () {
         });
         const mockRepository = {
             signUp: jest.fn(),
-            signIn: jest.fn().mockReturnValue(either_ts_1.right(expected))
+            signIn: jest.fn().mockReturnValue((0, either_ts_1.right)(expected))
         };
         const usecase = new sign_in_1.SignInUseCaseImpl(mockRepository);
         const result = await usecase.handle(new sign_in_1.SignInUseCaseParams({ username, password }));
-        expect(result).toStrictEqual(either_ts_1.right(expected));
+        expect(result).toStrictEqual((0, either_ts_1.right)(expected));
     });
     it("deve retornar left failure caso chamada ao repository der erro", async () => {
         const mockRepository = {
             signUp: jest.fn(),
-            signIn: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.InvalidCredentialsFailure()))
+            signIn: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.InvalidCredentialsFailure()))
         };
         const usecase = new sign_in_1.SignInUseCaseImpl(mockRepository);
         const result = await usecase.handle(new sign_in_1.SignInUseCaseParams({ username, password }));
-        expect(result).toStrictEqual(either_ts_1.left(new failures_1.InvalidCredentialsFailure()));
+        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.InvalidCredentialsFailure()));
     });
 });

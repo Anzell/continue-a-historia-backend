@@ -10,12 +10,12 @@ describe('player send phrase to history converter', function () {
         const phrase = "a long time ago";
         const converter = new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverter();
         const result = converter.handle(new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterParams({ userId, roomId, phrase }));
-        expect(result).toStrictEqual(either_ts_1.right({ userId, roomId, phrase }));
+        expect(result).toStrictEqual((0, either_ts_1.right)({ userId, roomId, phrase }));
     });
     it('should return left validation failure when data provided is not valid', function () {
         const converter = new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverter();
-        expect(converter.handle(new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterParams({ userId: "validId", phrase: "validPhrase" }))).toStrictEqual(either_ts_1.left(new failures_1.ValidationFailure({ message: player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterErrorMessages.missingRoom })));
-        expect(converter.handle(new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterParams({ roomId: "validId", phrase: "validPhrase" }))).toStrictEqual(either_ts_1.left(new failures_1.ValidationFailure({ message: player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterErrorMessages.missingUser })));
-        expect(converter.handle(new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterParams({ roomId: "validId", userId: "validId" }))).toStrictEqual(either_ts_1.left(new failures_1.ValidationFailure({ message: player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterErrorMessages.missingPhrase })));
+        expect(converter.handle(new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterParams({ userId: "validId", phrase: "validPhrase" }))).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterErrorMessages.missingRoom })));
+        expect(converter.handle(new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterParams({ roomId: "validId", phrase: "validPhrase" }))).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterErrorMessages.missingUser })));
+        expect(converter.handle(new player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterParams({ roomId: "validId", userId: "validId" }))).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: player_send_phrase_to_history_converter_1.PlayerSendPhraseToHistoryConverterErrorMessages.missingPhrase })));
     });
 });

@@ -9,11 +9,11 @@ describe('player enter in room converter', function () {
         const roomId = "validId";
         const converter = new player_enter_in_room_converter_1.PlayerEnterInRoomConverter();
         const result = converter.handle(new player_enter_in_room_converter_1.PlayerEnterInRoomConverterParams({ userId, roomId }));
-        expect(result).toStrictEqual(either_ts_1.right({ userId, roomId }));
+        expect(result).toStrictEqual((0, either_ts_1.right)({ userId, roomId }));
     });
     it('should return left validation failure when data provided is not valid', function () {
         const converter = new player_enter_in_room_converter_1.PlayerEnterInRoomConverter();
-        expect(converter.handle(new player_enter_in_room_converter_1.PlayerEnterInRoomConverterParams({ userId: "validId" }))).toStrictEqual(either_ts_1.left(new failures_1.ValidationFailure({ message: player_enter_in_room_converter_1.PlayerEnterInRoomConverterErrorMessages.missingRoomId })));
-        expect(converter.handle(new player_enter_in_room_converter_1.PlayerEnterInRoomConverterParams({ roomId: "validId" }))).toStrictEqual(either_ts_1.left(new failures_1.ValidationFailure({ message: player_enter_in_room_converter_1.PlayerEnterInRoomConverterErrorMessages.missingUserId })));
+        expect(converter.handle(new player_enter_in_room_converter_1.PlayerEnterInRoomConverterParams({ userId: "validId" }))).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: player_enter_in_room_converter_1.PlayerEnterInRoomConverterErrorMessages.missingRoomId })));
+        expect(converter.handle(new player_enter_in_room_converter_1.PlayerEnterInRoomConverterParams({ roomId: "validId" }))).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: player_enter_in_room_converter_1.PlayerEnterInRoomConverterErrorMessages.missingUserId })));
     });
 });

@@ -6,11 +6,17 @@ const controllers_injector_1 = require("../../di/controllers_injector");
 const type_messages_1 = require("../../core/constants/socket/type_messages");
 const custom_message_1 = require("../protocols/custom_message");
 exports.default = async (server) => {
-    const ws = new WebSocket.Server({
+    const wss = new WebSocket.Server({
         server: server,
         verifyClient: await (await controllers_injector_1.ControllersInjectorFactory.authGuardSocketFactory("user")).handle()
     });
-    ws.on('connection', (ws) => {
+    wss.on('connection', (ws) => {
+        function sendUpdateRoomToUsers(room) {
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                }
+            });
+        }
         ws.on('message', async (data) => {
             let controller;
             const jsonData = JSON.parse(data.toString());
@@ -28,7 +34,7 @@ exports.default = async (server) => {
                     }));
                     break;
             }
-            await socket_message_adapter_1.adaptSocketMessage(ws, jsonData.content, controller);
+            await (0, socket_message_adapter_1.adaptSocketMessage)(ws, wss, jsonData.content, controller);
         });
     });
 };

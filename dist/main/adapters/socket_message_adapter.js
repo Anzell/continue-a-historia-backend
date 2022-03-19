@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adaptSocketMessage = void 0;
-const adaptSocketMessage = async (ws, data, controller) => {
+const adaptSocketMessage = async (ws, wss, data, controller) => {
     const response = await controller.handle(data);
-    ws.send(JSON.stringify(response.content));
+    wss.clients.forEach((client) => {
+        client.send(JSON.stringify(response.content));
+    });
 };
 exports.adaptSocketMessage = adaptSocketMessage;
