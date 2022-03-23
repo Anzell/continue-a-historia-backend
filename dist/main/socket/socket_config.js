@@ -1,36 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const WebSocket = require("ws");
+const WebSocket = require("socket.io");
 const socket_message_adapter_1 = require("../adapters/socket_message_adapter");
 const controllers_injector_1 = require("../../di/controllers_injector");
 const type_messages_1 = require("../../core/constants/socket/type_messages");
 const custom_message_1 = require("../protocols/custom_message");
-exports.default = async (server) => {
-    const wss = new WebSocket.Server({
-        server: server,
-        verifyClient: await (await controllers_injector_1.ControllersInjectorFactory.authGuardSocketFactory("user")).handle()
+exports.default = (server) => {
+    const wss = new WebSocket.Server(server, { cors: { origin: "*" } });
+    wss.use(async (socket, next) => {
+        if (await (await controllers_injector_1.ControllersInjectorFactory.authGuardSocketFactory("user")).handle(socket)) {
+            next();
+        }
+        socket.disconnect();
     });
-    wss.on('connection', (ws) => {
-        var joinedRoom = "";
-        ws.on("updateRoom", (bufferedRoom) => {
-            const formattedRoom = JSON.parse(bufferedRoom.toString());
-            wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN && formattedRoom.id === joinedRoom) {
-                    client.send(JSON.stringify(formattedRoom));
-                }
-            });
-        });
+    wss.on("updateRoom", () => {
+        console.log("emitiu");
+    });
+    wss.sockets.on('connection', (ws) => {
         ws.on('message', async (data) => {
-            const jsonData = JSON.parse(data.toString());
-            switch (jsonData['type']) {
+            switch (data['type']) {
                 case type_messages_1.TypeSocketMessages.playerEnterInRoom:
-                    await socket_message_adapter_1.adaptSocketMessage(ws, wss, jsonData, await controllers_injector_1.ControllersInjectorFactory.playerEnterInRoomControllerFactory());
+                    await (0, socket_message_adapter_1.adaptSocketMessage)(ws, wss, data, await controllers_injector_1.ControllersInjectorFactory.playerEnterInRoomControllerFactory());
                     break;
                 case type_messages_1.TypeSocketMessages.sendPhraseToHistory:
-                    await socket_message_adapter_1.adaptSocketMessage(ws, wss, jsonData, await controllers_injector_1.ControllersInjectorFactory.playerSendPhraseToHistoryControllerFactory());
+                    await (0, socket_message_adapter_1.adaptSocketMessage)(ws, wss, data, await controllers_injector_1.ControllersInjectorFactory.playerSendPhraseToHistoryControllerFactory());
                     break;
                 case type_messages_1.TypeSocketMessages.joinRoom:
-                    joinedRoom = jsonData["room_id"];
+                    ws.join(data["content"]["room_id"]);
                     break;
                 default:
                     ws.send(JSON.stringify(new custom_message_1.CustomMessage({

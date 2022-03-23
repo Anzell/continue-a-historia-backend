@@ -20,9 +20,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.3.1",
     "rethinkdb": "^2.4.2",
+    "socket.io": "^4.4.1",
     "uuidv4": "^6.2.12",
-    "websocket": "^1.0.34",
-    "ws": "^8.4.2"
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^2.2.0",
@@ -30,7 +30,6 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.0",
     "@types/jsonwebtoken": "^8.5.8",
-    "@types/ws": "^8.2.2",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
     "ts-jest": "^27.1.3",

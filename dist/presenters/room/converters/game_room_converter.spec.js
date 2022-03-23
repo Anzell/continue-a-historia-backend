@@ -13,13 +13,13 @@ describe("game room converter", () => {
             name: "Sala de testes",
             adminsIds: ["admin1"]
         }));
-        expect(result.map((element) => element.name)).toStrictEqual(either_ts_1.right("Sala de testes"));
+        expect(result.map((element) => element.name)).toStrictEqual((0, either_ts_1.right)("Sala de testes"));
     });
     it("deve falhar caso algum parametro obrigatorio nao seja passado", () => {
         let result;
         result = converter.handle(new game_room_converter_1.GameRoomConverterParams({}));
-        expect(result.leftMap((failure) => failure_mapper_1.FailureHelper.mapFailureToMessage(failure))).toStrictEqual(either_ts_1.left(game_room_converter_1.GameRoomConverterErrorMessages.missingName));
+        expect(result.leftMap((failure) => failure_mapper_1.FailureHelper.mapFailureToMessage(failure))).toStrictEqual((0, either_ts_1.left)(game_room_converter_1.GameRoomConverterErrorMessages.missingName));
         result = converter.handle(new game_room_converter_1.GameRoomConverterParams({ name: "sala teste" }));
-        expect(result.leftMap((failure) => failure_mapper_1.FailureHelper.mapFailureToMessage(failure))).toStrictEqual(either_ts_1.left(game_room_converter_1.GameRoomConverterErrorMessages.missingAdmins));
+        expect(result.leftMap((failure) => failure_mapper_1.FailureHelper.mapFailureToMessage(failure))).toStrictEqual((0, either_ts_1.left)(game_room_converter_1.GameRoomConverterErrorMessages.missingAdmins));
     });
 });

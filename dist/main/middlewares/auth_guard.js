@@ -58,7 +58,7 @@ class AuthGuard {
         try {
             if (tokenData) {
                 if (tokenData.permission === "user") {
-                    const response = await this.getUserUsecase.handle({ id: tokenData.id });
+                    const response = await this.getUserUsecase.handle();
                     return await new Promise((resolve, reject) => {
                         response.leftMap((failure) => {
                             reject(failure_mapper_1.FailureHelper.mapFailureToMessage(failure));

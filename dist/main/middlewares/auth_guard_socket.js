@@ -9,22 +9,20 @@ class AuthGuardSocket {
         this.tokenHelper = tokenHelper;
         this.getUserPermissionUsecase = getUserPermissionUsecase;
     }
-    async handle() {
-        return async (info, callback) => {
-            try {
-                if (info.req.url?.split('token=')[1] === undefined) {
-                    throw new exceptions_1.AccessDeniedException();
-                }
-                let tokenData = await this.getAuthorization(info.req.url.split('token=')[1]);
-                if (tokenData !== undefined && await this.validatePermission(tokenData)) {
-                    return callback(true);
-                }
+    async handle(info) {
+        try {
+            if (info.request.headers['authorization'] === undefined || info.request.headers['authorization'].split(' ')[0] !== 'Bearer') {
                 throw new exceptions_1.AccessDeniedException();
             }
-            catch (e) {
-                return callback(false);
+            let tokenData = this.getAuthorization(info.request.headers['authorization'].split(' ')[1]);
+            if (tokenData !== undefined && await this.validatePermission(tokenData)) {
+                return true;
             }
-        };
+            throw new exceptions_1.AccessDeniedException();
+        }
+        catch (e) {
+            return false;
+        }
     }
     getAuthorization(authorization) {
         try {

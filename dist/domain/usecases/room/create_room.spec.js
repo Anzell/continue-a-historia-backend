@@ -23,24 +23,24 @@ describe("teste de usecase", () => {
     });
     it("deve retornar right void caso chamada ao repository der sucesso", async () => {
         const mockRoomRepository = {
-            createRoom: jest.fn().mockReturnValue(either_ts_1.right(null)),
+            createRoom: jest.fn().mockReturnValue((0, either_ts_1.right)(null)),
             insertPlayer: jest.fn(),
             sendPhrase: jest.fn(),
             getRoomById: jest.fn()
         };
         let usecase = new create_room_1.CreateRoomUsecaseImpl(mockRoomRepository);
         let result = await usecase.handle(new create_room_1.CreateRoomUsecaseParams({ room: exampleRoom }));
-        expect(result).toStrictEqual(either_ts_1.right(null));
+        expect(result).toStrictEqual((0, either_ts_1.right)(null));
     });
     it("deve retornar left failure caso chamada ao repository der erro", async () => {
         const mockRoomRepository = {
-            createRoom: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure())),
+            createRoom: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure())),
             insertPlayer: jest.fn(),
             sendPhrase: jest.fn(),
             getRoomById: jest.fn()
         };
         let usecase = new create_room_1.CreateRoomUsecaseImpl(mockRoomRepository);
         let result = await usecase.handle(new create_room_1.CreateRoomUsecaseParams({ room: exampleRoom }));
-        expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
+        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
     });
 });

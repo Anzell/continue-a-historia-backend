@@ -32,7 +32,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.createRoom(exampleRoom);
-            expect(result).toStrictEqual(either_ts_1.right(null));
+            expect(result).toStrictEqual((0, either_ts_1.right)(null));
         });
         it("deve retornar left failure caso chamada ao repository der erro", async () => {
             const mockRoomDatasource = {
@@ -43,7 +43,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.createRoom(exampleRoom);
-            expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
         });
     });
     describe('insert player', function () {
@@ -58,7 +58,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.insertPlayer({ userId: exampleUserId, roomId: exampleRoomId });
-            expect(result).toStrictEqual(either_ts_1.right(null));
+            expect(result).toStrictEqual((0, either_ts_1.right)(null));
         });
         it('should return left server failure if call to datasource fails', async function () {
             const mockRoomDatasource = {
@@ -69,7 +69,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.insertPlayer({ userId: exampleUserId, roomId: exampleRoomId });
-            expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
         });
     });
     describe('send phrase', function () {
@@ -99,7 +99,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.sendPhrase({ userId: exampleUserId, roomId: exampleRoomId, phrase: examplePhrase });
-            expect(result).toStrictEqual(either_ts_1.right(exampleRoom));
+            expect(result).toStrictEqual((0, either_ts_1.right)(exampleRoom));
         });
         it('should return left server failure if call to datasource fails', async function () {
             const mockRoomDatasource = {
@@ -110,7 +110,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.sendPhrase({ userId: exampleUserId, roomId: exampleRoomId, phrase: examplePhrase });
-            expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
         });
     });
     describe('get room by id', function () {
@@ -131,7 +131,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.getRoomById({ id: "getRoomByIdTest" });
-            expect(result).toStrictEqual(either_ts_1.right(expected));
+            expect(result).toStrictEqual((0, either_ts_1.right)(expected));
         });
         it('should return left not found failure if call to datasource fails', async function () {
             const mockRoomDatasource = {
@@ -142,7 +142,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.getRoomById({ id: "getRoomByIdTest" });
-            expect(result).toStrictEqual(either_ts_1.left(new failures_1.NotFoundFailure()));
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.NotFoundFailure()));
         });
         it('should return left server failure if call to datasource fails', async function () {
             const mockRoomDatasource = {
@@ -153,7 +153,7 @@ describe("teste de room repository impl", () => {
             };
             let repository = new room_repository_impl_1.RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.getRoomById({ id: "getRoomByIdTest" });
-            expect(result).toStrictEqual(either_ts_1.left(new failures_1.ServerFailure()));
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
         });
     });
 });

@@ -13,8 +13,8 @@ describe('sign up controller', function () {
         password: "123456",
     };
     it('deve completar o registro de usuario normalmente e retornar status 200', async function () {
-        const spyUsecase = jest.fn().mockReturnValue(either_ts_1.right(null));
-        const spyConverter = jest.fn().mockReturnValue(either_ts_1.right(requestExample));
+        const spyUsecase = jest.fn().mockReturnValue((0, either_ts_1.right)(null));
+        const spyConverter = jest.fn().mockReturnValue((0, either_ts_1.right)(requestExample));
         const mockUsecase = { handle: spyUsecase };
         const mockConverter = { handle: spyConverter };
         const result = await new signup_controller_1.SignUpController(mockUsecase, mockConverter).handle(requestExample);
@@ -28,10 +28,10 @@ describe('sign up controller', function () {
     });
     it('deve retornar status 400 caso converter falhe', async function () {
         const mockUsecase = {
-            handle: jest.fn().mockReturnValue(either_ts_1.right(null))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.right)(null))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ValidationFailure({ message: "erro" })))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: "erro" })))
         };
         const controller = new signup_controller_1.SignUpController(mockUsecase, mockConverter);
         const result = await controller.handle({});
@@ -43,10 +43,10 @@ describe('sign up controller', function () {
     });
     it('deve retornar status 400 caso usecase falhe', async function () {
         const mockUsecase = {
-            handle: jest.fn().mockReturnValue(either_ts_1.left(new failures_1.ServerFailure()))
+            handle: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
         };
         const mockConverter = {
-            handle: jest.fn().mockReturnValue(either_ts_1.right({
+            handle: jest.fn().mockReturnValue((0, either_ts_1.right)({
                 username: requestExample.username,
                 email: requestExample.email,
                 password: requestExample.password,

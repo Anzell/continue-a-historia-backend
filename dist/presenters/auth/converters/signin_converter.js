@@ -6,12 +6,12 @@ const either_ts_1 = require("either-ts");
 class SignInConverter {
     handle(params) {
         if (params.username == undefined || params.username == "") {
-            return either_ts_1.left(new failures_1.ValidationFailure({ message: SignInConverterErrorMessages.missingUsername }));
+            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: SignInConverterErrorMessages.missingUsername }));
         }
         if (params.password == undefined || params.password == "") {
-            return either_ts_1.left(new failures_1.ValidationFailure({ message: SignInConverterErrorMessages.missingPassword }));
+            return (0, either_ts_1.left)(new failures_1.ValidationFailure({ message: SignInConverterErrorMessages.missingPassword }));
         }
-        return either_ts_1.right({
+        return (0, either_ts_1.right)({
             password: params.password,
             username: params.username
         });

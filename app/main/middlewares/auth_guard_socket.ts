@@ -1,15 +1,13 @@
-import {Middleware} from "../protocols/middleware";
+import {SocketMiddleware} from "../protocols/middleware";
 import {AccessDeniedException} from "../../core/failures/exceptions";
 import {TokenData} from "../../domain/entities/token_data";
 import {TokenHelper} from "../../core/helper/token_helper";
-import {GetUserByIdUsecase} from "../../domain/usecases/user/get_user_by_id";
 import {FailureHelper} from "../../core/helper/failure_mapper";
-import {UserEntity} from "../../domain/entities/user_entity";
 import {Failure} from "../../core/failures/failures";
-import {VerifyClientCallbackAsync} from "ws";
 import {GetUserPermissionsUsecase} from "../../domain/usecases/user/get_user_permissions";
+import {Socket} from "socket.io";
 
-export class AuthGuardSocket implements Middleware {
+export class AuthGuardSocket implements SocketMiddleware {
     private readonly authorized: string[];
     private readonly getUserPermissionUsecase: GetUserPermissionsUsecase;
     private readonly tokenHelper: TokenHelper;
@@ -20,21 +18,21 @@ export class AuthGuardSocket implements Middleware {
         this.getUserPermissionUsecase = getUserPermissionUsecase;
     }
 
-    async handle(): Promise<VerifyClientCallbackAsync> {
-        return async (info, callback) => {
+    async handle (info: Socket): Promise<boolean> {
+       
             try{
-                if(info.req.url?.split('token=')[1] === undefined){
+                if(info.request.headers['authorization'] === undefined || info.request.headers['authorization'].split(' ')[0] !== 'Bearer'){
                     throw new AccessDeniedException();
                 }
-                let tokenData: TokenData | undefined = await this.getAuthorization(info.req.url.split('token=')[1]);
+                let tokenData: TokenData | undefined = this.getAuthorization(info.request.headers['authorization'].split(' ')[1]);
                 if (tokenData !== undefined && await this.validatePermission(tokenData)) {
-                    return callback(true);
+                    return true;
                 }
                 throw new AccessDeniedException();
             }  catch(e){
-                return callback(false);
+                return false;
             }
-        };
+        
     }
 
     private getAuthorization(authorization: string): TokenData | undefined {

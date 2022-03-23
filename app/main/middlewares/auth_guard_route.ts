@@ -1,16 +1,14 @@
-import {Middleware} from "../protocols/middleware";
-import {RequestHandler} from "express";
+import {HttpMiddleware} from "../protocols/middleware";
 import {CustomResponse} from "../protocols/custom_response";
 import {AccessDeniedException} from "../../core/failures/exceptions";
 import {TokenData} from "../../domain/entities/token_data";
 import {TokenHelper} from "../../core/helper/token_helper";
-import {GetUserByIdUsecase} from "../../domain/usecases/user/get_user_by_id";
 import {FailureHelper} from "../../core/helper/failure_mapper";
-import {UserEntity} from "../../domain/entities/user_entity";
 import {Failure} from "../../core/failures/failures";
 import {GetUserPermissionsUsecase} from "../../domain/usecases/user/get_user_permissions";
+import {RequestHandler} from "express";
 
-export class AuthGuardRoute implements Middleware {
+export class AuthGuardRoute implements HttpMiddleware {
     private readonly authorized: string[];
     private readonly getUserPermissionUsecase: GetUserPermissionsUsecase;
     private readonly tokenHelper: TokenHelper;
@@ -21,7 +19,7 @@ export class AuthGuardRoute implements Middleware {
         this.getUserPermissionUsecase = getUserPermissionUsecase;
     }
 
-    async handle(): Promise<RequestHandler> {
+    async handle(): Promise<RequestHandler>{
         return async (req, res, next) => {
           try{
               if(req.headers['authorization'] === undefined){

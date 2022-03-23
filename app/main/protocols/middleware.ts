@@ -1,6 +1,10 @@
-import { RequestHandler } from "express";
-import {VerifyClientCallbackAsync} from "ws";
+import {RequestHandler} from "express";
+import {Socket} from "socket.io";
 
-export interface Middleware {
-    handle: () => Promise<RequestHandler | VerifyClientCallbackAsync>;
+export interface HttpMiddleware {
+    handle: () => Promise<RequestHandler>;
+}
+
+export interface SocketMiddleware{
+    handle: (info: Socket) => Promise<boolean>;
 }

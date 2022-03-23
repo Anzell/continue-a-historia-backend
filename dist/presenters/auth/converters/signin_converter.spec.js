@@ -17,16 +17,16 @@ describe('sign in converter', function () {
             username: expected.username,
             password: expected.password
         }));
-        expect(result).toStrictEqual(either_ts_1.right(expected));
+        expect(result).toStrictEqual((0, either_ts_1.right)(expected));
     });
     it('should return a left with failure messages', function () {
         let result = converter.handle(new signin_converter_1.SignInConverterParams({
             password: "123456"
         }));
-        expect(result).toStrictEqual(either_ts_1.left(new failures_1.ValidationFailure({ message: signin_converter_1.SignInConverterErrorMessages.missingUsername })));
+        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: signin_converter_1.SignInConverterErrorMessages.missingUsername })));
         result = converter.handle(new signin_converter_1.SignInConverterParams({
             username: "anzell"
         }));
-        expect(result).toStrictEqual(either_ts_1.left(new failures_1.ValidationFailure({ message: signin_converter_1.SignInConverterErrorMessages.missingPassword })));
+        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: signin_converter_1.SignInConverterErrorMessages.missingPassword })));
     });
 });
