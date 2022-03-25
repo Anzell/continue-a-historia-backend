@@ -7,6 +7,7 @@ const custom_response_1 = require("../../main/protocols/custom_response");
 const success_messages_1 = require("../../core/constants/messages/success_messages");
 const failures_1 = require("../../core/failures/failures");
 const error_messages_1 = require("../../core/constants/messages/error_messages");
+const server_codes_1 = require("../../core/constants/messages/server_codes");
 describe("create room controller", () => {
     const requestExample = {
         "name": "Sala de testes",
@@ -28,6 +29,7 @@ describe("create room controller", () => {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             codeStatus: 200,
             message: success_messages_1.SuccessMessages.operationSuccess,
+            code: server_codes_1.ServerCodes.success,
             result: {}
         }));
     });
@@ -43,6 +45,7 @@ describe("create room controller", () => {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             codeStatus: 400,
             message: "erro",
+            code: server_codes_1.ServerCodes.validationError + ":" + "erro",
             result: {}
         }));
     });
@@ -58,6 +61,7 @@ describe("create room controller", () => {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             codeStatus: 400,
             message: error_messages_1.ErrorMessages.serverFailure,
+            code: server_codes_1.ServerCodes.serverFailure,
             result: {}
         }));
     });

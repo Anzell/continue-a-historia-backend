@@ -7,6 +7,7 @@ import {SignInUsecase} from "../../domain/usecases/auth/sign_in";
 import {SignInConverter} from "./converters/signin_converter";
 import {SignInController} from "./signin_controller";
 import {AuthToken} from "../../domain/entities/auth_token";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
 
 describe('sign up controller', function () {
     const requestExample = {
@@ -28,6 +29,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 200,
             message: SuccessMessages.operationSuccess,
+            code: ServerCodes.success,
             result: {
                 id: authTokenExample.id,
                 token: authTokenExample.token
@@ -50,6 +52,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 400,
             message: "erro",
+            code: ServerCodes.validationError+":"+"erro",
             result: {}
         }));
     });
@@ -70,6 +73,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 400,
             message: ErrorMessages.serverFailure,
+            code: ServerCodes.serverFailure,
             result: {}
         }));
     });
@@ -91,6 +95,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 400,
             message: ErrorMessages.invalidCredentials,
+            code: ServerCodes.invalidCredentials,
             result: {}
         }));
     });

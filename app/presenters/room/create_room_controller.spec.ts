@@ -8,6 +8,7 @@ import {CustomResponse} from "../../main/protocols/custom_response";
 import {SuccessMessages} from "../../core/constants/messages/success_messages";
 import {ServerFailure, ValidationFailure} from "../../core/failures/failures";
 import {ErrorMessages} from "../../core/constants/messages/error_messages";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
 
 describe("create room controller", () => {
     const requestExample = {
@@ -31,6 +32,7 @@ describe("create room controller", () => {
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 200,
             message: SuccessMessages.operationSuccess,
+            code: ServerCodes.success,
             result: {}
         }));
     });
@@ -47,6 +49,7 @@ describe("create room controller", () => {
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 400,
             message: "erro",
+            code: ServerCodes.validationError+":"+"erro",
             result: {}
         }));
     });
@@ -63,6 +66,7 @@ describe("create room controller", () => {
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 400,
             message: ErrorMessages.serverFailure,
+            code: ServerCodes.serverFailure,
             result: {}
         }));
     });

@@ -5,6 +5,8 @@ import {SignupConverter, SignupConvertersParams} from "./converters/signup_conve
 import {SuccessMessages} from "../../core/constants/messages/success_messages";
 import {Failure, ValidationFailure} from "../../core/failures/failures";
 import {FailureHelper} from "../../core/helper/failure_mapper";
+import {CodeHelper} from "../../core/helper/code_helper";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
 
 export class SignUpController implements HttpController{
     constructor (private readonly signUpUsecase: SignUpUsecase, private readonly signUpConverter: SignupConverter) {
@@ -14,6 +16,7 @@ export class SignUpController implements HttpController{
         let serverResponse = new CustomResponse({
             result: {},
             message: "Erro no servidor",
+            code: ServerCodes.serverFailure,
             codeStatus: 400
         });
         await new Promise((resolve) => {
@@ -32,6 +35,7 @@ export class SignUpController implements HttpController{
                     serverResponse = new CustomResponse({
                         codeStatus: 200,
                         message: SuccessMessages.operationSuccess,
+                        code: ServerCodes.success,
                         result: {}
                     });
                     resolve(true);
@@ -40,6 +44,7 @@ export class SignUpController implements HttpController{
                     serverResponse = new CustomResponse({
                         codeStatus: 400,
                         message: FailureHelper.mapFailureToMessage(failure),
+                        code: CodeHelper.failureToCode(failure),
                         result: {}
                     });
                     resolve(false);
@@ -49,6 +54,7 @@ export class SignUpController implements HttpController{
                 serverResponse = new CustomResponse({
                     codeStatus: 400,
                     message: (failure as ValidationFailure).message!,
+                    code: CodeHelper.failureToCode(failure),
                     result: {}
                 });
                 resolve(false);

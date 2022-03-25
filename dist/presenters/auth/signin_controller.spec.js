@@ -7,6 +7,7 @@ const failures_1 = require("../../core/failures/failures");
 const error_messages_1 = require("../../core/constants/messages/error_messages");
 const signin_controller_1 = require("./signin_controller");
 const auth_token_1 = require("../../domain/entities/auth_token");
+const server_codes_1 = require("../../core/constants/messages/server_codes");
 describe('sign up controller', function () {
     const requestExample = {
         username: "anzell",
@@ -25,6 +26,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             codeStatus: 200,
             message: success_messages_1.SuccessMessages.operationSuccess,
+            code: server_codes_1.ServerCodes.success,
             result: {
                 id: authTokenExample.id,
                 token: authTokenExample.token
@@ -45,6 +47,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             codeStatus: 400,
             message: "erro",
+            code: server_codes_1.ServerCodes.validationError + ":" + "erro",
             result: {}
         }));
     });
@@ -63,6 +66,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             codeStatus: 400,
             message: error_messages_1.ErrorMessages.serverFailure,
+            code: server_codes_1.ServerCodes.serverFailure,
             result: {}
         }));
     });
@@ -81,6 +85,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             codeStatus: 400,
             message: error_messages_1.ErrorMessages.invalidCredentials,
+            code: server_codes_1.ServerCodes.invalidCredentials,
             result: {}
         }));
     });

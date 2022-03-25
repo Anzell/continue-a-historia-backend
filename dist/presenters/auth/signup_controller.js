@@ -5,6 +5,8 @@ const custom_response_1 = require("../../main/protocols/custom_response");
 const signup_converters_1 = require("./converters/signup_converters");
 const success_messages_1 = require("../../core/constants/messages/success_messages");
 const failure_mapper_1 = require("../../core/helper/failure_mapper");
+const code_helper_1 = require("../../core/helper/code_helper");
+const server_codes_1 = require("../../core/constants/messages/server_codes");
 class SignUpController {
     constructor(signUpUsecase, signUpConverter) {
         this.signUpUsecase = signUpUsecase;
@@ -14,6 +16,7 @@ class SignUpController {
         let serverResponse = new custom_response_1.CustomResponse({
             result: {},
             message: "Erro no servidor",
+            code: server_codes_1.ServerCodes.serverFailure,
             codeStatus: 400
         });
         await new Promise((resolve) => {
@@ -32,6 +35,7 @@ class SignUpController {
                     serverResponse = new custom_response_1.CustomResponse({
                         codeStatus: 200,
                         message: success_messages_1.SuccessMessages.operationSuccess,
+                        code: server_codes_1.ServerCodes.success,
                         result: {}
                     });
                     resolve(true);
@@ -40,6 +44,7 @@ class SignUpController {
                     serverResponse = new custom_response_1.CustomResponse({
                         codeStatus: 400,
                         message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
+                        code: code_helper_1.CodeHelper.failureToCode(failure),
                         result: {}
                     });
                     resolve(false);
@@ -49,6 +54,7 @@ class SignUpController {
                 serverResponse = new custom_response_1.CustomResponse({
                     codeStatus: 400,
                     message: failure.message,
+                    code: code_helper_1.CodeHelper.failureToCode(failure),
                     result: {}
                 });
                 resolve(false);
