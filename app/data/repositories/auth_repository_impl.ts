@@ -34,9 +34,9 @@ export class AuthRepositoryImpl implements  AuthRepository {
     }
 
 
-    async signIn ({username, password}: { username: string; password: string }): Promise<Either<Failure, AuthToken>> {
+    async signIn ({email, password}: { email: string; password: string }): Promise<Either<Failure, AuthToken>> {
         try{
-            const result = await this.datasource.signIn({username, password});
+            const result = await this.datasource.signIn({email, password});
             return right(result);
         }catch(e){
             if(e instanceof InvalidCredentialsException){

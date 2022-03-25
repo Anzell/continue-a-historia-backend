@@ -23,9 +23,9 @@ class AuthRepositoryImpl {
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
     }
-    async signIn({ username, password }) {
+    async signIn({ email, password }) {
         try {
-            const result = await this.datasource.signIn({ username, password });
+            const result = await this.datasource.signIn({ email, password });
             return (0, either_ts_1.right)(result);
         }
         catch (e) {

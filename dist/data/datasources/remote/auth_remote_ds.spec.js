@@ -14,7 +14,7 @@ describe('auth remote ds', function () {
     describe('sign up', function () {
         const username = "newUser";
         const password = "123456";
-        const email = "test@email.com";
+        const email = "newUserTest@email.com";
         it('should register a new user', async function () {
             const spyGenerateUuid = jest.fn().mockReturnValue("validId");
             const spyHashPassword = jest.fn().mockReturnValue("PASSWORDENCRIPTED");
@@ -34,7 +34,7 @@ describe('auth remote ds', function () {
             expect(spyGenerateUuid).toBeCalled();
             expect(spyHashPassword).toBeCalled();
             const newUserDocument = await db.collection(db_collections_1.DbCollections.users).findOne({ id: "validId" });
-            expect(newUserDocument['email']).toStrictEqual("test@email.com");
+            expect(newUserDocument['email']).toStrictEqual("newUserTest@email.com");
             expect(newUserDocument['username']).toStrictEqual("newUser");
         });
         it('should throw a UsernameAlreadyExists if username provided already registered in db', async function () {
@@ -100,12 +100,12 @@ describe('auth remote ds', function () {
                 "id": "testId",
                 "username": "signInTestUsername",
                 "password": "123456",
-                "email": "test@email.com",
+                "email": "validEmail@email.com",
                 "permission": "user"
             });
             const datasource = new auth_remote_ds_1.AuthRemoteDsImpl(db, mockStringHelper, mockCryptographyHelper, mockTokenHelper);
             const result = await datasource.signIn({
-                username: "signInTestUsername",
+                email: "validEmail@email.com",
                 password: "123456"
             });
             expect(result).toStrictEqual(new auth_token_1.AuthToken({
@@ -113,7 +113,7 @@ describe('auth remote ds', function () {
                 token: "validToken"
             }));
         });
-        it('should throw a invalidcredentials if user not exists', async function () {
+        it('should throw a invalidcredentials if email not registered', async function () {
             const spyGenerateUuid = jest.fn();
             const spyComparePassword = jest.fn().mockReturnValue(true);
             const spyTokenGenerated = jest.fn().mockReturnValue("validToken");
@@ -130,7 +130,7 @@ describe('auth remote ds', function () {
             };
             const datasource = new auth_remote_ds_1.AuthRemoteDsImpl(db, mockStringHelper, mockCryptographyHelper, mockTokenHelper);
             const result = datasource.signIn({
-                username: "invalidUsername",
+                email: "dontRegisteredEmail@email.com",
                 password: "123456"
             });
             await expect(result).rejects.toStrictEqual(new exceptions_1.InvalidCredentialsException());
@@ -154,12 +154,12 @@ describe('auth remote ds', function () {
                 "id": "testId",
                 "username": "signInTestUsername",
                 "password": "123456",
-                "email": "test@email.com",
+                "email": "email@email.com",
                 "permission": "user"
             });
             const datasource = new auth_remote_ds_1.AuthRemoteDsImpl(db, mockStringHelper, mockCryptographyHelper, mockTokenHelper);
             const result = datasource.signIn({
-                username: "signInTestUsername",
+                email: "email@email.com",
                 password: "invalidPassword"
             });
             await expect(result).rejects.toStrictEqual(new exceptions_1.InvalidCredentialsException());

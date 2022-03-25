@@ -24,7 +24,7 @@ describe('auth remote ds', function () {
 
         const username: string = "newUser";
         const password: string = "123456";
-        const email: string = "test@email.com";
+        const email: string = "newUserTest@email.com";
 
         it('should register a new user', async function () {
 
@@ -46,7 +46,7 @@ describe('auth remote ds', function () {
             expect(spyGenerateUuid).toBeCalled();
             expect(spyHashPassword).toBeCalled();
             const newUserDocument = await db.collection(DbCollections.users).findOne({id: "validId"});
-            expect(newUserDocument!['email']).toStrictEqual("test@email.com");
+            expect(newUserDocument!['email']).toStrictEqual("newUserTest@email.com");
             expect(newUserDocument!['username']).toStrictEqual("newUser");
         });
 
@@ -116,12 +116,12 @@ describe('auth remote ds', function () {
                 "id": "testId",
                 "username": "signInTestUsername",
                 "password": "123456",
-                "email": "test@email.com",
+                "email": "validEmail@email.com",
                 "permission": "user"
             });
             const datasource = new AuthRemoteDsImpl(db, mockStringHelper, mockCryptographyHelper, mockTokenHelper);
             const result = await datasource.signIn({
-                username: "signInTestUsername",
+                email: "validEmail@email.com",
                 password: "123456"
             });
             expect(result).toStrictEqual(new AuthToken({
@@ -130,7 +130,7 @@ describe('auth remote ds', function () {
             }))
         });
 
-        it('should throw a invalidcredentials if user not exists', async function () {
+        it('should throw a invalidcredentials if email not registered', async function () {
             const spyGenerateUuid = jest.fn();
             const spyComparePassword = jest.fn().mockReturnValue(true);
             const spyTokenGenerated = jest.fn().mockReturnValue("validToken");
@@ -147,7 +147,7 @@ describe('auth remote ds', function () {
             };
             const datasource = new AuthRemoteDsImpl(db, mockStringHelper, mockCryptographyHelper, mockTokenHelper);
             const result = datasource.signIn({
-                username: "invalidUsername",
+                email: "dontRegisteredEmail@email.com",
                 password: "123456"
             });
             await expect(result).rejects.toStrictEqual(new InvalidCredentialsException());
@@ -172,12 +172,12 @@ describe('auth remote ds', function () {
                 "id": "testId",
                 "username": "signInTestUsername",
                 "password": "123456",
-                "email": "test@email.com",
+                "email": "email@email.com",
                 "permission": "user"
             });
             const datasource = new AuthRemoteDsImpl(db, mockStringHelper, mockCryptographyHelper, mockTokenHelper);
             const result = datasource.signIn({
-                username: "signInTestUsername",
+                email: "email@email.com",
                 password: "invalidPassword"
             });
             await expect(result).rejects.toStrictEqual(new InvalidCredentialsException());

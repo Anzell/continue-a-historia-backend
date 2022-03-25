@@ -5,7 +5,7 @@ import {InvalidCredentialsFailure} from "../../../core/failures/failures";
 import {AuthToken} from "../../entities/auth_token";
 
 describe('sign in use case', function () {
-    const username = "anzell";
+    const email = "email@email.com";
     const password = "123456";
 
     it('should return a right string if call to repository is success', async function () {
@@ -18,7 +18,7 @@ describe('sign in use case', function () {
            signIn: jest.fn().mockReturnValue(right(expected))
         };
         const usecase = new SignInUseCaseImpl(mockRepository);
-        const result = await usecase.handle(new SignInUseCaseParams({username, password}));
+        const result = await usecase.handle(new SignInUseCaseParams({email, password}));
         expect(result).toStrictEqual(right(expected));
     });
 
@@ -28,7 +28,7 @@ describe('sign in use case', function () {
             signIn: jest.fn().mockReturnValue(left(new InvalidCredentialsFailure()))
         };
         const usecase = new SignInUseCaseImpl(mockRepository);
-        const result = await usecase.handle(new SignInUseCaseParams({username, password}));
+        const result = await usecase.handle(new SignInUseCaseParams({email, password}));
         expect(result).toStrictEqual(left(new InvalidCredentialsFailure()));
     });
 });

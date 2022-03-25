@@ -48,7 +48,7 @@ describe('auth repository impl', function () {
         });
     });
     describe('sign in', function () {
-        const username = "anzell";
+        const email = "email@email.com";
         const password = "123456";
         it('should sign in sucessfull', async function () {
             const expected = new auth_token_1.AuthToken({
@@ -60,7 +60,7 @@ describe('auth repository impl', function () {
                 signIn: jest.fn().mockReturnValue(expected)
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
-            const result = await repository.signIn({ password, username });
+            const result = await repository.signIn({ password, email });
             expect(result).toStrictEqual((0, either_ts_1.right)(expected));
         });
         it('should return left server failure if call to datasource fail', async function () {
@@ -69,7 +69,7 @@ describe('auth repository impl', function () {
                 signIn: jest.fn().mockRejectedValue(new exceptions_1.ServerException())
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
-            const result = await repository.signIn({ password, username });
+            const result = await repository.signIn({ password, email });
             expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ServerFailure()));
         });
         it('should return left invalid credentials if datasource returns invalid', async function () {
@@ -78,7 +78,7 @@ describe('auth repository impl', function () {
                 signIn: jest.fn().mockRejectedValue(new exceptions_1.InvalidCredentialsException())
             };
             const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
-            const result = await repository.signIn({ password, username });
+            const result = await repository.signIn({ password, email });
             expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.InvalidCredentialsFailure()));
         });
     });

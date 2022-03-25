@@ -10,11 +10,11 @@ describe('sign in converter', function () {
     });
     it('should return a valid object for sign in', function () {
         const expected = {
-            username: "anzell",
+            email: "email@email.com",
             password: "123456"
         };
         const result = converter.handle(new signin_converter_1.SignInConverterParams({
-            username: expected.username,
+            email: expected.email,
             password: expected.password
         }));
         expect(result).toStrictEqual((0, either_ts_1.right)(expected));
@@ -23,9 +23,9 @@ describe('sign in converter', function () {
         let result = converter.handle(new signin_converter_1.SignInConverterParams({
             password: "123456"
         }));
-        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: signin_converter_1.SignInConverterErrorMessages.missingUsername })));
+        expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: signin_converter_1.SignInConverterErrorMessages.missingEmail })));
         result = converter.handle(new signin_converter_1.SignInConverterParams({
-            username: "anzell"
+            email: "email@email.com"
         }));
         expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.ValidationFailure({ message: signin_converter_1.SignInConverterErrorMessages.missingPassword })));
     });

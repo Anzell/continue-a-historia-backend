@@ -29,8 +29,8 @@ class AuthRemoteDsImpl {
             "permission": "user"
         });
     }
-    async signIn({ username, password }) {
-        const document = await this.db.collection(db_collections_1.DbCollections.users).findOne({ username });
+    async signIn({ email, password }) {
+        const document = await this.db.collection(db_collections_1.DbCollections.users).findOne({ email });
         if (document == undefined) {
             throw new exceptions_1.InvalidCredentialsException();
         }

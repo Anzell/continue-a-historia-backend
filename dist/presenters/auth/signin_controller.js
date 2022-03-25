@@ -21,13 +21,13 @@ class SignInController {
         });
         await new Promise((resolve) => {
             const converter = this.signInConverter.handle(new signin_converter_1.SignInConverterParams({
-                username: request['username'],
+                email: request['email'],
                 password: request['password'],
             }));
             converter.map(async (convertedObject) => {
                 const result = await this.signInUseCase.handle({
                     password: convertedObject.password,
-                    username: convertedObject.username
+                    email: convertedObject.email
                 });
                 result.map((token) => {
                     serverResponse = new custom_response_1.CustomResponse({

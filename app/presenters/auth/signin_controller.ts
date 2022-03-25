@@ -25,13 +25,13 @@ export class SignInController implements Controller{
         });
         await new Promise((resolve) => {
             const converter = this.signInConverter.handle(new SignInConverterParams({
-                username: request['username'],
+                email: request['email'],
                 password: request['password'],
             }));
             converter.map(async (convertedObject) => {
                 const result = await this.signInUseCase.handle({
                     password: convertedObject.password,
-                    username: convertedObject.username
+                    email: convertedObject.email
                 });
                 result.map((token: AuthToken) => {
                     serverResponse = new CustomResponse({

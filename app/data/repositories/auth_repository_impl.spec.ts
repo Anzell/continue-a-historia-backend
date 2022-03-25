@@ -63,7 +63,7 @@ describe('auth repository impl', function () {
     });
 
     describe('sign in', function () {
-        const username = "anzell";
+        const email = "email@email.com";
         const password = "123456";
 
         it('should sign in sucessfull', async function () {
@@ -76,7 +76,7 @@ describe('auth repository impl', function () {
                 signIn: jest.fn().mockReturnValue(expected)
             };
             const repository = new AuthRepositoryImpl(mockDatasource);
-            const result = await repository.signIn({password,username});
+            const result = await repository.signIn({password,email});
             expect(result).toStrictEqual(right(expected));
         });
 
@@ -86,7 +86,7 @@ describe('auth repository impl', function () {
                 signIn: jest.fn().mockRejectedValue(new ServerException())
             };
             const repository = new AuthRepositoryImpl(mockDatasource);
-            const result = await repository.signIn({password,username});
+            const result = await repository.signIn({password,email});
             expect(result).toStrictEqual(left(new ServerFailure()));
         });
 
@@ -96,7 +96,7 @@ describe('auth repository impl', function () {
                 signIn: jest.fn().mockRejectedValue(new InvalidCredentialsException())
             };
             const repository = new AuthRepositoryImpl(mockDatasource);
-            const result = await repository.signIn({password,username});
+            const result = await repository.signIn({password,email});
             expect(result).toStrictEqual(left(new InvalidCredentialsFailure()));
         });
     });

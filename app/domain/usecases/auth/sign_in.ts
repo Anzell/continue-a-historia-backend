@@ -13,7 +13,7 @@ export class SignInUseCaseImpl implements SignInUsecase{
 
     async handle (params: SignInUseCaseParams): Promise<Either<Failure, AuthToken>> {
         return await this.repository.signIn({
-            username: params.username,
+            email: params.email,
             password: params.password,
         });
     }
@@ -21,14 +21,14 @@ export class SignInUseCaseImpl implements SignInUsecase{
 }
 
 export class SignInUseCaseParams {
-    username: string;
+    email: string;
     password: string;
 
-    constructor ({username, password}: {
-        username: string,
+    constructor ({email, password}: {
+        email: string,
         password: string
     }) {
-        this.username = username;
+        this.email = email;
         this.password = password;
     }
 }

@@ -5,7 +5,7 @@ const either_ts_1 = require("either-ts");
 const failures_1 = require("../../../core/failures/failures");
 const auth_token_1 = require("../../entities/auth_token");
 describe('sign in use case', function () {
-    const username = "anzell";
+    const email = "email@email.com";
     const password = "123456";
     it('should return a right string if call to repository is success', async function () {
         const expected = new auth_token_1.AuthToken({
@@ -17,7 +17,7 @@ describe('sign in use case', function () {
             signIn: jest.fn().mockReturnValue((0, either_ts_1.right)(expected))
         };
         const usecase = new sign_in_1.SignInUseCaseImpl(mockRepository);
-        const result = await usecase.handle(new sign_in_1.SignInUseCaseParams({ username, password }));
+        const result = await usecase.handle(new sign_in_1.SignInUseCaseParams({ email, password }));
         expect(result).toStrictEqual((0, either_ts_1.right)(expected));
     });
     it("deve retornar left failure caso chamada ao repository der erro", async () => {
@@ -26,7 +26,7 @@ describe('sign in use case', function () {
             signIn: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.InvalidCredentialsFailure()))
         };
         const usecase = new sign_in_1.SignInUseCaseImpl(mockRepository);
-        const result = await usecase.handle(new sign_in_1.SignInUseCaseParams({ username, password }));
+        const result = await usecase.handle(new sign_in_1.SignInUseCaseParams({ email, password }));
         expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.InvalidCredentialsFailure()));
     });
 });

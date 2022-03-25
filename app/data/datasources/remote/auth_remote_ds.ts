@@ -14,7 +14,7 @@ import {TokenHelper} from "../../../core/helper/token_helper";
 
 export interface AuthRemoteDs {
     signUp({username, password, email}: {username: string, password: string, email: string}): Promise<void>;
-    signIn({username, password}: {username: string, password: string}): Promise<AuthToken>;
+    signIn({email, password}: {email: string, password: string}): Promise<AuthToken>;
 }
 
 export class AuthRemoteDsImpl implements  AuthRemoteDs {
@@ -43,8 +43,8 @@ export class AuthRemoteDsImpl implements  AuthRemoteDs {
         });
     }
 
-    async signIn ({username, password}: { username: string; password: string }): Promise<AuthToken> {
-        const document = await this.db.collection(DbCollections.users).findOne({username});
+    async signIn ({email, password}: { email: string; password: string }): Promise<AuthToken> {
+        const document = await this.db.collection(DbCollections.users).findOne({email});
         if(document == undefined){
             throw new InvalidCredentialsException();
         }

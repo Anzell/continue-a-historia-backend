@@ -10,15 +10,15 @@ class SignInUseCaseImpl {
     }
     async handle(params) {
         return await this.repository.signIn({
-            username: params.username,
+            email: params.email,
             password: params.password,
         });
     }
 }
 exports.SignInUseCaseImpl = SignInUseCaseImpl;
 class SignInUseCaseParams {
-    constructor({ username, password }) {
-        this.username = username;
+    constructor({ email, password }) {
+        this.email = email;
         this.password = password;
     }
 }
