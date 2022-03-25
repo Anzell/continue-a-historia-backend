@@ -1,4 +1,4 @@
-import {SocketController} from "../../main/protocols/controller";
+import {Controller} from "../../main/protocols/controller";
 import {
     PlayerEnterInRoomUsecase,
     PlayerEnterInRoomUsecaseParams
@@ -9,17 +9,22 @@ import {
 } from "./converters/player_enter_in_room_converter";
 import {Failure, ValidationFailure} from "../../core/failures/failures";
 import {FailureHelper} from "../../core/helper/failure_mapper";
-import {CustomMessage} from "../../main/protocols/custom_message";
 import {TypeSocketMessages} from "../../core/constants/socket/type_messages";
+import {CustomResponse} from "../../main/protocols/custom_response";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
+import {SuccessMessages} from "../../core/constants/messages/success_messages";
+import {CodeHelper} from "../../core/helper/code_helper";
 
-export class PlayerEnterInRoomController implements SocketController {
+export class PlayerEnterInRoomController implements Controller {
 
     constructor (private readonly insertPlayerInRoomUsecase: PlayerEnterInRoomUsecase, private readonly insertPlayerConverter: PlayerEnterInRoomConverter) {}
 
-    async handle (request: any): Promise<CustomMessage> {
-        let serverResponse = new CustomMessage({
-            type: TypeSocketMessages.error,
-            content: {}
+    async handle (request: any): Promise<CustomResponse> {
+        let serverResponse = new CustomResponse({
+            codeStatus: 400,
+            message: "Erro no servidor",
+            code: ServerCodes.serverFailure,
+            result: {}
         });
         await new Promise((resolve) => {
             const converter = this.insertPlayerConverter.handle(new PlayerEnterInRoomConverterParams({
@@ -32,24 +37,30 @@ export class PlayerEnterInRoomController implements SocketController {
                     userId: data.userId,
                 }));
                 result.map((_: any) => {
-                    serverResponse = new CustomMessage({
-                        type: TypeSocketMessages.playerEnterInRoom,
-                        content: {}
+                    serverResponse = new CustomResponse({
+                        codeStatus: 200,
+                        code: ServerCodes.success,
+                        message: SuccessMessages.operationSuccess,
+                        result: {}
                     });
                     resolve(true);
                 });
                 result.leftMap((failure: Failure)=>{
-                    serverResponse = new CustomMessage({
-                        type: TypeSocketMessages.error,
-                        content: FailureHelper.mapFailureToMessage(failure)
+                    serverResponse = new CustomResponse({
+                        message: FailureHelper.mapFailureToMessage(failure),
+                        code: CodeHelper.failureToCode(failure),
+                        codeStatus: 400,
+                        result: {}
                     });
                     resolve(false);
                 });
             });
             converter.leftMap((failure) => {
-                serverResponse = new CustomMessage({
-                    type: TypeSocketMessages.error,
-                    content: (failure as ValidationFailure).message!,
+                serverResponse = new CustomResponse({
+                    codeStatus: 400,
+                    code: CodeHelper.failureToCode(failure),
+                    message: FailureHelper.mapFailureToMessage(failure),
+                    result:{},
                 });
                 resolve(false);
             });

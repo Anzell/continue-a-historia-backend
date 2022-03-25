@@ -9,7 +9,7 @@ class CodeHelper {
             return server_codes_1.ServerCodes.serverFailure;
         }
         if (failure instanceof failures_1.ValidationFailure) {
-            return server_codes_1.ServerCodes.validationError + ":" + failure.message;
+            return server_codes_1.ServerCodes.validationError;
         }
         if (failure instanceof failures_1.InvalidCredentialsFailure) {
             return server_codes_1.ServerCodes.invalidCredentials;

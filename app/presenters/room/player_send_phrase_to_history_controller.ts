@@ -1,5 +1,4 @@
-import {SocketController} from "../../main/protocols/controller";
-import {CustomMessage} from "../../main/protocols/custom_message";
+
 import {
     PlayerSendPhraseToHistoryUsecase,
     PlayerSendPhraseToHistoryUsecaseParams
@@ -14,18 +13,26 @@ import {Failure} from "../../core/failures/failures";
 import {FailureHelper} from "../../core/helper/failure_mapper";
 import {GameRoom} from "../../domain/entities/game_room";
 import {GameRoomMapper} from "../../data/mappers/game_room_mapper";
+import {Controller} from "../../main/protocols/controller";
+import {CustomResponse} from "../../main/protocols/custom_response";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
+import {ErrorMessages} from "../../core/constants/messages/error_messages";
+import {CodeHelper} from "../../core/helper/code_helper";
+import {SuccessMessages} from "../../core/constants/messages/success_messages";
 
-export class PlayerSendPhraseToHistoryController implements SocketController {
+export class PlayerSendPhraseToHistoryController implements Controller {
     constructor (
         private readonly playerSendPhraseUsecase: PlayerSendPhraseToHistoryUsecase,
         private readonly playerSendPhraseConverter: PlayerSendPhraseToHistoryConverter,
         private readonly getRoomByIdUsecase: GetRoomByIdUsecase
     ) {}
 
-    async handle (request: any): Promise<CustomMessage> {
-        let serverResponse = new CustomMessage({
-            type: TypeSocketMessages.error,
-            content: {}
+    async handle (request: any): Promise<CustomResponse> {
+        let serverResponse = new CustomResponse({
+            codeStatus: 400,
+            code: ServerCodes.serverFailure,
+            message: ErrorMessages.serverFailure,
+            result: {}
         });
         await new Promise((resolve) => {
             const converterResult = this.playerSendPhraseConverter.handle(new PlayerSendPhraseToHistoryConverterParams({
@@ -34,18 +41,22 @@ export class PlayerSendPhraseToHistoryController implements SocketController {
                 userId: request['userId']
             }));
             converterResult.leftMap((failure: Failure) => {
-               serverResponse = new CustomMessage({
-                  type: TypeSocketMessages.error,
-                  content: FailureHelper.mapFailureToMessage(failure)
+               serverResponse = new CustomResponse({
+                  codeStatus: 400,
+                   code: CodeHelper.failureToCode(failure),
+                  message: FailureHelper.mapFailureToMessage(failure),
+                   result: {}
                });
                resolve(true);
             });
             converterResult.map(async (convertedRequest) => {
                 const roomResult = await this.getRoomByIdUsecase.handle(new GetRoomByIdUsecaseParams({id: convertedRequest.roomId}));
                 roomResult.leftMap((failure: Failure) => {
-                    serverResponse = new CustomMessage({
-                       type: TypeSocketMessages.error,
-                       content: FailureHelper.mapFailureToMessage(failure)
+                    serverResponse = new CustomResponse({
+                       code: CodeHelper.failureToCode(failure),
+                        result: {},
+                        codeStatus: 400,
+                       message: FailureHelper.mapFailureToMessage(failure)
                     });
                     resolve(true);
                 });
@@ -56,16 +67,20 @@ export class PlayerSendPhraseToHistoryController implements SocketController {
                         userId: convertedRequest.userId
                     }));
                     sendPhraseResult.leftMap((failure: Failure) => {
-                        serverResponse = new CustomMessage({
-                           type: TypeSocketMessages.error,
-                           content: FailureHelper.mapFailureToMessage(failure)
+                        serverResponse = new CustomResponse({
+                          result: {},
+                            code: CodeHelper.failureToCode(failure),
+                            codeStatus: 400,
+                           message: FailureHelper.mapFailureToMessage(failure)
                         });
                         resolve(true);
                     });
                     sendPhraseResult.map((updatedRoom: GameRoom) => {
-                       serverResponse = new CustomMessage({
-                               type: TypeSocketMessages.sendPhraseToHistory,
-                               content: GameRoomMapper.entityToModel(updatedRoom).toJson()
+                       serverResponse = new CustomResponse({
+                               message: SuccessMessages.operationSuccess,
+                           code: ServerCodes.success,
+                           codeStatus: 200,
+                               result: GameRoomMapper.entityToModel(updatedRoom).toJson()
                            }
                        ) ;
                        resolve(true);

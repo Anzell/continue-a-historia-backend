@@ -4,8 +4,9 @@ const either_ts_1 = require("either-ts");
 const player_enter_in_room_controller_1 = require("./player_enter_in_room_controller");
 const failures_1 = require("../../core/failures/failures");
 const error_messages_1 = require("../../core/constants/messages/error_messages");
-const custom_message_1 = require("../../main/protocols/custom_message");
-const type_messages_1 = require("../../core/constants/socket/type_messages");
+const custom_response_1 = require("../../main/protocols/custom_response");
+const server_codes_1 = require("../../core/constants/messages/server_codes");
+const success_messages_1 = require("../../core/constants/messages/success_messages");
 describe('player enter in room controller', function () {
     const request = { userId: "validId", roomId: "validId" };
     it('should return a valid custom response with status code 200', async function () {
@@ -20,9 +21,11 @@ describe('player enter in room controller', function () {
         };
         const controller = new player_enter_in_room_controller_1.PlayerEnterInRoomController(mockUseCase, mockConverter);
         const result = await controller.handle(request);
-        expect(result).toStrictEqual(new custom_message_1.CustomMessage({
-            type: type_messages_1.TypeSocketMessages.playerEnterInRoom,
-            content: {}
+        expect(result).toStrictEqual(new custom_response_1.CustomResponse({
+            codeStatus: 200,
+            code: server_codes_1.ServerCodes.success,
+            message: success_messages_1.SuccessMessages.operationSuccess,
+            result: {}
         }));
     });
     it('deve retornar status erro caso converter falhe', async function () {
@@ -34,9 +37,11 @@ describe('player enter in room controller', function () {
         };
         const controller = new player_enter_in_room_controller_1.PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter);
         const result = await controller.handle(request);
-        expect(result).toStrictEqual(new custom_message_1.CustomMessage({
-            type: type_messages_1.TypeSocketMessages.error,
-            content: "erro"
+        expect(result).toStrictEqual(new custom_response_1.CustomResponse({
+            message: "erro",
+            codeStatus: 400,
+            code: server_codes_1.ServerCodes.validationError,
+            result: {}
         }));
     });
     it('deve retornar status erro caso usecase falhe', async function () {
@@ -51,9 +56,11 @@ describe('player enter in room controller', function () {
         };
         const controller = new player_enter_in_room_controller_1.PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter);
         const result = await controller.handle(request);
-        expect(result).toStrictEqual(new custom_message_1.CustomMessage({
-            type: type_messages_1.TypeSocketMessages.error,
-            content: error_messages_1.ErrorMessages.serverFailure
+        expect(result).toStrictEqual(new custom_response_1.CustomResponse({
+            code: server_codes_1.ServerCodes.serverFailure,
+            message: error_messages_1.ErrorMessages.serverFailure,
+            codeStatus: 400,
+            result: {}
         }));
     });
 });

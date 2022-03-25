@@ -4,8 +4,10 @@ import {PlayerEnterInRoomConverter} from "./converters/player_enter_in_room_conv
 import {PlayerEnterInRoomController} from "./player_enter_in_room_controller";
 import {ServerFailure, ValidationFailure} from "../../core/failures/failures";
 import {ErrorMessages} from "../../core/constants/messages/error_messages";
-import {CustomMessage} from "../../main/protocols/custom_message";
 import {TypeSocketMessages} from "../../core/constants/socket/type_messages";
+import {CustomResponse} from "../../main/protocols/custom_response";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
+import {SuccessMessages} from "../../core/constants/messages/success_messages";
 
 describe('player enter in room controller', function () {
     const request = {userId: "validId", roomId: "validId"};
@@ -23,9 +25,11 @@ describe('player enter in room controller', function () {
 
         const controller = new PlayerEnterInRoomController(mockUseCase, mockConverter);
         const result = await controller.handle(request);
-        expect(result).toStrictEqual(new CustomMessage({
-            type: TypeSocketMessages.playerEnterInRoom,
-            content: {}
+        expect(result).toStrictEqual(new CustomResponse({
+            codeStatus: 200,
+            code: ServerCodes.success,
+            message: SuccessMessages.operationSuccess,
+            result: {}
         }))
     });
 
@@ -39,9 +43,11 @@ describe('player enter in room controller', function () {
         };
         const controller = new PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter);
         const result = await controller.handle(request);
-        expect(result).toStrictEqual(new CustomMessage({
-            type: TypeSocketMessages.error,
-            content: "erro"
+        expect(result).toStrictEqual(new CustomResponse({
+            message: "erro",
+            codeStatus: 400,
+            code: ServerCodes.validationError,
+            result: {}
         }));
     });
 
@@ -57,9 +63,11 @@ describe('player enter in room controller', function () {
         };
         const controller = new PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter);
         const result = await controller.handle(request);
-        expect(result).toStrictEqual(new CustomMessage({
-            type: TypeSocketMessages.error,
-            content: ErrorMessages.serverFailure
+        expect(result).toStrictEqual(new CustomResponse({
+            code: ServerCodes.serverFailure,
+            message: ErrorMessages.serverFailure,
+            codeStatus: 400,
+            result: {}
         }));
     });
 

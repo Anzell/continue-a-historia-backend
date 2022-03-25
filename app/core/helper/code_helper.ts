@@ -6,7 +6,6 @@ import {
     ServerFailure, UsernameAlreadyExistFailure,
     ValidationFailure
 } from "../failures/failures";
-import {ErrorMessages} from "../constants/messages/error_messages";
 import {ServerCodes} from "../constants/messages/server_codes";
 
 export class CodeHelper{
@@ -15,7 +14,7 @@ export class CodeHelper{
             return ServerCodes.serverFailure;
         }
         if(failure instanceof  ValidationFailure){
-            return ServerCodes.validationError+":"+(failure as ValidationFailure).message;
+            return ServerCodes.validationError;
         }
         if(failure instanceof InvalidCredentialsFailure){
             return ServerCodes.invalidCredentials;

@@ -1,4 +1,4 @@
-import {HttpController} from "../../main/protocols/controller";
+import {Controller} from "../../main/protocols/controller";
 import {CustomResponse} from "../../main/protocols/custom_response";
 import {SignInConverter, SignInConverterParams} from "./converters/signin_converter";
 import {SuccessMessages} from "../../core/constants/messages/success_messages";
@@ -9,7 +9,7 @@ import {SignInUsecase} from "../../domain/usecases/auth/sign_in";
 import {ServerCodes} from "../../core/constants/messages/server_codes";
 import {CodeHelper} from "../../core/helper/code_helper";
 
-export class SignInController implements HttpController{
+export class SignInController implements Controller{
     constructor (
         private readonly signInUseCase: SignInUsecase,
         private readonly signInConverter: SignInConverter

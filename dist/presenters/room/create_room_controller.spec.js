@@ -45,7 +45,7 @@ describe("create room controller", () => {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             codeStatus: 400,
             message: "erro",
-            code: server_codes_1.ServerCodes.validationError + ":" + "erro",
+            code: server_codes_1.ServerCodes.validationError,
             result: {}
         }));
     });

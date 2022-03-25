@@ -8,12 +8,14 @@ import {
     PlayerSendPhraseToHistoryUsecase,
     PlayerSendPhraseToHistoryUsecaseImpl
 } from "../../domain/usecases/room/player_send_phrase_to_history";
-import {CustomMessage} from "../../main/protocols/custom_message";
 import {TypeSocketMessages} from "../../core/constants/socket/type_messages";
 import {GameRoomMapper} from "../../data/mappers/game_room_mapper";
 import {PlayerEnterInRoomConverterErrorMessages} from "./converters/player_enter_in_room_converter";
 import {ServerFailure, ValidationFailure} from "../../core/failures/failures";
 import {ErrorMessages} from "../../core/constants/messages/error_messages";
+import {CustomResponse} from "../../main/protocols/custom_response";
+import {SuccessMessages} from "../../core/constants/messages/success_messages";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
 
 describe('player send phrase to history controller', function () {
 
@@ -60,9 +62,11 @@ describe('player send phrase to history controller', function () {
         };
         const controller = new PlayerSendPhraseToHistoryController(mockSendPhraseUsecase, mockConverter, mockGetRoomUsecase);
         const result = await controller.handle(validRequestExample);
-        expect(result).toStrictEqual(new CustomMessage({
-            type: TypeSocketMessages.sendPhraseToHistory,
-            content: GameRoomMapper.entityToModel(roomAfterUpdate).toJson()
+        expect(result).toStrictEqual(new CustomResponse({
+            codeStatus: 200,
+            message: SuccessMessages.operationSuccess,
+            code: ServerCodes.success,
+            result: GameRoomMapper.entityToModel(roomAfterUpdate).toJson()
         }));
     });
 
@@ -82,9 +86,11 @@ describe('player send phrase to history controller', function () {
         };
         const controller = new PlayerSendPhraseToHistoryController(mockSendPhraseUsecase, mockConverter, mockGetRoomUsecase);
         const result = await controller.handle(invalidRequestExample);
-        expect(result).toStrictEqual(new CustomMessage({
-            type: TypeSocketMessages.error,
-            content: PlayerEnterInRoomConverterErrorMessages.missingRoomId
+        expect(result).toStrictEqual(new CustomResponse({
+            code: ServerCodes.validationError,
+            message: PlayerEnterInRoomConverterErrorMessages.missingRoomId,
+            result: {},
+            codeStatus: 400
         }));
     });
 
@@ -109,9 +115,11 @@ describe('player send phrase to history controller', function () {
         };
         const controller = new PlayerSendPhraseToHistoryController(mockSendPhraseUsecase, mockConverter, mockGetRoomUsecase);
         const result = await controller.handle(validRequestExample);
-        expect(result).toStrictEqual(new CustomMessage({
-            type: TypeSocketMessages.error,
-            content: ErrorMessages.serverFailure
+        expect(result).toStrictEqual(new CustomResponse({
+            code: ServerCodes.serverFailure,
+            codeStatus: 400,
+            result: {},
+            message: ErrorMessages.serverFailure
         }));
     });
 
@@ -144,9 +152,11 @@ describe('player send phrase to history controller', function () {
         };
         const controller = new PlayerSendPhraseToHistoryController(mockSendPhraseUsecase, mockConverter, mockGetRoomUsecase);
         const result = await controller.handle(validRequestExample);
-        expect(result).toStrictEqual(new CustomMessage({
-            type: TypeSocketMessages.error,
-            content: ErrorMessages.serverFailure
+        expect(result).toStrictEqual(new CustomResponse({
+            code: ServerCodes.serverFailure,
+            result: {},
+            codeStatus: 400,
+            message: ErrorMessages.serverFailure
         }));
     });
 });

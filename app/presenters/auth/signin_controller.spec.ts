@@ -52,7 +52,7 @@ describe('sign up controller', function () {
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 400,
             message: "erro",
-            code: ServerCodes.validationError+":"+"erro",
+            code: ServerCodes.validationError,
             result: {}
         }));
     });
