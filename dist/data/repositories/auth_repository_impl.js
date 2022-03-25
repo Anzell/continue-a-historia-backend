@@ -17,6 +17,9 @@ class AuthRepositoryImpl {
             if (e instanceof exceptions_1.UsernameAlreadyExistException) {
                 return (0, either_ts_1.left)(new failures_1.UsernameAlreadyExistFailure());
             }
+            if (e instanceof exceptions_1.EmailAlreadyExistException) {
+                return (0, either_ts_1.left)(new failures_1.EmailAlreadyExistFailure());
+            }
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
     }
@@ -29,7 +32,6 @@ class AuthRepositoryImpl {
             if (e instanceof exceptions_1.InvalidCredentialsException) {
                 return (0, either_ts_1.left)(new failures_1.InvalidCredentialsFailure());
             }
-            console.log(e);
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
     }

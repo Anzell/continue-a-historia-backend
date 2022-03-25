@@ -14,9 +14,11 @@ class AuthRemoteDsImpl {
         this.tokenHelper = tokenHelper;
     }
     async signUp({ username, password, email }) {
-        const foundDocument = await this.db.collection(db_collections_1.DbCollections.users).findOne({ username });
-        if (foundDocument != null) {
+        if (await this.db.collection(db_collections_1.DbCollections.users).findOne({ username }) != null) {
             throw new exceptions_1.UsernameAlreadyExistException();
+        }
+        if (await this.db.collection(db_collections_1.DbCollections.users).findOne({ email }) != null) {
+            throw new exceptions_1.EmailAlreadyExistException();
         }
         const id = this.stringHelper.generateUuid();
         const newUserData = new user_model_1.UserModel({ id, username, email }).toJson();

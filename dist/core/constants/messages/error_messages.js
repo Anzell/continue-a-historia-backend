@@ -8,4 +8,5 @@ ErrorMessages.serverFailure = "Erro no servidor";
 ErrorMessages.unknownFailure = "Erro Desconhecido";
 ErrorMessages.invalidCredentials = "Credenciais invalidas";
 ErrorMessages.notFound = "Não encontrado";
-ErrorMessages.usernameAlreadyexists = "Username já existe";
+ErrorMessages.usernameAlreadyexists = "Username já registrado";
+ErrorMessages.emailAlreadyexists = "Email já registrado";

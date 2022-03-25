@@ -28,7 +28,16 @@ describe('auth repository impl', function () {
             const result = await repository.signUp({ email, password, username });
             expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.UsernameAlreadyExistFailure()));
         });
-        it('should register a new user', async function () {
+        it('should return left emailalreadyexists if email provided is already registered in server', async function () {
+            const mockDatasource = {
+                signUp: jest.fn().mockRejectedValue(new exceptions_1.EmailAlreadyExistException()),
+                signIn: jest.fn()
+            };
+            const repository = new auth_repository_impl_1.AuthRepositoryImpl(mockDatasource);
+            const result = await repository.signUp({ email, password, username });
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.EmailAlreadyExistFailure()));
+        });
+        it('should return a left serverFailure if call to datasource fail', async function () {
             const mockDatasource = {
                 signUp: jest.fn().mockRejectedValue((0, either_ts_1.left)(new exceptions_1.ServerException())),
                 signIn: jest.fn()

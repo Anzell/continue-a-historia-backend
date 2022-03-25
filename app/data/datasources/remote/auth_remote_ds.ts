@@ -1,7 +1,11 @@
 import {Db} from "mongodb";
 import {StringHelper} from "../../../core/helper/string_helper";
 import {DbCollections} from "../../../core/constants/db/db_collections";
-import {InvalidCredentialsException, UsernameAlreadyExistException} from "../../../core/failures/exceptions";
+import {
+    EmailAlreadyExistException,
+    InvalidCredentialsException,
+    UsernameAlreadyExistException
+} from "../../../core/failures/exceptions";
 import {UserModel} from "../../models/user_model";
 import {DateHelper} from "../../../core/helper/date_helper";
 import {CryptographyHelper} from "../../../core/helper/cryptography_helper";
@@ -23,9 +27,11 @@ export class AuthRemoteDsImpl implements  AuthRemoteDs {
         ) {}
 
     async signUp ({username, password, email}: { username: string; password: string; email: string }): Promise<void> {
-        const foundDocument = await this.db.collection(DbCollections.users).findOne({username});
-        if(foundDocument != null){
+        if(await this.db.collection(DbCollections.users).findOne({username}) != null){
             throw new UsernameAlreadyExistException();
+        }
+        if(await this.db.collection(DbCollections.users).findOne({email}) != null){
+            throw new EmailAlreadyExistException();
         }
         const id = this.stringHelper.generateUuid();
         const newUserData = new UserModel({id, username, email}).toJson();

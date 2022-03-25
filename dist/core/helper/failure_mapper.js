@@ -20,6 +20,9 @@ class FailureHelper {
         if (failure instanceof failures_1.UsernameAlreadyExistFailure) {
             return error_messages_1.ErrorMessages.usernameAlreadyexists;
         }
+        if (failure instanceof failures_1.EmailAlreadyExistFailure) {
+            return error_messages_1.ErrorMessages.emailAlreadyexists;
+        }
         return error_messages_1.ErrorMessages.unknownFailure;
     }
 }

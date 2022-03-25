@@ -2,11 +2,17 @@ import {AuthRemoteDs} from "../datasources/remote/auth_remote_ds";
 import {AuthRepositoryImpl} from "./auth_repository_impl";
 import {left, right} from "either-ts";
 import {
+    EmailAlreadyExistException,
     InvalidCredentialsException,
     ServerException,
     UsernameAlreadyExistException
 } from "../../core/failures/exceptions";
-import {InvalidCredentialsFailure, ServerFailure, UsernameAlreadyExistFailure} from "../../core/failures/failures";
+import {
+    EmailAlreadyExistFailure,
+    InvalidCredentialsFailure,
+    ServerFailure,
+    UsernameAlreadyExistFailure
+} from "../../core/failures/failures";
 import {AuthToken} from "../../domain/entities/auth_token";
 
 describe('auth repository impl', function () {
@@ -35,7 +41,17 @@ describe('auth repository impl', function () {
             expect(result).toStrictEqual(left(new UsernameAlreadyExistFailure()));
         });
 
-        it('should register a new user', async function () {
+        it('should return left emailalreadyexists if email provided is already registered in server', async function () {
+            const mockDatasource: AuthRemoteDs = {
+                signUp: jest.fn().mockRejectedValue(new EmailAlreadyExistException()),
+                signIn: jest.fn()
+            };
+            const repository = new AuthRepositoryImpl(mockDatasource);
+            const result = await repository.signUp({email,password,username});
+            expect(result).toStrictEqual(left(new EmailAlreadyExistFailure()));
+        });
+
+        it('should return a left serverFailure if call to datasource fail', async function () {
             const mockDatasource: AuthRemoteDs = {
                 signUp: jest.fn().mockRejectedValue(left(new ServerException())),
                 signIn: jest.fn()

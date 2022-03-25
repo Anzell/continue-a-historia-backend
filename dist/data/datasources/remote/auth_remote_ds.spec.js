@@ -37,6 +37,48 @@ describe('auth remote ds', function () {
             expect(newUserDocument['email']).toStrictEqual("test@email.com");
             expect(newUserDocument['username']).toStrictEqual("newUser");
         });
+        it('should throw a UsernameAlreadyExists if username provided already registered in db', async function () {
+            await db.collection(db_collections_1.DbCollections.users).insertOne({ "username": "registeredUsername" });
+            const spyGenerateUuid = jest.fn().mockReturnValue("validId");
+            const spyHashPassword = jest.fn().mockReturnValue("PASSWORDENCRIPTED");
+            const mockStringHelper = {
+                generateUuid: spyGenerateUuid
+            };
+            const mockCryptographyHelper = {
+                compareValues: jest.fn(),
+                hashString: spyHashPassword
+            };
+            const mockTokenHelper = {
+                generateToken: jest.fn(),
+                decodeToken: jest.fn()
+            };
+            const datasource = new auth_remote_ds_1.AuthRemoteDsImpl(db, mockStringHelper, mockCryptographyHelper, mockTokenHelper);
+            let result = datasource.signUp({ username: "registeredUsername", password, email });
+            await expect(result).rejects.toThrow(new exceptions_1.UsernameAlreadyExistException());
+            expect(spyGenerateUuid).not.toBeCalled();
+            expect(spyHashPassword).not.toBeCalled();
+        });
+        it('should throw a EmailAlreadyExists if email provided already registered in db', async function () {
+            await db.collection(db_collections_1.DbCollections.users).insertOne({ "email": "email@email.com" });
+            const spyGenerateUuid = jest.fn().mockReturnValue("validId");
+            const spyHashPassword = jest.fn().mockReturnValue("PASSWORDENCRIPTED");
+            const mockStringHelper = {
+                generateUuid: spyGenerateUuid
+            };
+            const mockCryptographyHelper = {
+                compareValues: jest.fn(),
+                hashString: spyHashPassword
+            };
+            const mockTokenHelper = {
+                generateToken: jest.fn(),
+                decodeToken: jest.fn()
+            };
+            const datasource = new auth_remote_ds_1.AuthRemoteDsImpl(db, mockStringHelper, mockCryptographyHelper, mockTokenHelper);
+            let result = datasource.signUp({ username, password, email: "email@email.com" });
+            await expect(result).rejects.toThrowError(new exceptions_1.EmailAlreadyExistException());
+            expect(spyGenerateUuid).not.toBeCalled();
+            expect(spyHashPassword).not.toBeCalled();
+        });
     });
     describe('sign in', function () {
         it('should sign in a user and return a valid token', async function () {

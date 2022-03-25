@@ -1,12 +1,17 @@
 import {AuthRepository} from "../../domain/repositories/auth_repository";
 import {
+    EmailAlreadyExistFailure,
     Failure,
     InvalidCredentialsFailure,
     ServerFailure,
     UsernameAlreadyExistFailure
 } from "../../core/failures/failures";
 import {AuthRemoteDs} from "../datasources/remote/auth_remote_ds";
-import {InvalidCredentialsException, UsernameAlreadyExistException} from "../../core/failures/exceptions";
+import {
+    EmailAlreadyExistException,
+    InvalidCredentialsException,
+    UsernameAlreadyExistException
+} from "../../core/failures/exceptions";
 import {left, right} from "either-ts";
 import {AuthToken} from "../../domain/entities/auth_token";
 
@@ -21,6 +26,9 @@ export class AuthRepositoryImpl implements  AuthRepository {
             if(e instanceof UsernameAlreadyExistException){
                 return left(new UsernameAlreadyExistFailure());
             }
+            if(e instanceof EmailAlreadyExistException){
+                return left(new EmailAlreadyExistFailure());
+            }
             return left(new ServerFailure());
         }
     }
@@ -34,8 +42,6 @@ export class AuthRepositoryImpl implements  AuthRepository {
             if(e instanceof InvalidCredentialsException){
                 return left(new InvalidCredentialsFailure());
             }
-            console.log(e);
-
             return left(new ServerFailure());
         }
     }

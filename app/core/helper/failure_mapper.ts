@@ -1,4 +1,5 @@
 import {
+    EmailAlreadyExistFailure,
     Failure,
     InvalidCredentialsFailure,
     NotFoundFailure,
@@ -23,7 +24,9 @@ export class FailureHelper{
         }
         if(failure instanceof UsernameAlreadyExistFailure){
             return ErrorMessages.usernameAlreadyexists;
-
+        }
+        if(failure instanceof EmailAlreadyExistFailure){
+            return ErrorMessages.emailAlreadyexists;
         }
         return ErrorMessages.unknownFailure;
     }
