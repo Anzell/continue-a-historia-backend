@@ -14,6 +14,7 @@ const signin_converter_1 = require("../presenters/auth/converters/signin_convert
 const player_enter_in_room_controller_1 = require("../presenters/room/player_enter_in_room_controller");
 const auth_guard_socket_1 = require("../main/middlewares/auth_guard_socket");
 const player_send_phrase_to_history_controller_1 = require("../presenters/room/player_send_phrase_to_history_controller");
+const get_user_by_id_controller_1 = require("../presenters/user/get_user_by_id_controller");
 class ControllersInjectorFactory {
     static async createRoomControllerFactory() {
         const usecase = await usecases_injector_1.UsecasesInjector.CreateRoomUsecaseFactory();
@@ -50,6 +51,11 @@ class ControllersInjectorFactory {
         const sendPhraseToHistoryUsecase = await usecases_injector_1.UsecasesInjector.playerSendPhraseToHistoryUsecaseFactory();
         const converter = await converters_injector_1.ConvertersInjector.playerSendPhraseToHistoryConverterFactory();
         return new player_send_phrase_to_history_controller_1.PlayerSendPhraseToHistoryController(sendPhraseToHistoryUsecase, converter, getRoomIdUsecase);
+    }
+    static async getUserByIdControllerFactory() {
+        const usecase = await usecases_injector_1.UsecasesInjector.getUserByIdUsecaseFactory();
+        const converter = await converters_injector_1.ConvertersInjector.getUserByIdConverterFactory();
+        return new get_user_by_id_controller_1.GetUserByIdController(usecase, converter);
     }
 }
 exports.ControllersInjectorFactory = ControllersInjectorFactory;

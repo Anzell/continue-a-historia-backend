@@ -3,9 +3,9 @@ import { Server } from "http";
 import { adaptSocketMessage } from "../adapters/socket_message_adapter";
 import { ControllersInjectorFactory } from "../../di/controllers_injector";
 import { TypeSocketMessages } from "../../core/constants/socket/type_messages";
-import { CustomMessage } from "../protocols/custom_message";
-import {Socket} from "socket.io";
-import { GameRoom } from '../../domain/entities/game_room';
+import {CustomResponse} from "../protocols/custom_response";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
+import {ErrorMessages} from "../../core/constants/messages/error_messages";
 
 export default (server: Server): void => {
     const wss = new WebSocket.Server(server, {cors: {origin: "*"}});
@@ -21,9 +21,7 @@ export default (server: Server): void => {
             console.log("emitiu");
         })    
 
-    wss.sockets.on('connection', (ws) => {         
-
-
+    wss.sockets.on('connection', (ws) => {
 
          ws.on('message', async (data: any) => {
              switch (data['type']) {
@@ -37,9 +35,11 @@ export default (server: Server): void => {
                      ws.join(data["content"]["room_id"]);
                      break;
                  default:
-                     ws.send(JSON.stringify(new CustomMessage({
-                         type: TypeSocketMessages.error,
-                         content: "invalid_message_type"
+                     ws.send(JSON.stringify(new CustomResponse({
+                         codeStatus: 400,
+                         code: ServerCodes.serverFailure,
+                         message: ErrorMessages.serverFailure,
+                         result: {}
                      })));
                      break;
              }

@@ -4,6 +4,7 @@ exports.AuthGuardRoute = void 0;
 const custom_response_1 = require("../protocols/custom_response");
 const exceptions_1 = require("../../core/failures/exceptions");
 const failure_mapper_1 = require("../../core/helper/failure_mapper");
+const server_codes_1 = require("../../core/constants/messages/server_codes");
 class AuthGuardRoute {
     constructor({ authorized, tokenHelper, getUserPermissionUsecase }) {
         this.authorized = authorized;
@@ -27,12 +28,14 @@ class AuthGuardRoute {
                 let error = new custom_response_1.CustomResponse({
                     codeStatus: 400,
                     message: "Erro no servidor. Token inválido ou inexistente",
+                    code: server_codes_1.ServerCodes.acessDenied,
                     result: {}
                 });
                 if (e instanceof exceptions_1.AccessDeniedException) {
                     error = new custom_response_1.CustomResponse({
                         codeStatus: 403,
                         message: "Acesso negado",
+                        code: server_codes_1.ServerCodes.acessDenied,
                         result: {},
                     });
                 }

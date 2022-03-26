@@ -6,4 +6,5 @@ export class ServerCodes {
     static success: string = "success";
     static invalidCredentials: string = "invalid_credentials";
     static validationError: string = "validation_error";
+    static acessDenied: string = "acess_denied";
 }

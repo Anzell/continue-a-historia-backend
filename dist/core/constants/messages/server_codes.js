@@ -11,3 +11,4 @@ ServerCodes.usernameAlreadyRegistered = "username_already_exists";
 ServerCodes.success = "success";
 ServerCodes.invalidCredentials = "invalid_credentials";
 ServerCodes.validationError = "validation_error";
+ServerCodes.acessDenied = "acess_denied";

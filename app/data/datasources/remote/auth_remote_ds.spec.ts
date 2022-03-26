@@ -10,7 +10,6 @@ import {
     InvalidCredentialsException,
     UsernameAlreadyExistException
 } from "../../../core/failures/exceptions";
-import {EmailAlreadyExistFailure} from "../../../core/failures/failures";
 
 describe('auth remote ds', function () {
     let db: Db;

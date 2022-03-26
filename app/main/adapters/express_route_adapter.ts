@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import {HttpController} from "../protocols/controller";
+import {Controller} from "../protocols/controller";
 
-export const adaptRoute = (controller: HttpController) => {
+export const adaptRoute = (controller: Controller) => {
     return async (req: Request, resp: Response) => {
         const request = {
             ...(req.body || {}),

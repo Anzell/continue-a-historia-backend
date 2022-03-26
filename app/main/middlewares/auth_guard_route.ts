@@ -7,6 +7,7 @@ import {FailureHelper} from "../../core/helper/failure_mapper";
 import {Failure} from "../../core/failures/failures";
 import {GetUserPermissionsUsecase} from "../../domain/usecases/user/get_user_permissions";
 import {RequestHandler} from "express";
+import {ServerCodes} from "../../core/constants/messages/server_codes";
 
 export class AuthGuardRoute implements HttpMiddleware {
     private readonly authorized: string[];
@@ -35,12 +36,14 @@ export class AuthGuardRoute implements HttpMiddleware {
               let error: CustomResponse = new CustomResponse({
                   codeStatus: 400,
                   message: "Erro no servidor. Token inválido ou inexistente",
+                  code: ServerCodes.acessDenied,
                   result: {}
               });
               if (e instanceof AccessDeniedException) {
                   error = new CustomResponse({
                       codeStatus: 403,
                       message: "Acesso negado",
+                      code: ServerCodes.acessDenied,
                       result: {},
                   });
               }
