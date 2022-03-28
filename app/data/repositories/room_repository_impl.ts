@@ -4,11 +4,19 @@ import { GameRoom } from "../../domain/entities/game_room";
 import { RoomRepository } from "../../domain/repositories/room_repository";
 import { RoomRemoteDs } from "../datasources/remote/room_remote_ds";
 import {NotFoundException} from "../../core/failures/exceptions";
+import {ResumeGameRoom} from "../../domain/entities/resume_game_room";
 
 export class RoomRepositoryImpl implements RoomRepository {
-
-
     constructor(public datasource: RoomRemoteDs){}
+
+    async getPlayerRooms ({userId}: { userId: string }): Promise<Either<Failure, Array<ResumeGameRoom>>> {
+        try{
+            const result = await this.datasource.getPlayerRooms({userId});
+            return right(result);
+        }catch(e){
+            return left(new ServerFailure());
+        }
+    }
 
     async getRoomById ({id}: { id: string }): Promise<Either<Failure, GameRoom>> {
         try{

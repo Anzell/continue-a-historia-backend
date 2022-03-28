@@ -8,6 +8,7 @@ import {GameRoomMapper} from "../../mappers/game_room_mapper";
 import {GameRoomModel} from "../../models/game_room";
 import {NotFoundException} from "../../../core/failures/exceptions";
 import {PhraseModel} from "../../models/phrase_model";
+import {ResumeGameRoom} from "../../../domain/entities/resume_game_room";
 
 describe("room remote ds", () => {
     let db: Db;
@@ -168,6 +169,69 @@ describe("room remote ds", () => {
             const datasource = new RoomRemoteDsImpl(db, mockStringHelper);
             const result = datasource.getRoomById({id: "invalidGetRoomByIdTest"});
             await expect(result).rejects.toStrictEqual(new NotFoundException());
+        });
+    });
+
+    describe('get player rooms', function () {
+        const mockStringHelper: StringHelper = {
+            generateUuid: jest.fn().mockReturnValue("validId")
+        } as StringHelper;
+
+        it('should return a valid array if call to db is success', async function () {
+            const expected = [
+                new GameRoomModel({
+                    adminsIds: ["admin1"],
+                    name: "roomName",
+                    history: [
+                        new PhraseModel({
+                            phrase: "Era uma vez",
+                            senderId: "admin1",
+                            sendAt: new Date(2021, 10, 10)
+                        })
+                    ],
+                    id: "validIdExistingArray",
+                    playersIds: ["aId", "validId", "anotherId"],
+                    createdAt: new Date(2021, 10, 10)
+                }),
+                new GameRoomModel({
+                    adminsIds: ["admin1"],
+                    name: "roomName",
+                    history: [
+                        new PhraseModel({
+                            phrase: "Era uma vez",
+                            senderId: "admin1",
+                            sendAt: new Date(2021, 10, 10)
+                        })
+                    ],
+                    id: "validIdExistingArray2",
+                    playersIds: ["aId"],
+                    createdAt: new Date(2021, 10, 10)
+                }),
+                new GameRoomModel({
+                    adminsIds: ["admin1", "validId"],
+                    name: "roomName 3",
+                    history: [
+                        new PhraseModel({
+                            phrase: "Era uma vez",
+                            senderId: "admin1",
+                            sendAt: new Date(2021, 10, 10)
+                        })
+                    ],
+                    id: "validIdExistingArray3",
+                    playersIds: ["aId", "anotherId"],
+                    createdAt: new Date(2021, 10, 10)
+                }),
+            ];
+            for(let x = 0; x < expected.length; x++){
+                await db.collection(DbCollections.rooms).insertOne(expected[x]);
+            }
+
+            const datasource = new RoomRemoteDsImpl(db, mockStringHelper);
+            const result = await datasource.getPlayerRooms({userId: "validId"});
+            expect(result).toStrictEqual([
+               new ResumeGameRoom({id: "validIdExistingArray", playersNumber: 3, phrasesNumber: 1, title: "roomName"}),
+               new ResumeGameRoom({id: "validIdExistingArray3", playersNumber: 2, phrasesNumber: 1, title: "roomName 3"})
+            ]);
         });
     });
 });

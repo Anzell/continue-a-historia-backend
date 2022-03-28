@@ -7,10 +7,24 @@ const date_helper_1 = require("../../../core/helper/date_helper");
 const exceptions_1 = require("../../../core/failures/exceptions");
 const game_room_1 = require("../../models/game_room");
 const phrase_model_1 = require("../../models/phrase_model");
+const resume_game_room_1 = require("../../../domain/entities/resume_game_room");
 class RoomRemoteDsImpl {
     constructor(db, stringHelper) {
         this.db = db;
         this.stringHelper = stringHelper;
+    }
+    async getPlayerRooms({ userId }) {
+        const documents = await this.db.collection(db_collections_1.DbCollections.rooms).find({ $or: [{ playersIds: userId }, { adminsIds: userId }] });
+        let tempArray = [];
+        await documents.forEach((document) => {
+            tempArray.push(new resume_game_room_1.ResumeGameRoom({
+                id: document["id"],
+                playersNumber: document["playersIds"].length,
+                phrasesNumber: document["history"].length,
+                title: document["name"]
+            }));
+        });
+        return tempArray;
     }
     async insertPlayer({ roomId, userId }) {
         const roomDocument = await this.db.collection(db_collections_1.DbCollections.rooms).findOne({ id: roomId });

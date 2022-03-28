@@ -8,6 +8,15 @@ class RoomRepositoryImpl {
     constructor(datasource) {
         this.datasource = datasource;
     }
+    async getPlayerRooms({ userId }) {
+        try {
+            const result = await this.datasource.getPlayerRooms({ userId });
+            return (0, either_ts_1.right)(result);
+        }
+        catch (e) {
+            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+        }
+    }
     async getRoomById({ id }) {
         try {
             const result = await this.datasource.getRoomById({ id });

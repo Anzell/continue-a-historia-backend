@@ -7,6 +7,7 @@ import { Phrase } from "../../domain/entities/phrase";
 import { RoomRepository } from "../../domain/repositories/room_repository";
 import { RoomRemoteDs } from "../datasources/remote/room_remote_ds";
 import { RoomRepositoryImpl } from "./room_repository_impl";
+import {ResumeGameRoom} from "../../domain/entities/resume_game_room";
 
 describe("teste de room repository impl", () => {
 
@@ -27,24 +28,18 @@ describe("teste de room repository impl", () => {
         });
 
         it("deve retornar right null caso chamada ao datasource der sucesso", async () => {
-            const mockRoomDatasource: RoomRemoteDs = {
+            const mockRoomDatasource: any = {
                 createRoom: jest.fn().mockReturnValue(null),
-                insertPlayer: jest.fn(),
-                sendPhrase: jest.fn(),
-                getRoomById: jest.fn()
-            } as RoomRemoteDs;
+            };
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
           let result = await repository.createRoom(exampleRoom);
           expect(result).toStrictEqual(right(null));
         });
     
         it("deve retornar left failure caso chamada ao repository der erro", async () => {
-            const mockRoomDatasource: RoomRemoteDs = {
+            const mockRoomDatasource: any = {
                 createRoom: jest.fn().mockRejectedValue(new ServerException()),
-                insertPlayer: jest.fn(),
-                sendPhrase: jest.fn(),
-                getRoomById: jest.fn()
-            } as RoomRemoteDs;
+            };
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
           let result = await repository.createRoom(exampleRoom);
           expect(result).toStrictEqual(left(new ServerFailure()));
@@ -56,24 +51,18 @@ describe("teste de room repository impl", () => {
         const exampleUserId = "validUserId";
 
         it('should return a right null if call to datasource is success', async function () {
-            const mockRoomDatasource: RoomRemoteDs = {
-                createRoom: jest.fn(),
+            const mockRoomDatasource: any = {
                 insertPlayer: jest.fn().mockReturnValue(null),
-                sendPhrase: jest.fn(),
-                getRoomById: jest.fn()
-            } as RoomRemoteDs;
+            };
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.insertPlayer({userId: exampleUserId, roomId: exampleRoomId});
             expect(result).toStrictEqual(right(null));
         });
 
         it('should return left server failure if call to datasource fails', async function () {
-            const mockRoomDatasource: RoomRemoteDs = {
-                createRoom: jest.fn(),
+            const mockRoomDatasource: any = {
                 insertPlayer: jest.fn().mockRejectedValue(new ServerException()),
-                sendPhrase: jest.fn(),
-                getRoomById: jest.fn()
-            } as RoomRemoteDs;
+            };
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.insertPlayer({userId: exampleUserId, roomId: exampleRoomId});
             expect(result).toStrictEqual(left(new ServerFailure()));
@@ -100,24 +89,18 @@ describe("teste de room repository impl", () => {
         });
 
         it('should return a right GameRoom if call to datasource is success', async function () {
-            const mockRoomDatasource: RoomRemoteDs = {
-                createRoom: jest.fn(),
-                insertPlayer: jest.fn(),
-                sendPhrase: jest.fn().mockReturnValue(exampleRoom),
-                getRoomById: jest.fn()
-            } as RoomRemoteDs;
+            const mockRoomDatasource: any = {
+                sendPhrase: jest.fn().mockReturnValue(exampleRoom)
+            } ;
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.sendPhrase({userId: exampleUserId, roomId: exampleRoomId, phrase: examplePhrase});
             expect(result).toStrictEqual(right(exampleRoom));
         });
 
         it('should return left server failure if call to datasource fails', async function () {
-            const mockRoomDatasource: RoomRemoteDs = {
-                createRoom: jest.fn(),
-                insertPlayer: jest.fn(),
+            const mockRoomDatasource: any = {
                 sendPhrase: jest.fn().mockRejectedValue(new ServerException()),
-                getRoomById: jest.fn()
-            } as RoomRemoteDs;
+            };
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.sendPhrase({userId: exampleUserId, roomId: exampleRoomId, phrase: examplePhrase});
             expect(result).toStrictEqual(left(new ServerFailure()));
@@ -134,38 +117,59 @@ describe("teste de room repository impl", () => {
                 name: "test",
                 playersIds: []
             });
-            const mockRoomDatasource: RoomRemoteDs = {
-                createRoom: jest.fn(),
-                insertPlayer: jest.fn(),
-                sendPhrase: jest.fn(),
+            const mockRoomDatasource: any = {
                 getRoomById: jest.fn().mockReturnValue(expected)
-            } as RoomRemoteDs;
+            };
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.getRoomById({id: "getRoomByIdTest"});
             expect(result).toStrictEqual(right(expected));
         });
 
         it('should return left not found failure if call to datasource fails', async function () {
-            const mockRoomDatasource: RoomRemoteDs = {
-                createRoom: jest.fn(),
-                insertPlayer: jest.fn(),
-                sendPhrase: jest.fn(),
+            const mockRoomDatasource: any = {
                 getRoomById: jest.fn().mockRejectedValue(new NotFoundException())
-            } as RoomRemoteDs;
+            };
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.getRoomById({id: "getRoomByIdTest"});
             expect(result).toStrictEqual(left(new NotFoundFailure()));
         });
         
         it('should return left server failure if call to datasource fails', async function () {
-            const mockRoomDatasource: RoomRemoteDs = {
-                createRoom: jest.fn(),
-                insertPlayer: jest.fn(),
-                sendPhrase: jest.fn(),
+            const mockRoomDatasource: any = {
                 getRoomById: jest.fn().mockRejectedValue(new ServerException())
-            } as RoomRemoteDs;
+            };
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.getRoomById({id: "getRoomByIdTest"});
+            expect(result).toStrictEqual(left(new ServerFailure()));
+        });
+    });
+
+    describe('get player rooms', function () {
+        it('should return a valid array of resumed rooms if call to datasource is success', async function () {
+            let expected = [
+                new ResumeGameRoom({id: "room1", title: "a long time", playersNumber: 2, phrasesNumber: 102}),
+                new ResumeGameRoom({id: "room3", title: "a long time 3", playersNumber: 22, phrasesNumber: 40}),
+                new ResumeGameRoom({id: "room2", title: "a long time 2", playersNumber: 2, phrasesNumber: 0}),
+            ];
+            const mockRoomDatasource: any = {
+                getPlayerRooms: jest.fn().mockReturnValue(expected)
+            };
+            let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
+            let result = await repository.getPlayerRooms({userId: "validTest"});
+            expect(result).toStrictEqual(right(expected));
+        });
+
+        it('should return a left if call to datasource is fail', async function () {
+            let expected = [
+                new ResumeGameRoom({id: "room1", title: "a long time", playersNumber: 2, phrasesNumber: 102}),
+                new ResumeGameRoom({id: "room3", title: "a long time 3", playersNumber: 22, phrasesNumber: 40}),
+                new ResumeGameRoom({id: "room2", title: "a long time 2", playersNumber: 2, phrasesNumber: 0}),
+            ];
+            const mockRoomDatasource: any = {
+                getPlayerRooms: jest.fn().mockRejectedValue(new ServerException())
+            };
+            let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
+            let result = await repository.getPlayerRooms({userId: "validTest"});
             expect(result).toStrictEqual(left(new ServerFailure()));
         });
     });

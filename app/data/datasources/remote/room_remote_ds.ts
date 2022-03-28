@@ -7,17 +7,33 @@ import {DateHelper} from "../../../core/helper/date_helper";
 import {NotFoundException, PlayerDontExistsInRoomException} from "../../../core/failures/exceptions";
 import {GameRoomModel} from "../../models/game_room";
 import {PhraseModel} from "../../models/phrase_model";
+import {ResumeGameRoom} from "../../../domain/entities/resume_game_room";
 
 export interface RoomRemoteDs {
     createRoom: (room: GameRoom) => Promise<void>;
     insertPlayer: ({roomId, userId}: {roomId: string, userId: string}) => Promise<void>;
     sendPhrase: ({userId, roomId, phrase}: {userId: string, roomId: string, phrase: string}) => Promise<GameRoom>;
     getRoomById: ({id}: {id: string}) => Promise<GameRoom>;
+    getPlayerRooms: ({userId}: {userId: string}) => Promise<Array<ResumeGameRoom>>;
 }
 
 export class RoomRemoteDsImpl implements RoomRemoteDs {
 
     constructor (private readonly db: Db, private readonly stringHelper: StringHelper) {}
+
+    async getPlayerRooms({userId}: {userId: string}): Promise<Array<ResumeGameRoom>> {
+        const documents = await this.db.collection(DbCollections.rooms).find({$or: [{playersIds: userId}, {adminsIds: userId}]});
+        let tempArray: Array<ResumeGameRoom> = [];
+        await documents.forEach((document) => {
+           tempArray.push(new ResumeGameRoom({
+               id: document["id"],
+               playersNumber: document["playersIds"].length,
+               phrasesNumber: document["history"].length,
+               title: document["name"]
+           }));
+        });
+        return tempArray;
+    }
 
     async insertPlayer ({roomId, userId}: { roomId: string; userId: string }): Promise<void> {
         const roomDocument = await this.db.collection(DbCollections.rooms).findOne({id: roomId});

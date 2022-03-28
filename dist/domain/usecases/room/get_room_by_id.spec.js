@@ -15,9 +15,6 @@ describe('get room by id usecase', function () {
             name: "test"
         });
         const mockRepository = {
-            createRoom: jest.fn(),
-            insertPlayer: jest.fn(),
-            sendPhrase: jest.fn(),
             getRoomById: jest.fn().mockReturnValue((0, either_ts_1.right)(expected))
         };
         const usecase = new get_room_by_id_1.GetRoomByIdUsecaseImpl(mockRepository);
@@ -26,9 +23,6 @@ describe('get room by id usecase', function () {
     });
     it('should return left server failure if call to repository fails', async function () {
         const mockRepository = {
-            createRoom: jest.fn(),
-            insertPlayer: jest.fn(),
-            sendPhrase: jest.fn(),
             getRoomById: jest.fn().mockReturnValue((0, either_ts_1.left)(new failures_1.ServerFailure()))
         };
         const usecase = new get_room_by_id_1.GetRoomByIdUsecaseImpl(mockRepository);

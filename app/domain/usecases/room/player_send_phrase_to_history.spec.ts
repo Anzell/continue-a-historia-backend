@@ -26,11 +26,8 @@ describe('player send phrase to history usecase', function () {
     });
 
     it('should return a right null if call to repository is success', async function () {
-        const mockRepository: RoomRepository = {
-            createRoom: jest.fn(),
-            insertPlayer: jest.fn(),
+        const mockRepository: any = {
             sendPhrase: jest.fn().mockReturnValue(right(exampleRoom)),
-            getRoomById: jest.fn()
         };
         const usecase = new PlayerSendPhraseToHistoryUsecaseImpl(mockRepository);
         const result = await usecase.handle({roomId: exampleRoomId, userId: exampleUserId, phrase: examplePhrase});
@@ -38,11 +35,8 @@ describe('player send phrase to history usecase', function () {
     });
 
     it('should return left server failure if call to repository fails', async function () {
-        const mockRepository: RoomRepository = {
-            createRoom: jest.fn(),
-            insertPlayer: jest.fn(),
+        const mockRepository: any = {
             sendPhrase: jest.fn().mockReturnValue(left(new ServerFailure())),
-            getRoomById: jest.fn()
         };
         const usecase = new PlayerSendPhraseToHistoryUsecaseImpl(mockRepository);
         const result = await usecase.handle({roomId: exampleRoomId, userId: exampleUserId, phrase: examplePhrase});

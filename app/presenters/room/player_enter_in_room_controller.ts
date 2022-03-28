@@ -7,9 +7,8 @@ import {
     PlayerEnterInRoomConverter,
     PlayerEnterInRoomConverterParams
 } from "./converters/player_enter_in_room_converter";
-import {Failure, ValidationFailure} from "../../core/failures/failures";
+import {Failure} from "../../core/failures/failures";
 import {FailureHelper} from "../../core/helper/failure_mapper";
-import {TypeSocketMessages} from "../../core/constants/socket/type_messages";
 import {CustomResponse} from "../../main/protocols/custom_response";
 import {ServerCodes} from "../../core/constants/messages/server_codes";
 import {SuccessMessages} from "../../core/constants/messages/success_messages";

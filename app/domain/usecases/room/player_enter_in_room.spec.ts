@@ -8,11 +8,8 @@ describe('player enter in room usecase', function () {
     const exampleUserId = "validUserId";
 
     it('should return a right null if call to repository is success', async function () {
-        const mockRepository: RoomRepository = {
-          createRoom: jest.fn(),
+        const mockRepository: any = {
           insertPlayer: jest.fn().mockReturnValue(right(null)),
-            sendPhrase: jest.fn(),
-            getRoomById: jest.fn()
         };
         const usecase = new PlayerEnterInRoomUsecaseImpl(mockRepository);
         const result = await usecase.handle({roomId: exampleRoomId, userId: exampleUserId});
@@ -20,11 +17,8 @@ describe('player enter in room usecase', function () {
     });
 
     it('should return left server failure if call to repository fails', async function () {
-        const mockRepository: RoomRepository = {
-            createRoom: jest.fn(),
+        const mockRepository: any = {
             insertPlayer: jest.fn().mockReturnValue(left(new ServerFailure())),
-            sendPhrase: jest.fn(),
-            getRoomById: jest.fn()
         };
         const usecase = new PlayerEnterInRoomUsecaseImpl(mockRepository);
         const result = await usecase.handle({roomId: exampleRoomId, userId: exampleUserId});
