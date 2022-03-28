@@ -10,6 +10,7 @@ const player_enter_in_room_1 = require("../domain/usecases/room/player_enter_in_
 const get_user_permissions_1 = require("../domain/usecases/user/get_user_permissions");
 const player_send_phrase_to_history_1 = require("../domain/usecases/room/player_send_phrase_to_history");
 const get_room_by_id_1 = require("../domain/usecases/room/get_room_by_id");
+const get_user_rooms_1 = require("../domain/usecases/room/get_user_rooms");
 class UsecasesInjector {
     static async CreateRoomUsecaseFactory() {
         const repository = await repositories_injector_1.RepositoriesInjector.roomRepositoryFactory();
@@ -42,6 +43,10 @@ class UsecasesInjector {
     static async getRoomByIdUsecaseFactory() {
         const repository = await repositories_injector_1.RepositoriesInjector.roomRepositoryFactory();
         return new get_room_by_id_1.GetRoomByIdUsecaseImpl(repository);
+    }
+    static async getRoomsOfPlayerByIdUsecaseFactory() {
+        const repository = await repositories_injector_1.RepositoriesInjector.roomRepositoryFactory();
+        return new get_user_rooms_1.GetUserRoomsUsecaseImpl({ repository });
     }
 }
 exports.UsecasesInjector = UsecasesInjector;

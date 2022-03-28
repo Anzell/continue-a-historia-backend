@@ -16,6 +16,7 @@ import {AuthGuardSocket} from "../main/middlewares/auth_guard_socket";
 import {GetUserPermissionsUsecase} from "../domain/usecases/user/get_user_permissions";
 import {PlayerSendPhraseToHistoryController} from "../presenters/room/player_send_phrase_to_history_controller";
 import {GetUserByIdController} from "../presenters/user/get_user_by_id_controller";
+import {GetPlayerRoomsController} from "../presenters/room/get_player_rooms_controller";
 
 export class ControllersInjectorFactory {
     public static async createRoomControllerFactory(): Promise<CreateRoomController>{
@@ -65,5 +66,11 @@ export class ControllersInjectorFactory {
         const usecase = await UsecasesInjector.getUserByIdUsecaseFactory();
         const converter = await ConvertersInjector.getUserByIdConverterFactory();
         return new GetUserByIdController(usecase, converter);
+    }
+
+    public static async getPlayerRoomsControllerFactory(): Promise<GetPlayerRoomsController> {
+        const usecase = await UsecasesInjector.getRoomsOfPlayerByIdUsecaseFactory();
+        const converter = await ConvertersInjector.getPlayerRoomsConverterFactory();
+        return new GetPlayerRoomsController({converter, usecase});
     }
 }

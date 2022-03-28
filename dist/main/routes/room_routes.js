@@ -4,4 +4,5 @@ const express_route_adapter_1 = require("../adapters/express_route_adapter");
 const controllers_injector_1 = require("../../di/controllers_injector");
 exports.default = async (router) => {
     router.post("/createRoom", await (await controllers_injector_1.ControllersInjectorFactory.authGuardRouteFactory("user")).handle(), (0, express_route_adapter_1.adaptRoute)(await controllers_injector_1.ControllersInjectorFactory.createRoomControllerFactory()));
+    router.get("/rooms/:userId", await (await controllers_injector_1.ControllersInjectorFactory.authGuardRouteFactory("user")).handle(), (0, express_route_adapter_1.adaptRoute)(await controllers_injector_1.ControllersInjectorFactory.getPlayerRoomsControllerFactory()));
 };

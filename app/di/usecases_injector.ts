@@ -10,6 +10,7 @@ import {
     PlayerSendPhraseToHistoryUsecaseImpl
 } from "../domain/usecases/room/player_send_phrase_to_history";
 import {GetRoomByIdUsecase, GetRoomByIdUsecaseImpl} from "../domain/usecases/room/get_room_by_id";
+import {GetUserRoomsUsecase, GetUserRoomsUsecaseImpl} from "../domain/usecases/room/get_user_rooms";
 
 export class UsecasesInjector {
     public static async CreateRoomUsecaseFactory(): Promise<CreateRoomUsecase> {
@@ -52,4 +53,8 @@ export class UsecasesInjector {
         return new GetRoomByIdUsecaseImpl(repository);
     }
 
+    public static async getRoomsOfPlayerByIdUsecaseFactory(): Promise<GetUserRoomsUsecase> {
+        const repository = await RepositoriesInjector.roomRepositoryFactory();
+        return new GetUserRoomsUsecaseImpl({repository});
+    }
 }
