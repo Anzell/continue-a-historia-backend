@@ -6,8 +6,9 @@ import {Controller} from "../protocols/controller";
 
 export const adaptSocketMessage = async (ws: Socket, wss: WebSocket.Server, data: any, controller: Controller) => {
     const response = await controller.handle(data['content']);
-    if(data['type'] === TypeSocketMessages.sendPhraseToHistory){
+    if(data['type'] === TypeSocketMessages.sendPhraseToHistory || data["type"] === TypeSocketMessages.joinRoom){
         const room = (response.result) as GameRoom;
+        console.log(room);
         wss.sockets.in(room.id!).emit("updateRoom", JSON.stringify(room));
     }else{
         ws.send(JSON.stringify(response.result));

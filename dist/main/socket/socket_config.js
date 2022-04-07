@@ -27,6 +27,7 @@ exports.default = (server) => {
                     break;
                 case type_messages_1.TypeSocketMessages.joinRoom:
                     ws.join(data["content"]["room_id"]);
+                    await (0, socket_message_adapter_1.adaptSocketMessage)(ws, wss, data, await controllers_injector_1.ControllersInjectorFactory.getRoomByIdControllerFactory());
                     break;
                 default:
                     ws.send(JSON.stringify(new custom_response_1.CustomResponse({

@@ -8,6 +8,7 @@ const code_helper_1 = require("../../core/helper/code_helper");
 const failure_mapper_1 = require("../../core/helper/failure_mapper");
 const get_room_by_id_converter_1 = require("./converters/get_room_by_id_converter");
 const get_room_by_id_1 = require("../../domain/usecases/room/get_room_by_id");
+const game_room_mapper_1 = require("../../data/mappers/game_room_mapper");
 class GetRoomByIdController {
     constructor({ converter, usecase }) {
         this.usecase = usecase;
@@ -21,7 +22,7 @@ class GetRoomByIdController {
             result: {}
         });
         await new Promise((resolve) => {
-            const converterResult = this.converter.handle(new get_room_by_id_converter_1.GetRoomByIdConverterParams({ roomId: request["roomId"] }));
+            const converterResult = this.converter.handle(new get_room_by_id_converter_1.GetRoomByIdConverterParams({ roomId: request["room_id"] }));
             converterResult.map(async (convertedRequest) => {
                 const usecaseResult = await this.usecase.handle(new get_room_by_id_1.GetRoomByIdUsecaseParams({ id: convertedRequest.roomId }));
                 usecaseResult.map((room) => {
@@ -29,7 +30,7 @@ class GetRoomByIdController {
                         code: server_codes_1.ServerCodes.success,
                         codeStatus: 200,
                         message: success_messages_1.SuccessMessages.operationSuccess,
-                        result: room
+                        result: game_room_mapper_1.GameRoomMapper.entityToModel(room).toJson()
                     });
                     resolve(true);
                 });

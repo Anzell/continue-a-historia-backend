@@ -6,6 +6,7 @@ import {
 } from "../presenters/room/converters/player_send_phrase_to_history_converter";
 import {GetUserByIdConverter} from "../presenters/user/converters/get_user_by_id_converter";
 import {GetPlayerRoomsConverter} from "../presenters/room/converters/get_player_rooms_converter";
+import {GetRoomByIdConverter} from "../presenters/room/converters/get_room_by_id_converter";
 
 export class ConvertersInjector {
     public static async gameRoomConverterFactory(): Promise<GameRoomConverter> {
@@ -30,5 +31,9 @@ export class ConvertersInjector {
 
     public static async getPlayerRoomsConverterFactory(): Promise<GetPlayerRoomsConverter>{
         return new GetPlayerRoomsConverter();
+    }
+
+    public static async getRoomByIdConverterFactory(): Promise<GetRoomByIdConverter>{
+        return new GetRoomByIdConverter();
     }
 }

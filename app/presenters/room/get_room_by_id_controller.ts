@@ -6,6 +6,7 @@ import {CodeHelper} from "../../core/helper/code_helper";
 import {FailureHelper} from "../../core/helper/failure_mapper";
 import {GetRoomByIdConverter, GetRoomByIdConverterParams} from "./converters/get_room_by_id_converter";
 import {GetRoomByIdUsecase, GetRoomByIdUsecaseParams} from "../../domain/usecases/room/get_room_by_id";
+import {GameRoomMapper} from "../../data/mappers/game_room_mapper";
 
 export class GetRoomByIdController implements Controller {
     readonly converter: GetRoomByIdConverter;
@@ -24,7 +25,7 @@ export class GetRoomByIdController implements Controller {
             result: {}
         });
         await new Promise((resolve) => {
-            const converterResult = this.converter.handle(new GetRoomByIdConverterParams({roomId: request["roomId"]}));
+            const converterResult = this.converter.handle(new GetRoomByIdConverterParams({roomId: request["room_id"]}));
             converterResult.map(async (convertedRequest) => {
                 const usecaseResult = await this.usecase.handle(new GetRoomByIdUsecaseParams({id: convertedRequest.roomId}));
                 usecaseResult.map((room) => {
@@ -32,7 +33,7 @@ export class GetRoomByIdController implements Controller {
                         code: ServerCodes.success,
                         codeStatus: 200,
                         message: SuccessMessages.operationSuccess,
-                        result: room
+                        result: GameRoomMapper.entityToModel(room).toJson()
                     });
                     resolve(true);
                 });

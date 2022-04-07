@@ -16,6 +16,7 @@ const auth_guard_socket_1 = require("../main/middlewares/auth_guard_socket");
 const player_send_phrase_to_history_controller_1 = require("../presenters/room/player_send_phrase_to_history_controller");
 const get_user_by_id_controller_1 = require("../presenters/user/get_user_by_id_controller");
 const get_player_rooms_controller_1 = require("../presenters/room/get_player_rooms_controller");
+const get_room_by_id_controller_1 = require("../presenters/room/get_room_by_id_controller");
 class ControllersInjectorFactory {
     static async createRoomControllerFactory() {
         const usecase = await usecases_injector_1.UsecasesInjector.CreateRoomUsecaseFactory();
@@ -62,6 +63,11 @@ class ControllersInjectorFactory {
         const usecase = await usecases_injector_1.UsecasesInjector.getRoomsOfPlayerByIdUsecaseFactory();
         const converter = await converters_injector_1.ConvertersInjector.getPlayerRoomsConverterFactory();
         return new get_player_rooms_controller_1.GetPlayerRoomsController({ converter, usecase });
+    }
+    static async getRoomByIdControllerFactory() {
+        const usecase = await usecases_injector_1.UsecasesInjector.getRoomByIdUsecaseFactory();
+        const converter = await converters_injector_1.ConvertersInjector.getRoomByIdConverterFactory();
+        return new get_room_by_id_controller_1.GetRoomByIdController({ converter, usecase });
     }
 }
 exports.ControllersInjectorFactory = ControllersInjectorFactory;

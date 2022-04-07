@@ -4,8 +4,9 @@ exports.adaptSocketMessage = void 0;
 const type_messages_1 = require("../../core/constants/socket/type_messages");
 const adaptSocketMessage = async (ws, wss, data, controller) => {
     const response = await controller.handle(data['content']);
-    if (data['type'] === type_messages_1.TypeSocketMessages.sendPhraseToHistory) {
+    if (data['type'] === type_messages_1.TypeSocketMessages.sendPhraseToHistory || data["type"] === type_messages_1.TypeSocketMessages.joinRoom) {
         const room = (response.result);
+        console.log(room);
         wss.sockets.in(room.id).emit("updateRoom", JSON.stringify(room));
     }
     else {

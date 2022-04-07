@@ -25,10 +25,10 @@ export default (server: Server): void => {
                      await adaptSocketMessage(ws, wss, data, await ControllersInjectorFactory.playerEnterInRoomControllerFactory());
                      break;
                  case TypeSocketMessages.sendPhraseToHistory:
-                     await adaptSocketMessage(ws, wss, data, await ControllersInjectorFactory.playerSendPhraseToHistoryControllerFactory());
-                     break;
+                     await adaptSocketMessage(ws, wss, data, await ControllersInjectorFactory.playerSendPhraseToHistoryControllerFactory());                     break;
                  case TypeSocketMessages.joinRoom:
                      ws.join(data["content"]["room_id"]);
+                     await adaptSocketMessage(ws, wss, data, await ControllersInjectorFactory.getRoomByIdControllerFactory());
                      break;
                  default:
                      ws.send(JSON.stringify(new CustomResponse({

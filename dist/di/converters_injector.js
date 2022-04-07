@@ -7,6 +7,7 @@ const player_enter_in_room_converter_1 = require("../presenters/room/converters/
 const player_send_phrase_to_history_converter_1 = require("../presenters/room/converters/player_send_phrase_to_history_converter");
 const get_user_by_id_converter_1 = require("../presenters/user/converters/get_user_by_id_converter");
 const get_player_rooms_converter_1 = require("../presenters/room/converters/get_player_rooms_converter");
+const get_room_by_id_converter_1 = require("../presenters/room/converters/get_room_by_id_converter");
 class ConvertersInjector {
     static async gameRoomConverterFactory() {
         return new game_room_converter_1.GameRoomConverter();
@@ -25,6 +26,9 @@ class ConvertersInjector {
     }
     static async getPlayerRoomsConverterFactory() {
         return new get_player_rooms_converter_1.GetPlayerRoomsConverter();
+    }
+    static async getRoomByIdConverterFactory() {
+        return new get_room_by_id_converter_1.GetRoomByIdConverter();
     }
 }
 exports.ConvertersInjector = ConvertersInjector;
