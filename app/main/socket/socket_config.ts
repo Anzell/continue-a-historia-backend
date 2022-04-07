@@ -11,18 +11,14 @@ export default (server: Server): void => {
     const wss = new WebSocket.Server(server, {cors: {origin: "*"}});
 
     wss.use(async (socket, next) => {
+        console.log("nova requisicao");
             if(await (await ControllersInjectorFactory.authGuardSocketFactory("user")).handle(socket)){
                 next();
             }
             socket.disconnect();
         });
-        
-        wss.on("updateRoom", () => {
-            console.log("emitiu");
-        })    
 
     wss.sockets.on('connection', (ws) => {
-
          ws.on('message', async (data: any) => {
              switch (data['type']) {
                  case TypeSocketMessages.playerEnterInRoom:

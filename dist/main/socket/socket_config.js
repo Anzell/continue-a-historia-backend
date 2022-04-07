@@ -10,13 +10,11 @@ const error_messages_1 = require("../../core/constants/messages/error_messages")
 exports.default = (server) => {
     const wss = new WebSocket.Server(server, { cors: { origin: "*" } });
     wss.use(async (socket, next) => {
+        console.log("nova requisicao");
         if (await (await controllers_injector_1.ControllersInjectorFactory.authGuardSocketFactory("user")).handle(socket)) {
             next();
         }
         socket.disconnect();
-    });
-    wss.on("updateRoom", () => {
-        console.log("emitiu");
     });
     wss.sockets.on('connection', (ws) => {
         ws.on('message', async (data) => {
