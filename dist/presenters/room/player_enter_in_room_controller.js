@@ -8,11 +8,14 @@ const custom_response_1 = require("../../main/protocols/custom_response");
 const server_codes_1 = require("../../core/constants/messages/server_codes");
 const success_messages_1 = require("../../core/constants/messages/success_messages");
 const code_helper_1 = require("../../core/helper/code_helper");
+const get_user_by_username_converter_1 = require("../user/converters/get_user_by_username_converter");
+const get_user_by_username_1 = require("../../domain/usecases/user/get_user_by_username");
 class PlayerEnterInRoomController {
     constructor(insertPlayerInRoomUsecase, insertPlayerConverter, getUserByUsernameConverter, getUserByUsernameUsecase) {
         this.insertPlayerInRoomUsecase = insertPlayerInRoomUsecase;
         this.insertPlayerConverter = insertPlayerConverter;
         this.getUserByUsernameConverter = getUserByUsernameConverter;
+        this.getUserByUsernameUsecase = getUserByUsernameUsecase;
     }
     async handle(request) {
         let serverResponse = new custom_response_1.CustomResponse({
@@ -22,35 +25,59 @@ class PlayerEnterInRoomController {
             result: {}
         });
         await new Promise((resolve) => {
-            const converter = this.insertPlayerConverter.handle(new player_enter_in_room_converter_1.PlayerEnterInRoomConverterParams({
-                userId: request['userId'],
-                roomId: request['roomId'],
-            }));
-            converter.map(async (data) => {
-                const result = await this.insertPlayerInRoomUsecase.handle(new player_enter_in_room_1.PlayerEnterInRoomUsecaseParams({
-                    roomId: data.roomId,
-                    userId: data.userId,
-                }));
-                result.map((_) => {
-                    serverResponse = new custom_response_1.CustomResponse({
-                        codeStatus: 200,
-                        code: server_codes_1.ServerCodes.success,
-                        message: success_messages_1.SuccessMessages.operationSuccess,
-                        result: {}
+            const getUserByUsernameConverterResult = this.getUserByUsernameConverter.handle(new get_user_by_username_converter_1.GetUserByUsernameConverterParams({ username: request["username"] }));
+            getUserByUsernameConverterResult.map(async (convertedUsername) => {
+                const getUserByUsermeUsecaseResult = await this.getUserByUsernameUsecase.handle(new get_user_by_username_1.GetUserByUsernameUsecaseParams({ username: convertedUsername.username }));
+                getUserByUsermeUsecaseResult.map(async (user) => {
+                    const playerEnterRoomConverter = this.insertPlayerConverter.handle(new player_enter_in_room_converter_1.PlayerEnterInRoomConverterParams({
+                        userId: user.id,
+                        roomId: request['roomId'],
+                    }));
+                    playerEnterRoomConverter.map(async (data) => {
+                        const result = await this.insertPlayerInRoomUsecase.handle(new player_enter_in_room_1.PlayerEnterInRoomUsecaseParams({
+                            roomId: data.roomId,
+                            userId: data.userId,
+                        }));
+                        result.map((_) => {
+                            serverResponse = new custom_response_1.CustomResponse({
+                                codeStatus: 200,
+                                code: server_codes_1.ServerCodes.success,
+                                message: success_messages_1.SuccessMessages.operationSuccess,
+                                result: {}
+                            });
+                            resolve(true);
+                        });
+                        result.leftMap((failure) => {
+                            serverResponse = new custom_response_1.CustomResponse({
+                                message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
+                                code: code_helper_1.CodeHelper.failureToCode(failure),
+                                codeStatus: 400,
+                                result: {}
+                            });
+                            resolve(false);
+                        });
                     });
-                    resolve(true);
+                    playerEnterRoomConverter.leftMap((failure) => {
+                        serverResponse = new custom_response_1.CustomResponse({
+                            codeStatus: 400,
+                            code: code_helper_1.CodeHelper.failureToCode(failure),
+                            message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
+                            result: {},
+                        });
+                        resolve(false);
+                    });
                 });
-                result.leftMap((failure) => {
+                getUserByUsermeUsecaseResult.leftMap((failure) => {
                     serverResponse = new custom_response_1.CustomResponse({
-                        message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
-                        code: code_helper_1.CodeHelper.failureToCode(failure),
                         codeStatus: 400,
-                        result: {}
+                        code: code_helper_1.CodeHelper.failureToCode(failure),
+                        message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
+                        result: {},
                     });
                     resolve(false);
                 });
             });
-            converter.leftMap((failure) => {
+            getUserByUsernameConverterResult.leftMap((failure) => {
                 serverResponse = new custom_response_1.CustomResponse({
                     codeStatus: 400,
                     code: code_helper_1.CodeHelper.failureToCode(failure),

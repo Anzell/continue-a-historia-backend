@@ -19,7 +19,6 @@ class SignUpController {
             code: server_codes_1.ServerCodes.serverFailure,
             codeStatus: 400
         });
-        console.log(request);
         await new Promise((resolve) => {
             const converter = this.signUpConverter.handle(new signup_converters_1.SignupConvertersParams({
                 username: request['username'],

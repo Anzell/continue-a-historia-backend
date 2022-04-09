@@ -53,7 +53,6 @@ export class AuthGuardSocket implements SocketMiddleware {
                     const response = await this.getUserPermissionUsecase.handle({id: tokenData.id});
                     return await new Promise((resolve, reject) => {
                         response.leftMap((failure: Failure) => {
-                            console.log(failure);
                             reject(FailureHelper.mapFailureToMessage(failure));
                         });
                         response.map((permission: string) => {

@@ -8,6 +8,7 @@ import {TypeSocketMessages} from "../../core/constants/socket/type_messages";
 import {CustomResponse} from "../../main/protocols/custom_response";
 import {ServerCodes} from "../../core/constants/messages/server_codes";
 import {SuccessMessages} from "../../core/constants/messages/success_messages";
+import { UserEntity } from "../../domain/entities/user_entity";
 
 describe('player enter in room controller', function () {
     const request = {userId: "validId", roomId: "validId"};
@@ -22,8 +23,17 @@ describe('player enter in room controller', function () {
               roomId: "validId"
           }))
         };
-
-        const controller = new PlayerEnterInRoomController(mockUseCase, mockConverter);
+        const mockGetUserByUsernameConverter: any = {
+            handle: jest.fn().mockReturnValue(right({
+                username: "validUsername"
+            }))
+        }
+        const mockGetUserByUsernameUseCase: any = {
+            handle: jest.fn().mockReturnValue(right(new UserEntity({
+                id: "validId"
+            })))
+        };
+        const controller = new PlayerEnterInRoomController(mockUseCase, mockConverter, mockGetUserByUsernameConverter, mockGetUserByUsernameUseCase);
         const result = await controller.handle(request);
         expect(result).toStrictEqual(new CustomResponse({
             codeStatus: 200,
@@ -33,15 +43,25 @@ describe('player enter in room controller', function () {
         }))
     });
 
-
-    it('deve retornar status erro caso converter falhe', async function () {
-        const mockCreateRoomUsecase: PlayerEnterInRoomUsecase = {
+    it('deve retornar status erro caso get user by username converter falhe', async function () {
+        const mockCreateRoomUsecase: any = {
             handle: jest.fn().mockReturnValue(right(null))
         };
-        const mockRoomConverter: PlayerEnterInRoomConverter = {
-            handle: jest.fn().mockReturnValue(left(new ValidationFailure({message: "erro"})))
+        const mockRoomConverter: any = {
+            handle: jest.fn().mockReturnValue(right({
+                userId: "validId",
+                roomId: "validId"
+            }))
         };
-        const controller = new PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter);
+        const mockGetUserByUsernameConverter: any = {
+            handle: jest.fn().mockReturnValue(left(new ValidationFailure({message: "erro"})))
+        }
+        const mockGetUserByUsernameUseCase: any = {
+            handle: jest.fn().mockReturnValue(right(new UserEntity({
+                id: "validId"
+            })))
+        };
+        const controller = new PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter, mockGetUserByUsernameConverter, mockGetUserByUsernameUseCase);
         const result = await controller.handle(request);
         expect(result).toStrictEqual(new CustomResponse({
             message: "erro",
@@ -51,7 +71,63 @@ describe('player enter in room controller', function () {
         }));
     });
 
-    it('deve retornar status erro caso usecase falhe', async function () {
+
+    it('deve retornar status erro caso player enter in room converter falhe', async function () {
+        const mockCreateRoomUsecase: any = {
+            handle: jest.fn().mockReturnValue(right(null))
+        };
+        const mockRoomConverter: any = {
+            handle: jest.fn().mockReturnValue(left(new ValidationFailure({message: "erro"})))
+        };
+        const mockGetUserByUsernameConverter: any = {
+            handle: jest.fn().mockReturnValue(right({
+                username: "validUsername"
+            }))
+        }
+        const mockGetUserByUsernameUseCase: any = {
+            handle: jest.fn().mockReturnValue(right(new UserEntity({
+                id: "validId"
+            })))
+        };
+        const controller = new PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter, mockGetUserByUsernameConverter, mockGetUserByUsernameUseCase);
+        const result = await controller.handle(request);
+        expect(result).toStrictEqual(new CustomResponse({
+            message: "erro",
+            codeStatus: 400,
+            code: ServerCodes.validationError,
+            result: {}
+        }));
+    });
+
+    it('deve retornar status erro caso get user by username usecase falhe', async function () {
+        const mockCreateRoomUsecase: PlayerEnterInRoomUsecase = {
+            handle: jest.fn().mockReturnValue(right(null))
+        };
+        const mockRoomConverter: PlayerEnterInRoomConverter = {
+            handle: jest.fn().mockReturnValue(right({
+                userId: "validId",
+                roomId: "validId"
+            }))
+        };
+        const mockGetUserByUsernameConverter: any = {
+            handle: jest.fn().mockReturnValue(right({
+                username: "validUsername"
+            }))
+        }
+        const mockGetUserByUsernameUseCase: any = {
+            handle: jest.fn().mockReturnValue(left(new ServerFailure()))
+        };
+        const controller = new PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter, mockGetUserByUsernameConverter, mockGetUserByUsernameUseCase);
+        const result = await controller.handle(request);
+        expect(result).toStrictEqual(new CustomResponse({
+            code: ServerCodes.serverFailure,
+            message: ErrorMessages.serverFailure,
+            codeStatus: 400,
+            result: {}
+        }));
+    });
+
+    it('deve retornar status erro caso player enter in room usecase falhe', async function () {
         const mockCreateRoomUsecase: PlayerEnterInRoomUsecase = {
             handle: jest.fn().mockReturnValue(left(new ServerFailure()))
         };
@@ -61,7 +137,17 @@ describe('player enter in room controller', function () {
                 roomId: "validId"
             }))
         };
-        const controller = new PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter);
+        const mockGetUserByUsernameConverter: any = {
+            handle: jest.fn().mockReturnValue(right({
+                username: "validUsername"
+            }))
+        }
+        const mockGetUserByUsernameUseCase: any = {
+            handle: jest.fn().mockReturnValue(right(new UserEntity({
+                id: "validId"
+            })))
+        };
+        const controller = new PlayerEnterInRoomController(mockCreateRoomUsecase, mockRoomConverter, mockGetUserByUsernameConverter, mockGetUserByUsernameUseCase);
         const result = await controller.handle(request);
         expect(result).toStrictEqual(new CustomResponse({
             code: ServerCodes.serverFailure,

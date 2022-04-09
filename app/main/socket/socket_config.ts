@@ -11,7 +11,6 @@ export default (server: Server): void => {
     const wss = new WebSocket.Server(server, {cors: {origin: "*"}});
 
     wss.use(async (socket, next) => {
-        console.log("nova requisicao");
             if(await (await ControllersInjectorFactory.authGuardSocketFactory("user")).handle(socket)){
                 next();
             }

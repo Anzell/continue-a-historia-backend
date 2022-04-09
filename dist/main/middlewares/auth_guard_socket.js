@@ -42,7 +42,6 @@ class AuthGuardSocket {
                     const response = await this.getUserPermissionUsecase.handle({ id: tokenData.id });
                     return await new Promise((resolve, reject) => {
                         response.leftMap((failure) => {
-                            console.log(failure);
                             reject(failure_mapper_1.FailureHelper.mapFailureToMessage(failure));
                         });
                         response.map((permission) => {

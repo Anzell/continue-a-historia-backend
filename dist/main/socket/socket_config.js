@@ -10,7 +10,6 @@ const error_messages_1 = require("../../core/constants/messages/error_messages")
 exports.default = (server) => {
     const wss = new WebSocket.Server(server, { cors: { origin: "*" } });
     wss.use(async (socket, next) => {
-        console.log("nova requisicao");
         if (await (await controllers_injector_1.ControllersInjectorFactory.authGuardSocketFactory("user")).handle(socket)) {
             next();
         }
