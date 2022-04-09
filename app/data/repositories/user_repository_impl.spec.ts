@@ -1,5 +1,4 @@
 import {UserEntity} from "../../domain/entities/user_entity";
-import {UserRemoteDs} from "../datasources/remote/user_remote_ds";
 import {UserRepositoryImpl} from "./user_repository_impl";
 import {NotFoundException, ServerException} from "../../core/failures/exceptions";
 import {left, right} from "either-ts";
