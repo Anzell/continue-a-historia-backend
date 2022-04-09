@@ -77,4 +77,39 @@ describe('user repository impl', function () {
             expect(result).toStrictEqual(left(new ServerFailure()));
         });
     });
+
+    describe("get user by username", function() {
+        const userExample = new UserEntity({
+            username: "anzell",
+            id: "exampleId",
+            email: "test@email.com"
+        });
+
+        it('should return a valid user from datasource', async function () {
+            const mockDatasource: any = {
+                getUserByUsername: jest.fn().mockReturnValue(userExample)
+            };
+            const repository = new UserRepositoryImpl(mockDatasource);
+            const result = await repository.getUserByUsername({username: "anzell"});
+            expect(result).toStrictEqual(right(userExample));
+        });
+
+        it('should return a NotFoundFailure when datasource fails', async function () {
+            const mockDatasource: any = {
+                getUserByUsername: jest.fn().mockRejectedValue(new NotFoundException())
+            };
+            const repository = new UserRepositoryImpl(mockDatasource);
+            const result = await repository.getUserByUsername({username: "usernameNotRegistered"});
+            expect(result).toStrictEqual(left(new NotFoundFailure()));
+        });
+
+        it('should return a ServerFailure when datasource fails', async function () {
+            const mockDatasource: any = {
+                getUserByUsername: jest.fn().mockRejectedValue(new ServerFailure())
+            };
+            const repository = new UserRepositoryImpl(mockDatasource);
+            const result = await repository.getUserByUsername({username: "anzell"});
+            expect(result).toStrictEqual(left(new ServerFailure()));
+        });
+    });
 });

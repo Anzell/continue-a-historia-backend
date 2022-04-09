@@ -8,6 +8,18 @@ class UserRepositoryImpl {
     constructor(datasource) {
         this.datasource = datasource;
     }
+    async getUserByUsername({ username }) {
+        try {
+            const result = await this.datasource.getUserByUsername({ username });
+            return (0, either_ts_1.right)(result);
+        }
+        catch (e) {
+            if (e instanceof exceptions_1.NotFoundException) {
+                return (0, either_ts_1.left)(new failures_1.NotFoundFailure());
+            }
+            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+        }
+    }
     async getUserById({ id }) {
         try {
             const result = await this.datasource.getUserById({ id });

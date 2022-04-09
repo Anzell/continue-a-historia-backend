@@ -8,6 +8,17 @@ import {NotFoundException} from "../../core/failures/exceptions";
 export class UserRepositoryImpl implements UserRepository {
 
     constructor (private readonly datasource: UserRemoteDs) {}
+    async getUserByUsername({ username }: { username: string; }): Promise<Either<Failure, UserEntity>>{
+        try{
+            const result = await this.datasource.getUserByUsername({username});
+            return right(result);
+        }catch(e){
+            if(e instanceof NotFoundException){
+                return left(new NotFoundFailure());
+            }
+            return left(new ServerFailure());
+        }
+    }
 
     async getUserById ({id}: { id: string }): Promise<Either<Failure, UserEntity>> {
         try{

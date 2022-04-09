@@ -7,7 +7,7 @@ describe('get user permissions usecase', function () {
     const permissionExample = "user";
 
     it('should return a valid permission if call to repository is success', async function () {
-        const mockRepository: UserRepository = {
+        const mockRepository: any = {
             getUserById: jest.fn(),
             getUserPermissions: jest.fn().mockReturnValue(right(permissionExample))
         };
@@ -17,7 +17,7 @@ describe('get user permissions usecase', function () {
     });
 
     it('should return left ServerFailure if a error ocurred in repository', async function () {
-        const mockRepository: UserRepository = {
+        const mockRepository: any = {
             getUserById: jest.fn(),
             getUserPermissions: jest.fn().mockReturnValue(left(new ServerFailure()))
         };
