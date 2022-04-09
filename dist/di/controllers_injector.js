@@ -46,7 +46,9 @@ class ControllersInjectorFactory {
     static async playerEnterInRoomControllerFactory() {
         const usecase = await usecases_injector_1.UsecasesInjector.insertUserInRoomUsecaseFactory();
         const converter = await converters_injector_1.ConvertersInjector.playerEnterInRoomConverterFactory();
-        return new player_enter_in_room_controller_1.PlayerEnterInRoomController(usecase, converter);
+        const getUserByUsernameConverter = await converters_injector_1.ConvertersInjector.getUserByUsernameConverterFactory();
+        const getUserByUsernameUsecase = await usecases_injector_1.UsecasesInjector.getUserByUsernameUsecaseFactory();
+        return new player_enter_in_room_controller_1.PlayerEnterInRoomController(usecase, converter, getUserByUsernameConverter, getUserByUsernameUsecase);
     }
     static async playerSendPhraseToHistoryControllerFactory() {
         const getRoomIdUsecase = await usecases_injector_1.UsecasesInjector.getRoomByIdUsecaseFactory();

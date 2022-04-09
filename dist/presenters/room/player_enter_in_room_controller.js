@@ -9,9 +9,10 @@ const server_codes_1 = require("../../core/constants/messages/server_codes");
 const success_messages_1 = require("../../core/constants/messages/success_messages");
 const code_helper_1 = require("../../core/helper/code_helper");
 class PlayerEnterInRoomController {
-    constructor(insertPlayerInRoomUsecase, insertPlayerConverter) {
+    constructor(insertPlayerInRoomUsecase, insertPlayerConverter, getUserByUsernameConverter, getUserByUsernameUsecase) {
         this.insertPlayerInRoomUsecase = insertPlayerInRoomUsecase;
         this.insertPlayerConverter = insertPlayerConverter;
+        this.getUserByUsernameConverter = getUserByUsernameConverter;
     }
     async handle(request) {
         let serverResponse = new custom_response_1.CustomResponse({
