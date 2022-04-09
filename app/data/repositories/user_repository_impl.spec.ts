@@ -14,7 +14,7 @@ describe('user repository impl', function () {
         });
 
         it('should return a valid user from datasource', async function () {
-            const mockDatasource: UserRemoteDs = {
+            const mockDatasource: any = {
                 getUserById: jest.fn().mockReturnValue(userExample),
                 getUserPermissions: jest.fn()
             };
@@ -24,7 +24,7 @@ describe('user repository impl', function () {
         });
 
         it('should return a NotFoundFailure when datasource fails', async function () {
-            const mockDatasource: UserRemoteDs = {
+            const mockDatasource: any = {
                 getUserById: jest.fn().mockRejectedValue(new NotFoundException()),
                 getUserPermissions: jest.fn()
             };
@@ -34,7 +34,7 @@ describe('user repository impl', function () {
         });
 
         it('should return a ServerFailure when datasource fails', async function () {
-            const mockDatasource: UserRemoteDs = {
+            const mockDatasource: any = {
                 getUserById: jest.fn().mockRejectedValue(new ServerException()),
                 getUserPermissions: jest.fn()
             };
@@ -48,7 +48,7 @@ describe('user repository impl', function () {
         const permissionExample = "user";
 
         it('should return a valid user from datasource', async function () {
-            const mockDatasource: UserRemoteDs = {
+            const mockDatasource: any = {
                 getUserById: jest.fn(),
                 getUserPermissions: jest.fn().mockReturnValue(permissionExample)
             };
@@ -58,7 +58,7 @@ describe('user repository impl', function () {
         });
 
         it('should return a NotFoundFailure when datasource fails', async function () {
-            const mockDatasource: UserRemoteDs = {
+            const mockDatasource: any = {
                 getUserById: jest.fn(),
                 getUserPermissions: jest.fn().mockRejectedValue(new NotFoundException())
             };
@@ -68,7 +68,7 @@ describe('user repository impl', function () {
         });
 
         it('should return a ServerFailure when datasource fails', async function () {
-            const mockDatasource: UserRemoteDs = {
+            const mockDatasource: any = {
                 getUserById: jest.fn(),
                 getUserPermissions: jest.fn().mockRejectedValue(new ServerException())
             };

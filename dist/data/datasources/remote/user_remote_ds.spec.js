@@ -52,4 +52,26 @@ describe('user remote ds', function () {
             await expect(result).rejects.toStrictEqual(new exceptions_1.NotFoundException());
         });
     });
+    describe("get user by username", () => {
+        it('should return a valid user', async function () {
+            const userExample = new user_entity_1.UserEntity({
+                username: "anzell",
+                id: "exampleId",
+                email: "test@email.com"
+            });
+            await db.collection(db_collections_1.DbCollections.users).insertOne({
+                "username": "anzell",
+                "id": "exampleId",
+                "email": "test@email.com"
+            });
+            const datasource = new user_remote_ds_1.UserRemoteDsImpl(db);
+            const result = await datasource.getUserByUsername({ username: "anzell" });
+            expect(result).toStrictEqual(userExample);
+        });
+        it('should throw a NotFoundException if provided username not exists in database', async function () {
+            const datasource = new user_remote_ds_1.UserRemoteDsImpl(db);
+            const result = datasource.getUserByUsername({ username: "invalidId" });
+            await expect(result).rejects.toStrictEqual(new exceptions_1.NotFoundException());
+        });
+    });
 });

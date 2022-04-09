@@ -9,6 +9,7 @@ const error_messages_1 = require("../../core/constants/messages/error_messages")
 const game_room_1 = require("../../domain/entities/game_room");
 const phrase_1 = require("../../domain/entities/phrase");
 const get_room_by_id_controller_1 = require("./get_room_by_id_controller");
+const game_room_mapper_1 = require("../../data/mappers/game_room_mapper");
 describe('get room by id controller', function () {
     it('should return a GameRoom if call to usecase is success', async function () {
         let expected = new game_room_1.GameRoom({
@@ -35,7 +36,7 @@ describe('get room by id controller', function () {
         expect(result).toStrictEqual(new custom_response_1.CustomResponse({
             code: server_codes_1.ServerCodes.success,
             codeStatus: 200,
-            result: expected,
+            result: game_room_mapper_1.GameRoomMapper.entityToModel(expected).toJson(),
             message: success_messages_1.SuccessMessages.operationSuccess
         }));
     });

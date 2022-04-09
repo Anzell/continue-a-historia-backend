@@ -6,7 +6,7 @@ const adaptSocketMessage = async (ws, wss, data, controller) => {
     const response = await controller.handle(data['content']);
     if (data['type'] === type_messages_1.TypeSocketMessages.sendPhraseToHistory || data["type"] === type_messages_1.TypeSocketMessages.joinRoom) {
         const room = (response.result);
-        console.log(room);
+        console.log("emissao");
         wss.sockets.in(room.id).emit("updateRoom", JSON.stringify(room));
     }
     else {

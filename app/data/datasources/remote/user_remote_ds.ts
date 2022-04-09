@@ -7,6 +7,7 @@ import {UserModel} from "../../models/user_model";
 
 export interface UserRemoteDs {
     getUserById: ({id}: {id: string}) => Promise<UserEntity>;
+    getUserByUsername: ({username}: {username: string}) => Promise<UserEntity>;
     getUserPermissions: ({id}: {id: string}) => Promise<string>;
 }
 
@@ -21,6 +22,13 @@ export class UserRemoteDsImpl implements UserRemoteDs {
     }
 
     constructor (private readonly db: Db) {}
+    async getUserByUsername({ username }: { username: string; }): Promise<UserEntity>{
+        const document = await this.db.collection(DbCollections.users).findOne({username});
+        if(document == undefined){
+            throw new NotFoundException();
+        }
+        return UserMapper.modelToEntity(UserModel.fromJson(document));
+    }
 
     async getUserById ({id}: { id: string }): Promise<UserEntity> {
         const document = await this.db.collection(DbCollections.users).findOne({id});

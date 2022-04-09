@@ -7,6 +7,8 @@ import {ErrorMessages} from "../../core/constants/messages/error_messages";
 import {GameRoom} from "../../domain/entities/game_room";
 import {Phrase} from "../../domain/entities/phrase";
 import {GetRoomByIdController} from "./get_room_by_id_controller";
+import { UserMapper } from "../../data/mappers/user_mapper";
+import { GameRoomMapper } from "../../data/mappers/game_room_mapper";
 
 describe('get room by id controller', function () {
     it('should return a GameRoom if call to usecase is success', async function () {
@@ -34,7 +36,7 @@ describe('get room by id controller', function () {
         expect(result).toStrictEqual(new CustomResponse({
             code: ServerCodes.success,
             codeStatus: 200,
-            result: expected,
+            result: GameRoomMapper.entityToModel(expected).toJson(),
             message: SuccessMessages.operationSuccess
         }));
     });
