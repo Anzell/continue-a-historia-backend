@@ -1,9 +1,9 @@
 import { left, right } from "either-ts";
-import {Failure, NotFoundFailure, ServerFailure} from "../../core/failures/failures";
+import {Failure, NotFoundFailure, PlayerNotFoundFailure, ServerFailure} from "../../core/failures/failures";
 import { GameRoom } from "../../domain/entities/game_room";
 import { RoomRepository } from "../../domain/repositories/room_repository";
 import { RoomRemoteDs } from "../datasources/remote/room_remote_ds";
-import {NotFoundException} from "../../core/failures/exceptions";
+import {NotFoundException, PlayerNotFoundException} from "../../core/failures/exceptions";
 import {ResumeGameRoom} from "../../domain/entities/resume_game_room";
 
 export class RoomRepositoryImpl implements RoomRepository {

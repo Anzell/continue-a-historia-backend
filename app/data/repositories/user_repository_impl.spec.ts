@@ -1,8 +1,8 @@
 import {UserEntity} from "../../domain/entities/user_entity";
 import {UserRepositoryImpl} from "./user_repository_impl";
-import {NotFoundException, ServerException} from "../../core/failures/exceptions";
+import {NotFoundException, PlayerNotFoundException, ServerException} from "../../core/failures/exceptions";
 import {left, right} from "either-ts";
-import {NotFoundFailure, ServerFailure} from "../../core/failures/failures";
+import {NotFoundFailure, PlayerNotFoundFailure, ServerFailure} from "../../core/failures/failures";
 
 describe('user repository impl', function () {
     describe('get user by id', function () {
@@ -24,12 +24,12 @@ describe('user repository impl', function () {
 
         it('should return a NotFoundFailure when datasource fails', async function () {
             const mockDatasource: any = {
-                getUserById: jest.fn().mockRejectedValue(new NotFoundException()),
+                getUserById: jest.fn().mockRejectedValue(new PlayerNotFoundException()),
                 getUserPermissions: jest.fn()
             };
             const repository = new UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserById({id: "validId"});
-            expect(result).toStrictEqual(left(new NotFoundFailure()));
+            expect(result).toStrictEqual(left(new PlayerNotFoundFailure()));
         });
 
         it('should return a ServerFailure when datasource fails', async function () {
@@ -59,11 +59,11 @@ describe('user repository impl', function () {
         it('should return a NotFoundFailure when datasource fails', async function () {
             const mockDatasource: any = {
                 getUserById: jest.fn(),
-                getUserPermissions: jest.fn().mockRejectedValue(new NotFoundException())
+                getUserPermissions: jest.fn().mockRejectedValue(new PlayerNotFoundException())
             };
             const repository = new UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserPermissions({id: "validId"});
-            expect(result).toStrictEqual(left(new NotFoundFailure()));
+            expect(result).toStrictEqual(left(new PlayerNotFoundFailure()));
         });
 
         it('should return a ServerFailure when datasource fails', async function () {
@@ -95,11 +95,11 @@ describe('user repository impl', function () {
 
         it('should return a NotFoundFailure when datasource fails', async function () {
             const mockDatasource: any = {
-                getUserByUsername: jest.fn().mockRejectedValue(new NotFoundException())
+                getUserByUsername: jest.fn().mockRejectedValue(new PlayerNotFoundException())
             };
             const repository = new UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserByUsername({username: "usernameNotRegistered"});
-            expect(result).toStrictEqual(left(new NotFoundFailure()));
+            expect(result).toStrictEqual(left(new PlayerNotFoundFailure()));
         });
 
         it('should return a ServerFailure when datasource fails', async function () {

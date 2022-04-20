@@ -6,5 +6,6 @@ class TypeSocketMessages {
 exports.TypeSocketMessages = TypeSocketMessages;
 TypeSocketMessages.playerEnterInRoom = "player_enter_in_room";
 TypeSocketMessages.sendPhraseToHistory = "send_phrase_to_history";
-TypeSocketMessages.joinRoom = "player_join_room";
 TypeSocketMessages.error = "error";
+TypeSocketMessages.joinRoom = "player_join_room";
+TypeSocketMessages.serverFailure = "server_failure";

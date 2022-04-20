@@ -87,11 +87,9 @@ export class PlayerEnterInRoomController implements Controller {
                     message: FailureHelper.mapFailureToMessage(failure),
                     result: {},
                 });
-                resolve(false);
             });
             
         });
-
         return serverResponse;
     }
 }

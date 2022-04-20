@@ -23,6 +23,9 @@ class FailureHelper {
         if (failure instanceof failures_1.EmailAlreadyExistFailure) {
             return error_messages_1.ErrorMessages.emailAlreadyexists;
         }
+        if (failure instanceof failures_1.PlayerNotFoundFailure) {
+            return error_messages_1.ErrorMessages.playerNotFound;
+        }
         return error_messages_1.ErrorMessages.unknownFailure;
     }
 }

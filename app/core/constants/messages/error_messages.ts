@@ -5,4 +5,5 @@ export class ErrorMessages {
     static notFound: string = "Não encontrado";
     static usernameAlreadyexists: string = "Username já registrado";
     static emailAlreadyexists: string = "Email já registrado";
+    static playerNotFound: string = "Usuário não encontrado";
 }

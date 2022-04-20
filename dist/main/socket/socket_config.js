@@ -29,7 +29,7 @@ exports.default = (server) => {
                     await (0, socket_message_adapter_1.adaptSocketMessage)(ws, wss, data, await controllers_injector_1.ControllersInjectorFactory.getRoomByIdControllerFactory());
                     break;
                 default:
-                    ws.send(JSON.stringify(new custom_response_1.CustomResponse({
+                    ws.emit(type_messages_1.TypeSocketMessages.serverFailure, (data) => JSON.stringify(new custom_response_1.CustomResponse({
                         codeStatus: 400,
                         code: server_codes_1.ServerCodes.serverFailure,
                         message: error_messages_1.ErrorMessages.serverFailure,

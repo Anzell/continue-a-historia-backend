@@ -1,9 +1,9 @@
 import {UserRepository} from "../../domain/repositories/user_repository";
 import {UserEntity} from "../../domain/entities/user_entity";
-import {Failure, NotFoundFailure, ServerFailure} from "../../core/failures/failures";
+import {Failure, NotFoundFailure, PlayerNotFoundFailure, ServerFailure} from "../../core/failures/failures";
 import {UserRemoteDs} from "../datasources/remote/user_remote_ds";
 import {left, right} from "either-ts";
-import {NotFoundException} from "../../core/failures/exceptions";
+import {NotFoundException, PlayerNotFoundException} from "../../core/failures/exceptions";
 
 export class UserRepositoryImpl implements UserRepository {
 
@@ -13,8 +13,8 @@ export class UserRepositoryImpl implements UserRepository {
             const result = await this.datasource.getUserByUsername({username});
             return right(result);
         }catch(e){
-            if(e instanceof NotFoundException){
-                return left(new NotFoundFailure());
+            if(e instanceof PlayerNotFoundException){
+                return left(new PlayerNotFoundFailure());
             }
             return left(new ServerFailure());
         }
@@ -25,8 +25,8 @@ export class UserRepositoryImpl implements UserRepository {
           const result = await this.datasource.getUserById({id});
           return right(result);
         }catch (e){
-            if(e instanceof NotFoundException){
-                return left(new NotFoundFailure());
+            if(e instanceof PlayerNotFoundException){
+                return left(new PlayerNotFoundFailure());
             }
             return left(new ServerFailure());
         }
@@ -37,8 +37,8 @@ export class UserRepositoryImpl implements UserRepository {
             const result = await this.datasource.getUserPermissions({id});
             return right(result);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                return left(new NotFoundFailure());
+            if (e instanceof PlayerNotFoundException) {
+                return left(new PlayerNotFoundFailure());
             }
             return left(new ServerFailure());
         }

@@ -2,7 +2,7 @@ import {Db, MongoClient} from "mongodb";
 import {UserEntity} from "../../../domain/entities/user_entity";
 import {DbCollections} from "../../../core/constants/db/db_collections";
 import {UserRemoteDsImpl} from "./user_remote_ds";
-import {NotFoundException} from "../../../core/failures/exceptions";
+import {NotFoundException, PlayerNotFoundException} from "../../../core/failures/exceptions";
 
 describe('user remote ds', function () {
     let db: Db;
@@ -32,7 +32,7 @@ describe('user remote ds', function () {
         it('should throw a NotFoundException if provided id not exists in database', async function () {
             const datasource = new UserRemoteDsImpl(db);
             const result = datasource.getUserById({id: "invalidId"});
-            await expect(result).rejects.toStrictEqual(new NotFoundException());
+            await expect(result).rejects.toStrictEqual(new PlayerNotFoundException());
         });
     });
 
@@ -77,7 +77,7 @@ describe('user remote ds', function () {
         it('should throw a NotFoundException if provided username not exists in database', async function () {
             const datasource = new UserRemoteDsImpl(db);
             const result = datasource.getUserByUsername({username: "invalidId"});
-            await expect(result).rejects.toStrictEqual(new NotFoundException());
+            await expect(result).rejects.toStrictEqual(new PlayerNotFoundException());
         });
     });
 });

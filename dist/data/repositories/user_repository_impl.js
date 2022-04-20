@@ -14,8 +14,8 @@ class UserRepositoryImpl {
             return (0, either_ts_1.right)(result);
         }
         catch (e) {
-            if (e instanceof exceptions_1.NotFoundException) {
-                return (0, either_ts_1.left)(new failures_1.NotFoundFailure());
+            if (e instanceof exceptions_1.PlayerNotFoundException) {
+                return (0, either_ts_1.left)(new failures_1.PlayerNotFoundFailure());
             }
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
@@ -26,8 +26,8 @@ class UserRepositoryImpl {
             return (0, either_ts_1.right)(result);
         }
         catch (e) {
-            if (e instanceof exceptions_1.NotFoundException) {
-                return (0, either_ts_1.left)(new failures_1.NotFoundFailure());
+            if (e instanceof exceptions_1.PlayerNotFoundException) {
+                return (0, either_ts_1.left)(new failures_1.PlayerNotFoundFailure());
             }
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
@@ -38,8 +38,8 @@ class UserRepositoryImpl {
             return (0, either_ts_1.right)(result);
         }
         catch (e) {
-            if (e instanceof exceptions_1.NotFoundException) {
-                return (0, either_ts_1.left)(new failures_1.NotFoundFailure());
+            if (e instanceof exceptions_1.PlayerNotFoundException) {
+                return (0, either_ts_1.left)(new failures_1.PlayerNotFoundFailure());
             }
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }

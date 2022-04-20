@@ -23,12 +23,12 @@ describe('user repository impl', function () {
         });
         it('should return a NotFoundFailure when datasource fails', async function () {
             const mockDatasource = {
-                getUserById: jest.fn().mockRejectedValue(new exceptions_1.NotFoundException()),
+                getUserById: jest.fn().mockRejectedValue(new exceptions_1.PlayerNotFoundException()),
                 getUserPermissions: jest.fn()
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserById({ id: "validId" });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.NotFoundFailure()));
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.PlayerNotFoundFailure()));
         });
         it('should return a ServerFailure when datasource fails', async function () {
             const mockDatasource = {
@@ -54,11 +54,11 @@ describe('user repository impl', function () {
         it('should return a NotFoundFailure when datasource fails', async function () {
             const mockDatasource = {
                 getUserById: jest.fn(),
-                getUserPermissions: jest.fn().mockRejectedValue(new exceptions_1.NotFoundException())
+                getUserPermissions: jest.fn().mockRejectedValue(new exceptions_1.PlayerNotFoundException())
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserPermissions({ id: "validId" });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.NotFoundFailure()));
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.PlayerNotFoundFailure()));
         });
         it('should return a ServerFailure when datasource fails', async function () {
             const mockDatasource = {
@@ -86,11 +86,11 @@ describe('user repository impl', function () {
         });
         it('should return a NotFoundFailure when datasource fails', async function () {
             const mockDatasource = {
-                getUserByUsername: jest.fn().mockRejectedValue(new exceptions_1.NotFoundException())
+                getUserByUsername: jest.fn().mockRejectedValue(new exceptions_1.PlayerNotFoundException())
             };
             const repository = new user_repository_impl_1.UserRepositoryImpl(mockDatasource);
             const result = await repository.getUserByUsername({ username: "usernameNotRegistered" });
-            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.NotFoundFailure()));
+            expect(result).toStrictEqual((0, either_ts_1.left)(new failures_1.PlayerNotFoundFailure()));
         });
         it('should return a ServerFailure when datasource fails', async function () {
             const mockDatasource = {

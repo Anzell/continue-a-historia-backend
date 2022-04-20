@@ -10,3 +10,4 @@ ErrorMessages.invalidCredentials = "Credenciais invalidas";
 ErrorMessages.notFound = "Não encontrado";
 ErrorMessages.usernameAlreadyexists = "Username já registrado";
 ErrorMessages.emailAlreadyexists = "Email já registrado";
+ErrorMessages.playerNotFound = "Usuário não encontrado";

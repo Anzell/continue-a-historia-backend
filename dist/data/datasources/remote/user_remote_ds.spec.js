@@ -30,7 +30,7 @@ describe('user remote ds', function () {
         it('should throw a NotFoundException if provided id not exists in database', async function () {
             const datasource = new user_remote_ds_1.UserRemoteDsImpl(db);
             const result = datasource.getUserById({ id: "invalidId" });
-            await expect(result).rejects.toStrictEqual(new exceptions_1.NotFoundException());
+            await expect(result).rejects.toStrictEqual(new exceptions_1.PlayerNotFoundException());
         });
     });
     describe('get user permission', function () {
@@ -71,7 +71,7 @@ describe('user remote ds', function () {
         it('should throw a NotFoundException if provided username not exists in database', async function () {
             const datasource = new user_remote_ds_1.UserRemoteDsImpl(db);
             const result = datasource.getUserByUsername({ username: "invalidId" });
-            await expect(result).rejects.toStrictEqual(new exceptions_1.NotFoundException());
+            await expect(result).rejects.toStrictEqual(new exceptions_1.PlayerNotFoundException());
         });
     });
 });

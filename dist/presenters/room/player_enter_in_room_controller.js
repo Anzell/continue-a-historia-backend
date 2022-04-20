@@ -84,7 +84,6 @@ class PlayerEnterInRoomController {
                     message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
                     result: {},
                 });
-                resolve(false);
             });
         });
         return serverResponse;

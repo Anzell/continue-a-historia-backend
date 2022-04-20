@@ -4,7 +4,6 @@ import {PlayerEnterInRoomConverter} from "./converters/player_enter_in_room_conv
 import {PlayerEnterInRoomController} from "./player_enter_in_room_controller";
 import {ServerFailure, ValidationFailure} from "../../core/failures/failures";
 import {ErrorMessages} from "../../core/constants/messages/error_messages";
-import {TypeSocketMessages} from "../../core/constants/socket/type_messages";
 import {CustomResponse} from "../../main/protocols/custom_response";
 import {ServerCodes} from "../../core/constants/messages/server_codes";
 import {SuccessMessages} from "../../core/constants/messages/success_messages";

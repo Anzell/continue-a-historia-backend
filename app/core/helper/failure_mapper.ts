@@ -2,7 +2,7 @@ import {
     EmailAlreadyExistFailure,
     Failure,
     InvalidCredentialsFailure,
-    NotFoundFailure,
+    NotFoundFailure, PlayerNotFoundFailure,
     ServerFailure, UsernameAlreadyExistFailure,
     ValidationFailure
 } from "../failures/failures";
@@ -27,6 +27,9 @@ export class FailureHelper{
         }
         if(failure instanceof EmailAlreadyExistFailure){
             return ErrorMessages.emailAlreadyexists;
+        }
+        if(failure instanceof  PlayerNotFoundFailure){
+            return ErrorMessages.playerNotFound;
         }
         return ErrorMessages.unknownFailure;
     }

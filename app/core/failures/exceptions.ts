@@ -4,4 +4,5 @@ export class EmailAlreadyExistException extends Error{}
 export class InvalidCredentialsException extends Error{}
 export class AccessDeniedException extends Error{}
 export class NotFoundException extends Error{}
+export class PlayerNotFoundException extends Error{}
 export class PlayerDontExistsInRoomException extends Error{}

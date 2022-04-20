@@ -4,7 +4,11 @@ import {StringHelper} from "../../../core/helper/string_helper";
 import {DbCollections} from "../../../core/constants/db/db_collections";
 import {GameRoomMapper} from "../../mappers/game_room_mapper";
 import {DateHelper} from "../../../core/helper/date_helper";
-import {NotFoundException, PlayerDontExistsInRoomException} from "../../../core/failures/exceptions";
+import {
+    NotFoundException,
+    PlayerDontExistsInRoomException,
+    PlayerNotFoundException
+} from "../../../core/failures/exceptions";
 import {GameRoomModel} from "../../models/game_room";
 import {PhraseModel} from "../../models/phrase_model";
 import {ResumeGameRoom} from "../../../domain/entities/resume_game_room";
