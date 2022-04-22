@@ -7,7 +7,6 @@ import {DateHelper} from "../../../core/helper/date_helper";
 import {
     NotFoundException,
     PlayerDontExistsInRoomException,
-    PlayerNotFoundException
 } from "../../../core/failures/exceptions";
 import {GameRoomModel} from "../../models/game_room";
 import {PhraseModel} from "../../models/phrase_model";
@@ -19,11 +18,22 @@ export interface RoomRemoteDs {
     sendPhrase: ({userId, roomId, phrase}: {userId: string, roomId: string, phrase: string}) => Promise<GameRoom>;
     getRoomById: ({id}: {id: string}) => Promise<GameRoom>;
     getPlayerRooms: ({userId}: {userId: string}) => Promise<Array<ResumeGameRoom>>;
+    updateRoom: ({roomData} : {roomData: GameRoom}) => Promise<void>;
 }
 
 export class RoomRemoteDsImpl implements RoomRemoteDs {
 
     constructor (private readonly db: Db, private readonly stringHelper: StringHelper) {}
+
+    async updateRoom({ roomData }: { roomData: GameRoom; }): Promise<void>{
+
+        const result = await this.db.collection(DbCollections.rooms).findOneAndUpdate({"id": roomData.id}, {
+          $set: {...GameRoomMapper.entityToModel(roomData).toJson()}
+        });
+        if(result.lastErrorObject!["updatedExisting"] === false){
+            throw new NotFoundException();
+        }
+    }
 
     async getPlayerRooms({userId}: {userId: string}): Promise<Array<ResumeGameRoom>> {
         const documents = await this.db.collection(DbCollections.rooms).find({$or: [{playersIds: userId}, {adminsIds: userId}]});

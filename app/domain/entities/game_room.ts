@@ -6,15 +6,19 @@ export class GameRoom {
     public adminsIds?: Array<string>;
     public playersIds?: Array<string>;
     public history?: Array<Phrase>;
+    public someoneIsTaping?: boolean;
+    public lastTappedId?: string;
     public createdAt?: Date;
 
-    constructor({ id, name, adminsIds, playersIds, history, createdAt }: {
+    constructor({ id, name, adminsIds, playersIds, history, createdAt, someoneIsTapping, lastTappedId }: {
         id?: string,
         name: string,
         adminsIds: Array<string>,
         playersIds?: Array<string>,
         history?: Array<Phrase>,
         createdAt?: Date,
+        someoneIsTapping?: boolean,
+        lastTappedId?: string,
     }) {
         this.id = id;
         this.name = name;
@@ -22,5 +26,7 @@ export class GameRoom {
         this.playersIds = playersIds;
         this.history = history;
         this.createdAt = createdAt;
+        this.someoneIsTaping = someoneIsTapping;
+        this.lastTappedId = lastTappedId;
     }
 }

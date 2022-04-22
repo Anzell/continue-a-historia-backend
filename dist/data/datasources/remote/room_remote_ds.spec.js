@@ -216,4 +216,26 @@ describe("room remote ds", () => {
             ]);
         });
     });
+    describe('update room', function () {
+        const mockStringHelper = {
+            generateUuid: jest.fn().mockReturnValue("validId")
+        };
+        it('should update room and return the updated room', async function () {
+            const exampleRoom = new game_room_2.GameRoomModel({ id: "testUpdateRoom", name: "testName", adminsIds: ["admin1"] });
+            const expected = new game_room_2.GameRoomModel({ id: "testUpdateRoom", name: "changed Name Test", adminsIds: ["admin1"] });
+            await db.collection(db_collections_1.DbCollections.rooms).insertOne(exampleRoom.toJson());
+            const datasource = new room_remote_ds_1.RoomRemoteDsImpl(db, mockStringHelper);
+            const result = await datasource.updateRoom({ roomData: expected });
+            const documentUpdated = await db.collection(db_collections_1.DbCollections.rooms).findOne({ id: exampleRoom.id });
+            expect(documentUpdated["name"]).toStrictEqual(expected.name);
+        });
+        it('should throw NotFoundFailure when id provided is invalid', async function () {
+            const exampleRoom = new game_room_2.GameRoomModel({ id: "testUpdateRoom", name: "testName", adminsIds: ["admin1"] });
+            const expected = new game_room_2.GameRoomModel({ id: "not existind document id", name: "changed Name Test", adminsIds: ["admin1"] });
+            await db.collection(db_collections_1.DbCollections.rooms).insertOne(exampleRoom.toJson());
+            const datasource = new room_remote_ds_1.RoomRemoteDsImpl(db, mockStringHelper);
+            const result = datasource.updateRoom({ roomData: expected });
+            await expect(result).rejects.toStrictEqual(new exceptions_1.NotFoundException());
+        });
+    });
 });

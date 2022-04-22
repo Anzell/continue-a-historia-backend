@@ -13,6 +13,14 @@ class RoomRemoteDsImpl {
         this.db = db;
         this.stringHelper = stringHelper;
     }
+    async updateRoom({ roomData }) {
+        const result = await this.db.collection(db_collections_1.DbCollections.rooms).findOneAndUpdate({ "id": roomData.id }, {
+            $set: { ...game_room_mapper_1.GameRoomMapper.entityToModel(roomData).toJson() }
+        });
+        if (result.lastErrorObject["updatedExisting"] === false) {
+            throw new exceptions_1.NotFoundException();
+        }
+    }
     async getPlayerRooms({ userId }) {
         const documents = await this.db.collection(db_collections_1.DbCollections.rooms).find({ $or: [{ playersIds: userId }, { adminsIds: userId }] });
         let tempArray = [];
