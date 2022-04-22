@@ -5,7 +5,6 @@ import { DateHelper } from "../../core/helper/date_helper";
 import { GameRoom } from "../../domain/entities/game_room";
 import { Phrase } from "../../domain/entities/phrase";
 import { RoomRepository } from "../../domain/repositories/room_repository";
-import { RoomRemoteDs } from "../datasources/remote/room_remote_ds";
 import { RoomRepositoryImpl } from "./room_repository_impl";
 import {ResumeGameRoom} from "../../domain/entities/resume_game_room";
 
@@ -171,6 +170,50 @@ describe("teste de room repository impl", () => {
             let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
             let result = await repository.getPlayerRooms({userId: "validTest"});
             expect(result).toStrictEqual(left(new ServerFailure()));
+        });
+    });
+
+    describe('update room', function () {
+        const exampleRoom = new GameRoom({
+            adminsIds:["admin1"],
+            name: "roomName",
+            history: [
+                new Phrase({
+                    phrase: "era uma vez",
+                    senderId: "admin1",
+                    sendAt: DateHelper.numberToDate(Date.now())
+                })
+            ],
+            id: "admin1",
+            playersIds:["user1"],
+            createdAt: DateHelper.numberToDate(Date.now())
+        });
+
+        it('should return null if call to datasource is success', async function () {
+            const mockRoomDatasource: any = {
+                updateRoom: jest.fn().mockReturnValue(null),
+            };
+            let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
+            let result = await repository.updateRoom({roomData: exampleRoom});
+            expect(result).toStrictEqual(right(null));
+        });
+
+        it("deve retornar left failure caso chamada ao datasource der erro", async () => {
+            const mockRoomDatasource: any = {
+                updateRoom: jest.fn().mockRejectedValue(new ServerException()),
+            };
+            let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
+            let result = await repository.updateRoom({roomData: exampleRoom});
+            expect(result).toStrictEqual(left(new ServerFailure()));
+        });
+
+        it("deve retornar NotFoundFailure caso chamada ao datasource der erro", async () => {
+            const mockRoomDatasource: any = {
+                updateRoom: jest.fn().mockRejectedValue(new NotFoundException()),
+            };
+            let repository: RoomRepository = new RoomRepositoryImpl(mockRoomDatasource);
+            let result = await repository.updateRoom({roomData: exampleRoom});
+            expect(result).toStrictEqual(left(new NotFoundFailure()));
         });
     });
 });

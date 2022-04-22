@@ -56,5 +56,17 @@ class RoomRepositoryImpl {
             return (0, either_ts_1.left)(new failures_1.ServerFailure());
         }
     }
+    async updateRoom({ roomData }) {
+        try {
+            await this.datasource.updateRoom({ roomData });
+            return (0, either_ts_1.right)(null);
+        }
+        catch (e) {
+            if (e instanceof exceptions_1.NotFoundException) {
+                return (0, either_ts_1.left)(new failures_1.NotFoundFailure());
+            }
+            return (0, either_ts_1.left)(new failures_1.ServerFailure());
+        }
+    }
 }
 exports.RoomRepositoryImpl = RoomRepositoryImpl;

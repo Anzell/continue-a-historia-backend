@@ -8,4 +8,5 @@ export interface RoomRepository{
     sendPhrase: ({userId, roomId, phrase}: {userId: string, roomId: string, phrase: string}) => Promise<Either<Failure, GameRoom>>;
     getRoomById: ({id}: {id: string}) => Promise<Either<Failure, GameRoom>>;
     getPlayerRooms: ({userId}: {userId: string}) => Promise<Either<Failure, Array<ResumeGameRoom>>>;
+    updateRoom: ({roomData}: {roomData: GameRoom}) => Promise<Either<Failure, null>>;
 }

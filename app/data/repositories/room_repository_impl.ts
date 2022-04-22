@@ -7,6 +7,7 @@ import {NotFoundException, PlayerNotFoundException} from "../../core/failures/ex
 import {ResumeGameRoom} from "../../domain/entities/resume_game_room";
 
 export class RoomRepositoryImpl implements RoomRepository {
+
     constructor(public datasource: RoomRemoteDs){}
 
     async getPlayerRooms ({userId}: { userId: string }): Promise<Either<Failure, Array<ResumeGameRoom>>> {
@@ -53,6 +54,18 @@ export class RoomRepositoryImpl implements RoomRepository {
             const result = await this.datasource.sendPhrase({userId, roomId, phrase});
             return right(result);
         }catch(e){
+            return left(new ServerFailure());
+        }
+    }
+
+    async updateRoom ({roomData}: { roomData: GameRoom }): Promise<Either<Failure, null>> {
+        try {
+            await this.datasource.updateRoom({roomData});
+            return right(null);
+        }catch(e){
+            if(e instanceof NotFoundException){
+                return left(new NotFoundFailure());
+            }
             return left(new ServerFailure());
         }
     }
