@@ -3,7 +3,7 @@ import {Controller} from "../protocols/controller";
 
 export const adaptRoute = (controller: Controller) => {
     return async (req: Request, resp: Response) => {
-        console.log(req.socket.remoteAddress)
+        console.log(req.ip)
         const request = {
             ...(req.body || {}),
             ...(req.params || {}),
