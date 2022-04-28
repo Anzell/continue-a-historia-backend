@@ -19,7 +19,9 @@ describe("game room model", () => {
             name: "Sala de testes",
             createdAt: new Date(2021,10,10),
             playersIds: [],
-            id: "validId"
+            id: "validId",
+            lastTappedId: undefined,
+            someoneIsTapping: false,
         });
     });
 
@@ -36,7 +38,9 @@ describe("game room model", () => {
             "name": "Sala de testes",
             "createdAt": DateHelper.dateToNumber(new Date(2021,10,10)),
             "playersIds": [],
-            "id": "validId"
+            "id": "validId",
+            "someoneIsTapping": false,
+            "lastTappedId": undefined
         };
         const result = model.toJson();
         expect(result).toStrictEqual(expected); 
@@ -55,7 +59,9 @@ describe("game room model", () => {
             "name": "Sala de testes",
             "createdAt": DateHelper.dateToNumber(new Date(2021,10,10)),
             "playersIds": [],
-            "id": "validId"
+            "id": "validId",
+            "someoneIsTapping": false,
+            "lastTappedId": undefined,
         });
         expect(result).toStrictEqual(model);
     });

@@ -8,22 +8,26 @@ class GameRoomModel extends game_room_1.GameRoom {
     toJson() {
         let createdAt = date_helper_1.DateHelper.dateToNumber(this.createdAt);
         return {
-            "createdAt": createdAt,
-            "name": this.name,
-            "adminsIds": this.adminsIds,
+            "createdAt": createdAt ?? undefined,
+            "name": this.name ?? "",
+            "adminsIds": this.adminsIds ?? [],
             "history": this.history?.map((element) => new phrase_model_1.PhraseModel({ senderId: element.senderId, phrase: element.phrase, sendAt: element.sendAt }).toJson()) ?? [],
             "playersIds": this.playersIds ?? [],
-            "id": this.id
+            "id": this.id ?? undefined,
+            "someoneIsTapping": this.someoneIsTaping ?? undefined,
+            "lastTappedId": this.lastTappedId ?? undefined,
         };
     }
     static fromJson(json) {
         return new GameRoomModel({
-            adminsIds: json['adminsIds'],
-            name: json['name'],
-            createdAt: date_helper_1.DateHelper.numberToDate(Number.parseInt(json['createdAt'])),
+            adminsIds: json['adminsIds'] ?? undefined,
+            name: json['name'] ?? undefined,
+            createdAt: date_helper_1.DateHelper.numberToDate(Number.parseInt(json['createdAt'])) ?? undefined,
             history: json['history']?.map((element) => phrase_model_1.PhraseModel.fromJson(element)) ?? [],
-            id: json['id'],
-            playersIds: json['playersIds'] ?? []
+            id: json['id'] ?? undefined,
+            playersIds: json['playersIds'] ?? [],
+            someoneIsTapping: json["someoneIsTapping"] ?? undefined,
+            lastTappedId: json["lastTappedId"] ?? undefined
         });
     }
 }

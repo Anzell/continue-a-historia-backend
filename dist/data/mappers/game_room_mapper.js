@@ -13,6 +13,8 @@ class GameRoomMapper {
             history: entity.history?.map((element) => phrase_mapper_1.PhraseMapper.entityToModel(element)),
             name: entity.name,
             playersIds: entity.playersIds,
+            lastTappedId: entity.lastTappedId,
+            someoneIsTapping: entity.someoneIsTaping,
         });
     }
     static modelToEntity(model) {
@@ -23,6 +25,8 @@ class GameRoomMapper {
             history: model.history?.map((element) => phrase_mapper_1.PhraseMapper.modelToEntity(element)),
             name: model.name,
             playersIds: model.playersIds,
+            lastTappedId: model.lastTappedId,
+            someoneIsTapping: model.someoneIsTaping,
         });
     }
 }

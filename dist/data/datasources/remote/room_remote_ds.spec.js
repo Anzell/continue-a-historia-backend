@@ -143,6 +143,8 @@ describe("room remote ds", () => {
                 history: [],
                 createdAt: new Date(2021, 10, 10),
                 name: "test",
+                someoneIsTapping: false,
+                lastTappedId: undefined,
                 playersIds: []
             });
             await db.collection(db_collections_1.DbCollections.rooms).insertOne({ ...game_room_mapper_1.GameRoomMapper.entityToModel(expected).toJson() });

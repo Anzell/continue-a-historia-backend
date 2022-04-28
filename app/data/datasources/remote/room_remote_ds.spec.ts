@@ -156,6 +156,8 @@ describe("room remote ds", () => {
                 history: [],
                 createdAt: new Date(2021,10,10),
                 name: "test",
+                someoneIsTapping: false,
+                lastTappedId: undefined,
                 playersIds: []
             });
 

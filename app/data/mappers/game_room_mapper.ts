@@ -13,6 +13,8 @@ export class GameRoomMapper{
            history: entity.history?.map((element: Phrase) => PhraseMapper.entityToModel(element)),
            name: entity.name!,
            playersIds: entity.playersIds,
+            lastTappedId: entity.lastTappedId,
+            someoneIsTapping: entity.someoneIsTaping,
         });
     }
 
@@ -24,6 +26,8 @@ export class GameRoomMapper{
             history: model.history?.map((element: PhraseModel) => PhraseMapper.modelToEntity(element)),
             name: model.name!,
             playersIds: model.playersIds,
+            lastTappedId: model.lastTappedId,
+            someoneIsTapping: model.someoneIsTaping,
         });
     }
 }
