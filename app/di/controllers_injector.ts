@@ -20,6 +20,7 @@ import {GetPlayerRoomsController} from "../presenters/room/get_player_rooms_cont
 import {GetRoomByIdController} from "../presenters/room/get_room_by_id_controller";
 import { GetUserByUsernameConverter } from "../presenters/user/converters/get_user_by_username_converter";
 import { GetUserByUsernameUsecase } from "../domain/usecases/user/get_user_by_username";
+import {LockRoomController} from "../presenters/room/lock_room_controller";
 
 export class ControllersInjectorFactory {
     public static async createRoomControllerFactory(): Promise<CreateRoomController>{
@@ -85,4 +86,10 @@ export class ControllersInjectorFactory {
         return new GetRoomByIdController({converter, usecase});
     }
 
+    public static async lockRoomControllerFactory(): Promise<LockRoomController> {
+        const getRoombyIdUsecase = await UsecasesInjector.getRoomByIdUsecaseFactory();
+        const updateRoomUsecase = await UsecasesInjector.updateRoomUsecaseFactory();
+        const converter = await ConvertersInjector.lockRoomConverterFactory();
+        return new LockRoomController({converter, getRoombyIdUsecase, updateRoomUsecase});
+    }
 }

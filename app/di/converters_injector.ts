@@ -8,6 +8,7 @@ import {GetUserByIdConverter} from "../presenters/user/converters/get_user_by_id
 import {GetPlayerRoomsConverter} from "../presenters/room/converters/get_player_rooms_converter";
 import {GetRoomByIdConverter} from "../presenters/room/converters/get_room_by_id_converter";
 import { GetUserByUsernameConverter } from "../presenters/user/converters/get_user_by_username_converter";
+import {LockRoomConverter} from "../presenters/room/converters/lock_room_converter";
 
 export class ConvertersInjector {
     public static async gameRoomConverterFactory(): Promise<GameRoomConverter> {
@@ -40,5 +41,9 @@ export class ConvertersInjector {
 
     public static async getUserByUsernameConverterFactory(): Promise<GetUserByUsernameConverter>{
         return new GetUserByUsernameConverter();
+    }
+
+    public static async lockRoomConverterFactory(): Promise<LockRoomConverter> {
+        return new LockRoomConverter();
     }
 }

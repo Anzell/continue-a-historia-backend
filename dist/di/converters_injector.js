@@ -9,6 +9,7 @@ const get_user_by_id_converter_1 = require("../presenters/user/converters/get_us
 const get_player_rooms_converter_1 = require("../presenters/room/converters/get_player_rooms_converter");
 const get_room_by_id_converter_1 = require("../presenters/room/converters/get_room_by_id_converter");
 const get_user_by_username_converter_1 = require("../presenters/user/converters/get_user_by_username_converter");
+const lock_room_converter_1 = require("../presenters/room/converters/lock_room_converter");
 class ConvertersInjector {
     static async gameRoomConverterFactory() {
         return new game_room_converter_1.GameRoomConverter();
@@ -33,6 +34,9 @@ class ConvertersInjector {
     }
     static async getUserByUsernameConverterFactory() {
         return new get_user_by_username_converter_1.GetUserByUsernameConverter();
+    }
+    static async lockRoomConverterFactory() {
+        return new lock_room_converter_1.LockRoomConverter();
     }
 }
 exports.ConvertersInjector = ConvertersInjector;

@@ -4,4 +4,5 @@ export class TypeSocketMessages {
     static error: string = "error";
     static joinRoom: string = "player_join_room";
     static serverFailure: string = "server_failure";
+    static lockRoom: string = "lock_room";
 }

@@ -12,6 +12,7 @@ const player_send_phrase_to_history_1 = require("../domain/usecases/room/player_
 const get_room_by_id_1 = require("../domain/usecases/room/get_room_by_id");
 const get_user_rooms_1 = require("../domain/usecases/room/get_user_rooms");
 const get_user_by_username_1 = require("../domain/usecases/user/get_user_by_username");
+const update_room_1 = require("../domain/usecases/room/update_room");
 class UsecasesInjector {
     static async CreateRoomUsecaseFactory() {
         const repository = await repositories_injector_1.RepositoriesInjector.roomRepositoryFactory();
@@ -52,6 +53,10 @@ class UsecasesInjector {
     static async getUserByUsernameUsecaseFactory() {
         const repository = await repositories_injector_1.RepositoriesInjector.userRepositoryFactory();
         return new get_user_by_username_1.GetUserByUsernameUsecase(repository);
+    }
+    static async updateRoomUsecaseFactory() {
+        const repository = await repositories_injector_1.RepositoriesInjector.roomRepositoryFactory();
+        return new update_room_1.UpdateRoomUseCaseImpl(repository);
     }
 }
 exports.UsecasesInjector = UsecasesInjector;

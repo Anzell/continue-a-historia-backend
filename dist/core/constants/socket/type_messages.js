@@ -9,3 +9,4 @@ TypeSocketMessages.sendPhraseToHistory = "send_phrase_to_history";
 TypeSocketMessages.error = "error";
 TypeSocketMessages.joinRoom = "player_join_room";
 TypeSocketMessages.serverFailure = "server_failure";
+TypeSocketMessages.lockRoom = "lock_room";

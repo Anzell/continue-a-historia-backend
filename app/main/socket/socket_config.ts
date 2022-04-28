@@ -29,6 +29,9 @@ export default (server: Server): void => {
                      ws.join(data["content"]["room_id"]);
                      await adaptSocketMessage(ws, wss, data, await ControllersInjectorFactory.getRoomByIdControllerFactory());
                      break;
+                 case TypeSocketMessages.lockRoom:
+
+                     break;
                  default:
                      ws.emit(TypeSocketMessages.serverFailure, (data: any) => JSON.stringify(new CustomResponse({
                          codeStatus: 400,

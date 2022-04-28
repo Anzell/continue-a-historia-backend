@@ -12,6 +12,7 @@ import {
 import {GetRoomByIdUsecase, GetRoomByIdUsecaseImpl} from "../domain/usecases/room/get_room_by_id";
 import {GetUserRoomsUsecase, GetUserRoomsUsecaseImpl} from "../domain/usecases/room/get_user_rooms";
 import { GetUserByUsernameUsecase } from "../domain/usecases/user/get_user_by_username";
+import {UpdateRoomUseCase, UpdateRoomUseCaseImpl} from "../domain/usecases/room/update_room";
 
 export class UsecasesInjector {
     public static async CreateRoomUsecaseFactory(): Promise<CreateRoomUsecase> {
@@ -62,5 +63,10 @@ export class UsecasesInjector {
     public static async getUserByUsernameUsecaseFactory(): Promise<GetUserByUsernameUsecase> {
         const repository = await RepositoriesInjector.userRepositoryFactory();
         return new GetUserByUsernameUsecase(repository);
+    }
+
+    public static async updateRoomUsecaseFactory(): Promise<UpdateRoomUseCase> {
+        const repository = await RepositoriesInjector.roomRepositoryFactory();
+        return new UpdateRoomUseCaseImpl(repository);
     }
 }
