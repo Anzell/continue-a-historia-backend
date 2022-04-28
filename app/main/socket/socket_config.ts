@@ -19,28 +19,7 @@ export default (server: Server): void => {
 
     wss.sockets.on('connection', (ws) => {
          ws.on('message', async (data: any) => {
-             switch (data['type']) {
-                 case TypeSocketMessages.playerEnterInRoom:
-                     await adaptSocketMessage(ws, wss, data, await ControllersInjectorFactory.playerEnterInRoomControllerFactory());
-                     break;
-                 case TypeSocketMessages.sendPhraseToHistory:
-                     await adaptSocketMessage(ws, wss, data, await ControllersInjectorFactory.playerSendPhraseToHistoryControllerFactory());                     break;
-                 case TypeSocketMessages.joinRoom:
-                     ws.join(data["content"]["room_id"]);
-                     await adaptSocketMessage(ws, wss, data, await ControllersInjectorFactory.getRoomByIdControllerFactory());
-                     break;
-                 case TypeSocketMessages.lockRoom:
-
-                     break;
-                 default:
-                     ws.emit(TypeSocketMessages.serverFailure, (data: any) => JSON.stringify(new CustomResponse({
-                         codeStatus: 400,
-                         code: ServerCodes.serverFailure,
-                         message: ErrorMessages.serverFailure,
-                         result: {}
-                     })));
-                     break;
-             }
+             await adaptSocketMessage(ws, wss, data);
          });
     });
 

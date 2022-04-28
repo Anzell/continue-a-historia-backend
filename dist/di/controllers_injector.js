@@ -17,6 +17,7 @@ const player_send_phrase_to_history_controller_1 = require("../presenters/room/p
 const get_user_by_id_controller_1 = require("../presenters/user/get_user_by_id_controller");
 const get_player_rooms_controller_1 = require("../presenters/room/get_player_rooms_controller");
 const get_room_by_id_controller_1 = require("../presenters/room/get_room_by_id_controller");
+const lock_room_controller_1 = require("../presenters/room/lock_room_controller");
 class ControllersInjectorFactory {
     static async createRoomControllerFactory() {
         const usecase = await usecases_injector_1.UsecasesInjector.CreateRoomUsecaseFactory();
@@ -70,6 +71,12 @@ class ControllersInjectorFactory {
         const usecase = await usecases_injector_1.UsecasesInjector.getRoomByIdUsecaseFactory();
         const converter = await converters_injector_1.ConvertersInjector.getRoomByIdConverterFactory();
         return new get_room_by_id_controller_1.GetRoomByIdController({ converter, usecase });
+    }
+    static async lockRoomControllerFactory() {
+        const getRoombyIdUsecase = await usecases_injector_1.UsecasesInjector.getRoomByIdUsecaseFactory();
+        const updateRoomUsecase = await usecases_injector_1.UsecasesInjector.updateRoomUsecaseFactory();
+        const converter = await converters_injector_1.ConvertersInjector.lockRoomConverterFactory();
+        return new lock_room_controller_1.LockRoomController({ converter, getRoombyIdUsecase, updateRoomUsecase });
     }
 }
 exports.ControllersInjectorFactory = ControllersInjectorFactory;
