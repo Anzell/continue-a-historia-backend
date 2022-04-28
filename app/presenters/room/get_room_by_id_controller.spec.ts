@@ -7,7 +7,6 @@ import {ErrorMessages} from "../../core/constants/messages/error_messages";
 import {GameRoom} from "../../domain/entities/game_room";
 import {Phrase} from "../../domain/entities/phrase";
 import {GetRoomByIdController} from "./get_room_by_id_controller";
-import { UserMapper } from "../../data/mappers/user_mapper";
 import { GameRoomMapper } from "../../data/mappers/game_room_mapper";
 
 describe('get room by id controller', function () {

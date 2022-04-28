@@ -18,13 +18,7 @@ class PlayerEnterInRoomController {
         this.getUserByUsernameUsecase = getUserByUsernameUsecase;
     }
     async handle(request) {
-        let serverResponse = new custom_response_1.CustomResponse({
-            codeStatus: 400,
-            message: "Erro no servidor",
-            code: server_codes_1.ServerCodes.serverFailure,
-            result: {}
-        });
-        await new Promise((resolve) => {
+        return await new Promise((resolve) => {
             const getUserByUsernameConverterResult = this.getUserByUsernameConverter.handle(new get_user_by_username_converter_1.GetUserByUsernameConverterParams({ username: request["username"] }));
             getUserByUsernameConverterResult.map(async (convertedUsername) => {
                 const getUserByUsermeUsecaseResult = await this.getUserByUsernameUsecase.handle(new get_user_by_username_1.GetUserByUsernameUsecaseParams({ username: convertedUsername.username }));
@@ -39,54 +33,49 @@ class PlayerEnterInRoomController {
                             userId: data.userId,
                         }));
                         result.map((_) => {
-                            serverResponse = new custom_response_1.CustomResponse({
+                            resolve(new custom_response_1.CustomResponse({
                                 codeStatus: 200,
                                 code: server_codes_1.ServerCodes.success,
                                 message: success_messages_1.SuccessMessages.operationSuccess,
                                 result: {}
-                            });
-                            resolve(true);
+                            }));
                         });
                         result.leftMap((failure) => {
-                            serverResponse = new custom_response_1.CustomResponse({
+                            resolve(new custom_response_1.CustomResponse({
                                 message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
                                 code: code_helper_1.CodeHelper.failureToCode(failure),
                                 codeStatus: 400,
                                 result: {}
-                            });
-                            resolve(false);
+                            }));
                         });
                     });
                     playerEnterRoomConverter.leftMap((failure) => {
-                        serverResponse = new custom_response_1.CustomResponse({
+                        resolve(new custom_response_1.CustomResponse({
                             codeStatus: 400,
                             code: code_helper_1.CodeHelper.failureToCode(failure),
                             message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
                             result: {},
-                        });
-                        resolve(false);
+                        }));
                     });
                 });
                 getUserByUsermeUsecaseResult.leftMap((failure) => {
-                    serverResponse = new custom_response_1.CustomResponse({
+                    resolve(new custom_response_1.CustomResponse({
                         codeStatus: 400,
                         code: code_helper_1.CodeHelper.failureToCode(failure),
                         message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
                         result: {},
-                    });
-                    resolve(false);
+                    }));
                 });
             });
             getUserByUsernameConverterResult.leftMap((failure) => {
-                serverResponse = new custom_response_1.CustomResponse({
+                resolve(new custom_response_1.CustomResponse({
                     codeStatus: 400,
                     code: code_helper_1.CodeHelper.failureToCode(failure),
                     message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure),
                     result: {},
-                });
+                }));
             });
         });
-        return serverResponse;
     }
 }
 exports.PlayerEnterInRoomController = PlayerEnterInRoomController;

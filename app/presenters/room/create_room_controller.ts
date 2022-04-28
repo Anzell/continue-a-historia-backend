@@ -12,13 +12,7 @@ export class CreateRoomController implements Controller {
     constructor (private readonly createRoomUsecase: CreateRoomUsecase, private readonly gameRoomConverter: GameRoomConverter) {}
 
     async handle (request: any): Promise<CustomResponse> {
-        let serverResponse = new CustomResponse({
-            result: {},
-            message: "Erro no servidor",
-            code: ServerCodes.serverFailure,
-            codeStatus: 400
-        });
-        await new Promise((resolve) => {
+        return await new Promise<CustomResponse>((resolve) => {
             const converter = this.gameRoomConverter.handle(new GameRoomConverterParams({
                 name: request['name'],
                 adminsIds: request['adminsIds'],
@@ -27,36 +21,31 @@ export class CreateRoomController implements Controller {
             converter.map(async (room) => {
                 const result = await this.createRoomUsecase.handle({room});
                 result.map((_: any) => {
-                    serverResponse = new CustomResponse({
+                    resolve(new CustomResponse({
                         codeStatus: 200,
                         message: SuccessMessages.operationSuccess,
                         code: ServerCodes.success,
                         result: {}
-                    });
-                    resolve(true);
+                    }));
                 });
                 result.leftMap((failure: Failure)=>{
-                    serverResponse = new CustomResponse({
+                    resolve(new CustomResponse({
                         codeStatus: 400,
                         message: FailureHelper.mapFailureToMessage(failure),
                         code: CodeHelper.failureToCode(failure),
                         result: {}
-                    });
-                    resolve(false);
+                    }));
                 });
             });
             converter.leftMap((failure) => {
-                serverResponse = new CustomResponse({
+                resolve(new CustomResponse({
                     codeStatus: 400,
                     message: (failure as ValidationFailure).message!,
                     code: CodeHelper.failureToCode(failure),
                     result: {}
-                });
-                resolve(false);
+                }));
             });
         });
-
-        return serverResponse;
     }
 
 }

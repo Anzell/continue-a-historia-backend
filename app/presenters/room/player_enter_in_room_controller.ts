@@ -21,13 +21,7 @@ export class PlayerEnterInRoomController implements Controller {
     constructor(private readonly insertPlayerInRoomUsecase: PlayerEnterInRoomUsecase, private readonly insertPlayerConverter: PlayerEnterInRoomConverter, private readonly getUserByUsernameConverter: GetUserByUsernameConverter, private readonly getUserByUsernameUsecase: GetUserByUsernameUsecase,) { }
 
     async handle(request: any): Promise<CustomResponse> {
-        let serverResponse = new CustomResponse({
-            codeStatus: 400,
-            message: "Erro no servidor",
-            code: ServerCodes.serverFailure,
-            result: {}
-        });
-        await new Promise((resolve) => {
+        return await new Promise((resolve) => {
             const getUserByUsernameConverterResult = this.getUserByUsernameConverter.handle(new GetUserByUsernameConverterParams({username: request["username"]}));
             getUserByUsernameConverterResult.map(async (convertedUsername) => {
                 const getUserByUsermeUsecaseResult = await this.getUserByUsernameUsecase.handle(new GetUserByUsernameUsecaseParams({username: convertedUsername.username}));
@@ -42,54 +36,48 @@ export class PlayerEnterInRoomController implements Controller {
                             userId: data.userId,
                         }));
                         result.map((_: any) => {
-                            serverResponse = new CustomResponse({
+                            resolve(new CustomResponse({
                                 codeStatus: 200,
                                 code: ServerCodes.success,
                                 message: SuccessMessages.operationSuccess,
                                 result: {}
-                            });
-                            resolve(true);
+                            }));
                         });
                         result.leftMap((failure: Failure) => {
-                            serverResponse = new CustomResponse({
+                            resolve(new CustomResponse({
                                 message: FailureHelper.mapFailureToMessage(failure),
                                 code: CodeHelper.failureToCode(failure),
                                 codeStatus: 400,
                                 result: {}
-                            });
-                            resolve(false);
+                            }));
                         });
                     });
                     playerEnterRoomConverter.leftMap((failure) => {
-                        serverResponse = new CustomResponse({
+                        resolve(new CustomResponse({
                             codeStatus: 400,
                             code: CodeHelper.failureToCode(failure),
                             message: FailureHelper.mapFailureToMessage(failure),
                             result: {},
-                        });
-                        resolve(false);
+                        }));
                     });
                 });
                 getUserByUsermeUsecaseResult.leftMap((failure) => {
-                    serverResponse = new CustomResponse({
+                    resolve(new CustomResponse({
                         codeStatus: 400,
                         code: CodeHelper.failureToCode(failure),
                         message: FailureHelper.mapFailureToMessage(failure),
                         result: {},
-                    });
-                    resolve(false);
+                    }));
                 });
             });
             getUserByUsernameConverterResult.leftMap((failure) => {
-                serverResponse = new CustomResponse({
+                resolve(new CustomResponse({
                     codeStatus: 400,
                     code: CodeHelper.failureToCode(failure),
                     message: FailureHelper.mapFailureToMessage(failure),
                     result: {},
-                });
+                }));
             });
-            
         });
-        return serverResponse;
     }
 }

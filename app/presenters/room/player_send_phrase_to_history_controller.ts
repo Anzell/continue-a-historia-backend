@@ -28,37 +28,29 @@ export class PlayerSendPhraseToHistoryController implements Controller {
     ) {}
 
     async handle (request: any): Promise<CustomResponse> {
-        let serverResponse = new CustomResponse({
-            codeStatus: 400,
-            code: ServerCodes.serverFailure,
-            message: ErrorMessages.serverFailure,
-            result: {}
-        });
-        await new Promise((resolve) => {
+        return await new Promise((resolve) => {
             const converterResult = this.playerSendPhraseConverter.handle(new PlayerSendPhraseToHistoryConverterParams({
                 phrase: request['phrase'],
                 roomId: request['roomId'],
                 userId: request['userId']
             }));
             converterResult.leftMap((failure: Failure) => {
-               serverResponse = new CustomResponse({
-                  codeStatus: 400,
+               resolve(new CustomResponse({
+                   codeStatus: 400,
                    code: CodeHelper.failureToCode(failure),
-                  message: FailureHelper.mapFailureToMessage(failure),
+                   message: FailureHelper.mapFailureToMessage(failure),
                    result: {}
-               });
-               resolve(true);
+               }));
             });
             converterResult.map(async (convertedRequest) => {
                 const roomResult = await this.getRoomByIdUsecase.handle(new GetRoomByIdUsecaseParams({id: convertedRequest.roomId}));
                 roomResult.leftMap((failure: Failure) => {
-                    serverResponse = new CustomResponse({
-                       code: CodeHelper.failureToCode(failure),
+                    resolve(new CustomResponse({
+                        code: CodeHelper.failureToCode(failure),
                         result: {},
                         codeStatus: 400,
-                       message: FailureHelper.mapFailureToMessage(failure)
-                    });
-                    resolve(true);
+                        message: FailureHelper.mapFailureToMessage(failure)
+                    }));
                 });
                 roomResult.map(async (room: GameRoom) => {
                     const sendPhraseResult = await this.playerSendPhraseUsecase.handle(new PlayerSendPhraseToHistoryUsecaseParams({
@@ -67,28 +59,25 @@ export class PlayerSendPhraseToHistoryController implements Controller {
                         userId: convertedRequest.userId
                     }));
                     sendPhraseResult.leftMap((failure: Failure) => {
-                        serverResponse = new CustomResponse({
-                          result: {},
+                        resolve(new CustomResponse({
+                            result: {},
                             code: CodeHelper.failureToCode(failure),
                             codeStatus: 400,
-                           message: FailureHelper.mapFailureToMessage(failure)
-                        });
-                        resolve(true);
+                            message: FailureHelper.mapFailureToMessage(failure)
+                        }));
                     });
                     sendPhraseResult.map((updatedRoom: GameRoom) => {
-                       serverResponse = new CustomResponse({
+                       resolve(new CustomResponse({
                                message: SuccessMessages.operationSuccess,
-                           code: ServerCodes.success,
-                           codeStatus: 200,
+                               code: ServerCodes.success,
+                               codeStatus: 200,
                                result: GameRoomMapper.entityToModel(updatedRoom).toJson()
                            }
-                       ) ;
-                       resolve(true);
+                       ));
                     });
                 });
             });
         });
-        return serverResponse;
     }
 
 }

@@ -18,46 +18,36 @@ export class GetRoomByIdController implements Controller {
     }
 
     async handle (request: any): Promise<CustomResponse> {
-        let serverResponse = new CustomResponse({
-            codeStatus: 400,
-            message: "Erro no servidor",
-            code: ServerCodes.serverFailure,
-            result: {}
-        });
-        await new Promise((resolve) => {
+        return await new Promise<CustomResponse>((resolve) => {
             const converterResult = this.converter.handle(new GetRoomByIdConverterParams({roomId: request["room_id"]}));
             converterResult.map(async (convertedRequest) => {
                 const usecaseResult = await this.usecase.handle(new GetRoomByIdUsecaseParams({id: convertedRequest.roomId}));
                 usecaseResult.map((room) => {
-                    serverResponse = new CustomResponse({
+                    resolve(new CustomResponse({
                         code: ServerCodes.success,
                         codeStatus: 200,
                         message: SuccessMessages.operationSuccess,
                         result: GameRoomMapper.entityToModel(room).toJson()
-                    });
-                    resolve(true);
+                    }));
                 });
                 usecaseResult.leftMap((failure) => {
-                    serverResponse = new CustomResponse({
+                    resolve(new CustomResponse({
                         code: CodeHelper.failureToCode(failure),
                         codeStatus: 400,
                         result: {},
                         message: FailureHelper.mapFailureToMessage(failure)
-                    });
-                    resolve(true);
+                    }));
                 });
             });
             converterResult.leftMap((failure) => {
-                serverResponse = new CustomResponse({
+                resolve(new CustomResponse({
                     code: CodeHelper.failureToCode(failure),
                     codeStatus: 400,
                     result: {},
                     message: FailureHelper.mapFailureToMessage(failure)
-                });
-                resolve(true);
+                }));
             });
         });
-        return serverResponse;
     }
 
 }

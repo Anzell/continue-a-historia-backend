@@ -3,8 +3,6 @@ import {Controller} from "../protocols/controller";
 
 export const adaptRoute = (controller: Controller) => {
     return async (req: Request, resp: Response) => {
-        console.log(req.ip)
-        console.log(req.headers['x-forwarded-for'])
         const request = {
             ...(req.body || {}),
             ...(req.params || {}),

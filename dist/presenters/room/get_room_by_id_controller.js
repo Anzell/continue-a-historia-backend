@@ -15,46 +15,36 @@ class GetRoomByIdController {
         this.converter = converter;
     }
     async handle(request) {
-        let serverResponse = new custom_response_1.CustomResponse({
-            codeStatus: 400,
-            message: "Erro no servidor",
-            code: server_codes_1.ServerCodes.serverFailure,
-            result: {}
-        });
-        await new Promise((resolve) => {
+        return await new Promise((resolve) => {
             const converterResult = this.converter.handle(new get_room_by_id_converter_1.GetRoomByIdConverterParams({ roomId: request["room_id"] }));
             converterResult.map(async (convertedRequest) => {
                 const usecaseResult = await this.usecase.handle(new get_room_by_id_1.GetRoomByIdUsecaseParams({ id: convertedRequest.roomId }));
                 usecaseResult.map((room) => {
-                    serverResponse = new custom_response_1.CustomResponse({
+                    resolve(new custom_response_1.CustomResponse({
                         code: server_codes_1.ServerCodes.success,
                         codeStatus: 200,
                         message: success_messages_1.SuccessMessages.operationSuccess,
                         result: game_room_mapper_1.GameRoomMapper.entityToModel(room).toJson()
-                    });
-                    resolve(true);
+                    }));
                 });
                 usecaseResult.leftMap((failure) => {
-                    serverResponse = new custom_response_1.CustomResponse({
+                    resolve(new custom_response_1.CustomResponse({
                         code: code_helper_1.CodeHelper.failureToCode(failure),
                         codeStatus: 400,
                         result: {},
                         message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure)
-                    });
-                    resolve(true);
+                    }));
                 });
             });
             converterResult.leftMap((failure) => {
-                serverResponse = new custom_response_1.CustomResponse({
+                resolve(new custom_response_1.CustomResponse({
                     code: code_helper_1.CodeHelper.failureToCode(failure),
                     codeStatus: 400,
                     result: {},
                     message: failure_mapper_1.FailureHelper.mapFailureToMessage(failure)
-                });
-                resolve(true);
+                }));
             });
         });
-        return serverResponse;
     }
 }
 exports.GetRoomByIdController = GetRoomByIdController;
